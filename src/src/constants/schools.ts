@@ -1,0 +1,15 @@
+export const KOSOVO_SCHOOLS = [
+  'Liceu i Përgjithshëm "Sami Frashëri" - Prishtinë',
+  'Liceu i Përgjithshëm "Eqrem Çabej" - Prishtinë',
+  'Shkolla e Mesme "Shtjefën Gjeçovi" - Prishtinë',
+  'Liceu "Gjon Buzuku" - Prizren',
+  'Shkolla e Mesme Teknike "7 Shtatori" - Prizren',
+  'Liceu "Lidhja e Prizrenit" - Prizren',
+  'Shkolla e Mesme "Bahri Haxhiu" - Ferizaj',
+  'Liceu "Zenel Hajdini" - Gjilan',
+  'Shkolla e Mesme "11 Marsi" - Gjakovë',
+  'Liceu "Hajdar Dushi" - Pejë',
+  'Shkolla e Mesme "Abdyl Frashëri" - Mitrovicë',
+  'Liceu "Ukshin Hoti" - Vushtrri',
+  'Shkolla e Mesme "Ismail Qemali" - Istog',
+];
