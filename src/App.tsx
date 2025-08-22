@@ -1,23 +1,23 @@
 import React, { useState, useEffect, lazy, Suspense, useCallback, useMemo } from 'react';
-import { Button } from './components/ui/button';
-import { Card, CardContent } from './components/ui/card';
-import { Badge } from './components/ui/badge';
-import { Toaster } from './components/ui/sonner';
+import { Button } from './ui/button';
+import { Card, CardContent } from './ui/card';
+import { Badge } from './ui/badge';
+import { Toaster } from './ui/sonner';
 import { toast } from 'sonner';
 import { GraduationCap, BookOpen, Target, Users, ChevronRight, Star } from 'lucide-react';
-import { Skeleton } from './components/ui/skeleton';
+import { Skeleton } from './ui/skeleton';
 
-// Lazy load components for better performance
-const AuthModal = lazy(() => import('./components/AuthModal').then(module => ({ default: module.AuthModal })));
-const Navigation = lazy(() => import('./components/Navigation').then(module => ({ default: module.Navigation })));
-const Dashboard = lazy(() => import('./components/Dashboard').then(module => ({ default: module.Dashboard })));
-const TestList = lazy(() => import('./components/TestList').then(module => ({ default: module.TestList })));
-const SubjectSelection = lazy(() => import('./components/SubjectSelection').then(module => ({ default: module.SubjectSelection })));
-const ExamInterface = lazy(() => import('./components/ExamInterface').then(module => ({ default: module.ExamInterface })));
-const TestTaking = lazy(() => import('./components/TestTaking').then(module => ({ default: module.TestTaking })));
-const TestResults = lazy(() => import('./components/TestResults').then(module => ({ default: module.TestResults })));
-const Settings = lazy(() => import('./components/Settings').then(module => ({ default: module.Settings })));
-const Tips = lazy(() => import('./components/Tips').then(module => ({ default: module.Tips })));
+// Lazy load pages for better performance
+const AuthModal = lazy(() => import('./components/forms').then(module => ({ default: module.AuthModal })));
+const Navigation = lazy(() => import('./components/layout').then(module => ({ default: module.Navigation })));
+const Dashboard = lazy(() => import('./pages').then(module => ({ default: module.Dashboard })));
+const TestList = lazy(() => import('./pages').then(module => ({ default: module.TestList })));
+const SubjectSelection = lazy(() => import('./pages').then(module => ({ default: module.SubjectSelection })));
+const ExamInterface = lazy(() => import('./pages').then(module => ({ default: module.ExamInterface })));
+const TestTaking = lazy(() => import('./pages').then(module => ({ default: module.TestTaking })));
+const TestResults = lazy(() => import('./pages').then(module => ({ default: module.TestResults })));
+const Settings = lazy(() => import('./pages').then(module => ({ default: module.Settings })));
+const Tips = lazy(() => import('./pages').then(module => ({ default: module.Tips })));
 
 interface User {
   name: string;
