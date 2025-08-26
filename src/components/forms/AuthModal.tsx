@@ -236,7 +236,8 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
             <Button 
               onClick={handleLogin} 
               className="w-full" 
-              disabled={isLoading || !formData.email || !formData.password}
+              // disabled={isLoading || !formData.email || !formData.password}
+              disabled={true}
             >
               {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               Hyr në llogari
