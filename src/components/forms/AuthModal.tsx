@@ -117,7 +117,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
     try {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 800));
-      onLogin(formData.email, formData.password);
+      // onLogin(formData.email, formData.password);
     } catch (error) {
       toast.error('Gabim gjatë hyrjes në llogari');
     } finally {
@@ -498,7 +498,8 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
               <Button 
                 onClick={handleSignup} 
                 className="flex-1" 
-                disabled={!canCompleteSignup || isLoading}
+                // disabled={!canCompleteSignup || isLoading}
+                disabled={true}
               >
                 {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Krijo llogari
