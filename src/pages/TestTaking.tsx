@@ -31,19 +31,21 @@ const mockQuestions: Question[] = Array.from({ length: 100 }, (_, i) => ({
     `Alternativa D për pyetjen ${i + 1}`,
   ],
   correctAnswer: Math.floor(Math.random() * 4),
-  subject: 'Matematika'
+  subject: 'Matematika',
 }));
 
 export function TestTaking({ testId, onComplete, onExit }: TestTakingProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<number[]>(new Array(100).fill(-1));
   const [timeLeft, setTimeLeft] = useState(7200); // 2 hours in seconds
-  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<number>>(new Set());
+  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<number>>(
+    new Set()
+  );
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
+      setTimeLeft((prev) => {
         if (prev <= 1) {
           handleSubmit();
           return 0;
@@ -94,7 +96,7 @@ export function TestTaking({ testId, onComplete, onExit }: TestTakingProps) {
     onComplete(answers);
   };
 
-  const answeredCount = answers.filter(answer => answer !== -1).length;
+  const answeredCount = answers.filter((answer) => answer !== -1).length;
   const progress = (answeredCount / 100) * 100;
 
   return (
@@ -109,17 +111,19 @@ export function TestTaking({ testId, onComplete, onExit }: TestTakingProps) {
             </Button>
             <h1>Test {testId}</h1>
           </div>
-          
+
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2 text-sm">
               <Clock className="w-4 h-4" />
-              <span className={timeLeft < 600 ? 'text-red-500' : ''}>{formatTime(timeLeft)}</span>
+              <span className={timeLeft < 600 ? 'text-red-500' : ''}>
+                {formatTime(timeLeft)}
+              </span>
             </div>
             <div className="text-sm text-muted-foreground">
               {answeredCount}/100 përgjigjur
             </div>
             <Button onClick={() => setShowSubmitConfirm(true)} size="sm">
-              Dërgo testin
+              Perfundo testin
             </Button>
           </div>
         </div>
@@ -132,31 +136,47 @@ export function TestTaking({ testId, onComplete, onExit }: TestTakingProps) {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Pyetja {currentQuestion + 1} nga 100</CardTitle>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={toggleFlag}
-                  className={flaggedQuestions.has(currentQuestion) ? 'text-yellow-500' : ''}
+                  className={
+                    flaggedQuestions.has(currentQuestion)
+                      ? 'text-yellow-500'
+                      : ''
+                  }
                 >
                   <Flag className="w-4 h-4" />
                 </Button>
               </div>
-              <Progress value={((currentQuestion + 1) / 100) * 100} className="h-2" />
+              <Progress
+                value={((currentQuestion + 1) / 100) * 100}
+                className="h-2"
+              />
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="text-lg">
                 {mockQuestions[currentQuestion].question}
               </div>
 
-              <RadioGroup 
-                value={answers[currentQuestion].toString()} 
+              <RadioGroup
+                value={answers[currentQuestion].toString()}
                 onValueChange={handleAnswerChange}
                 className="space-y-4"
               >
                 {mockQuestions[currentQuestion].options.map((option, index) => (
-                  <div key={index} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-muted/50">
-                    <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
+                  <div
+                    key={index}
+                    className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-muted/50"
+                  >
+                    <RadioGroupItem
+                      value={index.toString()}
+                      id={`option-${index}`}
+                    />
+                    <Label
+                      htmlFor={`option-${index}`}
+                      className="flex-1 cursor-pointer"
+                    >
                       {String.fromCharCode(65 + index)}. {option}
                     </Label>
                   </div>
@@ -164,18 +184,14 @@ export function TestTaking({ testId, onComplete, onExit }: TestTakingProps) {
               </RadioGroup>
 
               <div className="flex justify-between pt-6">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={handlePrevious}
                   disabled={currentQuestion === 0}
                 >
-                  <ArrowLeft className="w-4 h-4 mr-1" />
-                  E mëparshme
+                  <ArrowLeft className="w-4 h-4 mr-1" />E mëparshme
                 </Button>
-                <Button 
-                  onClick={handleNext}
-                  disabled={currentQuestion === 99}
-                >
+                <Button onClick={handleNext} disabled={currentQuestion === 99}>
                   E radhës
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
@@ -202,13 +218,14 @@ export function TestTaking({ testId, onComplete, onExit }: TestTakingProps) {
                     onClick={() => setCurrentQuestion(i)}
                     className={`
                       w-8 h-8 text-xs rounded border transition-colors
-                      ${currentQuestion === i 
-                        ? 'bg-primary text-primary-foreground border-primary' 
-                        : answers[i] !== -1 
-                          ? 'bg-green-100 text-green-800 border-green-300' 
-                          : flaggedQuestions.has(i)
-                            ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
-                            : 'bg-muted hover:bg-muted/80 border-muted'
+                      ${
+                        currentQuestion === i
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : answers[i] !== -1
+                            ? 'bg-green-100 text-green-800 border-green-300'
+                            : flaggedQuestions.has(i)
+                              ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
+                              : 'bg-muted hover:bg-muted/80 border-muted'
                       }
                     `}
                   >
@@ -216,7 +233,7 @@ export function TestTaking({ testId, onComplete, onExit }: TestTakingProps) {
                   </button>
                 ))}
               </div>
-              
+
               <div className="mt-4 space-y-2 text-xs">
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-primary rounded"></div>
@@ -252,13 +269,20 @@ export function TestTaking({ testId, onComplete, onExit }: TestTakingProps) {
                   <p>Kohë e mbetur: {formatTime(timeLeft)}</p>
                   <p>Pyetje të shënuara: {flaggedQuestions.size}</p>
                 </div>
-                <p className="text-sm">A jeni të sigurt që doni të dërgoni testin? Ky veprim nuk mund të zhbëhet.</p>
+                <p className="text-sm">
+                  A jeni të sigurt që doni të dërgoni testin? Ky veprim nuk mund
+                  të zhbëhet.
+                </p>
                 <div className="flex space-x-2">
-                  <Button variant="outline" onClick={() => setShowSubmitConfirm(false)} className="flex-1">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowSubmitConfirm(false)}
+                    className="flex-1"
+                  >
                     Anulo
                   </Button>
                   <Button onClick={handleSubmit} className="flex-1">
-                    Dërgo testin
+                    Perfundo testin
                   </Button>
                 </div>
               </div>

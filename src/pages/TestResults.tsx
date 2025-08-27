@@ -3,8 +3,25 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
 import { Badge } from '../ui/badge';
-import { CheckCircle2, XCircle, Clock, Target, TrendingUp, ArrowLeft } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import {
+  CheckCircle2,
+  XCircle,
+  Clock,
+  Target,
+  TrendingUp,
+  ArrowLeft,
+} from 'lucide-react';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from 'recharts';
 
 interface TestResultsProps {
   testId: number;
@@ -12,7 +29,9 @@ interface TestResultsProps {
   onBack: () => void;
 }
 
-const mockCorrectAnswers = Array.from({ length: 100 }, () => Math.floor(Math.random() * 4));
+const mockCorrectAnswers = Array.from({ length: 100 }, () =>
+  Math.floor(Math.random() * 4)
+);
 const subjectBreakdown = [
   { subject: 'Matematika', questions: 40, correct: 32, percentage: 80 },
   { subject: 'Gjuha Shqipe', questions: 35, correct: 28, percentage: 80 },
@@ -28,12 +47,16 @@ const difficultyAnalysis = [
 const COLORS = ['#10B981', '#EF4444', '#F59E0B'];
 
 export function TestResults({ testId, answers, onBack }: TestResultsProps) {
-  const correctAnswers = answers.filter((answer, index) => answer === mockCorrectAnswers[index]).length;
-  const incorrectAnswers = answers.filter((answer, index) => answer !== mockCorrectAnswers[index] && answer !== -1).length;
-  const unanswered = answers.filter(answer => answer === -1).length;
-  
+  const correctAnswers = answers.filter(
+    (answer, index) => answer === mockCorrectAnswers[index]
+  ).length;
+  const incorrectAnswers = answers.filter(
+    (answer, index) => answer !== mockCorrectAnswers[index] && answer !== -1
+  ).length;
+  const unanswered = answers.filter((answer) => answer === -1).length;
+
   const percentage = Math.round((correctAnswers / 100) * 100);
-  const timeSpent = "1:23:45";
+  const timeSpent = '1:23:45';
 
   const pieData = [
     { name: 'E saktë', value: correctAnswers, color: '#10B981' },
@@ -71,12 +94,10 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
         <Card>
           <CardContent className="p-6">
             <div className="text-center space-y-4">
-              <div className={`text-6xl font-bold ${color}`}>
-                {percentage}%
-              </div>
-              <div className={`text-2xl font-semibold ${color}`}>
+              <div className={`text-6xl font-bold ${color}`}>{percentage}%</div>
+              {/* <div className={`text-2xl font-semibold ${color}`}>
                 Nota: {grade}
-              </div>
+              </div> */}
               <div className="flex justify-center space-x-8 text-sm text-muted-foreground">
                 <div className="flex items-center space-x-1">
                   <Clock className="w-4 h-4" />
@@ -155,7 +176,11 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
                 <div key={index} className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span>{subject.subject}</span>
-                    <Badge variant={subject.percentage >= 75 ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        subject.percentage >= 75 ? 'default' : 'secondary'
+                      }
+                    >
                       {subject.percentage}%
                     </Badge>
                   </div>
@@ -170,7 +195,7 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
         </div>
 
         {/* Difficulty Analysis */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>Analiza e vështirësisë</CardTitle>
           </CardHeader>
@@ -186,10 +211,10 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
               </ResponsiveContainer>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Recommendations */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <TrendingUp className="w-5 h-5" />
@@ -218,19 +243,15 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
               </div>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Action Buttons */}
         <div className="flex justify-center space-x-4">
           <Button variant="outline" onClick={onBack}>
             Kthehu te testet
           </Button>
-          <Button>
-            Bëj testin përsëri
-          </Button>
-          <Button variant="secondary">
-            Studjo gabimet
-          </Button>
+          <Button>Bëj testin përsëri</Button>
+          <Button variant="secondary">Studjo gabimet</Button>
         </div>
       </div>
     </div>

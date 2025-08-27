@@ -1,11 +1,11 @@
 import React from 'react';
-import { 
-  SettingsHeader, 
-  ProfileSettings, 
-  NotificationSettings, 
-  PrivacySecurity, 
-  AccountStatus, 
-  DangerZone 
+import {
+  SettingsHeader,
+  ProfileSettings,
+  NotificationSettings,
+  PrivacySecurity,
+  AccountStatus,
+  DangerZone,
 } from '../components/settings';
 
 interface SettingsProps {
@@ -21,7 +21,13 @@ interface SettingsProps {
   onLogout: () => void;
 }
 
-export function Settings({ user, darkMode, onToggleDarkMode, onUpdateProfile, onLogout }: SettingsProps) {
+export function Settings({
+  user,
+  darkMode,
+  onToggleDarkMode,
+  onUpdateProfile,
+  onLogout,
+}: SettingsProps) {
   const [name, setName] = React.useState(user.name);
   const [email, setEmail] = React.useState(user.email);
   const [school, setSchool] = React.useState(user.school || '');
@@ -37,7 +43,7 @@ export function Settings({ user, darkMode, onToggleDarkMode, onUpdateProfile, on
   return (
     <div className="p-4 max-w-4xl mx-auto space-y-6">
       <SettingsHeader userName={user.name} />
-      
+
       <ProfileSettings
         name={name}
         email={email}
@@ -50,7 +56,7 @@ export function Settings({ user, darkMode, onToggleDarkMode, onUpdateProfile, on
         onSave={handleSaveProfile}
       />
 
-      <NotificationSettings
+      {/* <NotificationSettings
         notifications={notifications}
         emailNotifications={emailNotifications}
         sound={sound}
@@ -59,9 +65,9 @@ export function Settings({ user, darkMode, onToggleDarkMode, onUpdateProfile, on
         onEmailNotificationsChange={setEmailNotifications}
         onSoundChange={setSound}
         onAutoSaveChange={setAutoSave}
-      />
+      /> */}
 
-      <PrivacySecurity />
+      {/* <PrivacySecurity /> */}
       <AccountStatus />
       <DangerZone onLogout={onLogout} />
     </div>

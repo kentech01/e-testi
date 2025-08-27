@@ -22,7 +22,7 @@ export function SubmitDialog({
   flaggedCount,
   onConfirm,
   onCancel,
-  formatTime
+  formatTime,
 }: SubmitDialogProps) {
   if (!isOpen) return null;
 
@@ -36,20 +36,32 @@ export function SubmitDialog({
             </div>
             <h3>Konfirmo dërgimin e testit</h3>
             <div className="space-y-2 text-sm text-muted-foreground">
-              <p>Lënda: <span className="font-medium">{subject}</span></p>
-              <p>Përgjigje të dhëna: <span className="font-medium">{answeredCount}/100</span></p>
-              <p>Kohë e mbetur: <span className="font-medium">{formatTime(timeLeft)}</span></p>
-              <p>Pyetje të shënuara: <span className="font-medium">{flaggedCount}</span></p>
+              <p>
+                Lënda: <span className="font-medium">{subject}</span>
+              </p>
+              <p>
+                Përgjigje të dhëna:{' '}
+                <span className="font-medium">{answeredCount}/100</span>
+              </p>
+              <p>
+                Kohë e mbetur:{' '}
+                <span className="font-medium">{formatTime(timeLeft)}</span>
+              </p>
+              <p>
+                Pyetje të shënuara:{' '}
+                <span className="font-medium">{flaggedCount}</span>
+              </p>
             </div>
             <p className="text-sm text-muted-foreground">
-              A jeni të sigurt që doni të dërgoni testin? Ky veprim nuk mund të zhbëhet.
+              A jeni të sigurt që doni të dërgoni testin? Ky veprim nuk mund të
+              zhbëhet.
             </p>
             <div className="flex space-x-2">
               <Button variant="outline" onClick={onCancel} className="flex-1">
                 Anulo
               </Button>
               <Button onClick={onConfirm} className="flex-1">
-                Dërgo testin
+                Perfundo testin
               </Button>
             </div>
           </div>
@@ -57,4 +69,4 @@ export function SubmitDialog({
       </Card>
     </div>
   );
-} 
+}

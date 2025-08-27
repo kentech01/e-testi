@@ -2,7 +2,16 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import { CheckCircle2, FileText, Clock, Play, Plus, BookOpen, Calculator, Globe } from 'lucide-react';
+import {
+  CheckCircle2,
+  FileText,
+  Clock,
+  Play,
+  Plus,
+  BookOpen,
+  Calculator,
+  Globe,
+} from 'lucide-react';
 
 interface Test {
   id: number;
@@ -20,16 +29,79 @@ interface TestListProps {
 }
 
 const mockTests: Test[] = [
-  { id: 1, title: 'Test 1', completed: true, score: 85, timeSpent: '45 min', subject: 'matematik' },
-  { id: 2, title: 'Test 2', completed: true, score: 78, timeSpent: '52 min', subject: 'matematik' },
-  { id: 3, title: 'Test 3', completed: true, score: 92, timeSpent: '38 min', subject: 'gjuhaShqipe' },
-  { id: 4, title: 'Test 4', completed: true, score: 75, timeSpent: '48 min', subject: 'anglisht' },
+  {
+    id: 1,
+    title: 'Test 1',
+    completed: true,
+    score: 85,
+    timeSpent: '45 min',
+    subject: 'matematik',
+  },
+  {
+    id: 2,
+    title: 'Test 2',
+    completed: true,
+    score: 78,
+    timeSpent: '52 min',
+    subject: 'matematik',
+  },
+  {
+    id: 3,
+    title: 'Test 3',
+    completed: true,
+    score: 92,
+    timeSpent: '38 min',
+    subject: 'gjuhaShqipe',
+  },
+  {
+    id: 4,
+    title: 'Test 4',
+    completed: true,
+    score: 75,
+    timeSpent: '48 min',
+    subject: 'anglisht',
+  },
   { id: 5, title: 'Test 5', completed: false, subject: 'matematik' },
-  { id: 6, title: 'Test 6', completed: true, score: 88, timeSpent: '42 min', subject: 'gjuhaShqipe' },
-  { id: 7, title: 'Test 7', completed: true, score: 91, timeSpent: '40 min', subject: 'anglisht' },
-  { id: 8, title: 'Test 8', completed: true, score: 82, timeSpent: '46 min', subject: 'matematik' },
-  { id: 9, title: 'Test 9', completed: true, score: 79, timeSpent: '50 min', subject: 'gjuhaShqipe' },
-  { id: 10, title: 'Test 10', completed: true, score: 86, timeSpent: '44 min', subject: 'anglisht' },
+  {
+    id: 6,
+    title: 'Test 6',
+    completed: true,
+    score: 88,
+    timeSpent: '42 min',
+    subject: 'gjuhaShqipe',
+  },
+  {
+    id: 7,
+    title: 'Test 7',
+    completed: true,
+    score: 91,
+    timeSpent: '40 min',
+    subject: 'anglisht',
+  },
+  {
+    id: 8,
+    title: 'Test 8',
+    completed: true,
+    score: 82,
+    timeSpent: '46 min',
+    subject: 'matematik',
+  },
+  {
+    id: 9,
+    title: 'Test 9',
+    completed: true,
+    score: 79,
+    timeSpent: '50 min',
+    subject: 'gjuhaShqipe',
+  },
+  {
+    id: 10,
+    title: 'Test 10',
+    completed: true,
+    score: 86,
+    timeSpent: '44 min',
+    subject: 'anglisht',
+  },
   { id: 11, title: 'Test 11', completed: false, subject: 'matematik' },
   { id: 12, title: 'Test 12', completed: false, subject: 'gjuhaShqipe' },
   { id: 13, title: 'Test 13', completed: false, subject: 'anglisht' },
@@ -40,14 +112,24 @@ const mockTests: Test[] = [
 
 const subjectInfo = {
   matematik: { name: 'Matematika', icon: Calculator, color: 'text-blue-600' },
-  gjuhaShqipe: { name: 'Gjuha Shqipe', icon: BookOpen, color: 'text-green-600' },
-  anglisht: { name: 'Gjuha Angleze', icon: Globe, color: 'text-purple-600' }
+  gjuhaShqipe: {
+    name: 'Gjuha Shqipe',
+    icon: BookOpen,
+    color: 'text-green-600',
+  },
+  anglisht: { name: 'Gjuha Angleze', icon: Globe, color: 'text-purple-600' },
 };
 
-export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestListProps) {
+export function TestList({
+  onStartTest,
+  onViewResults,
+  onStartNewExam,
+}: TestListProps) {
   const [selectedTest, setSelectedTest] = useState<Test | null>(null);
 
-  const getSubjectIcon = (subject: 'matematik' | 'gjuhaShqipe' | 'anglisht') => {
+  const getSubjectIcon = (
+    subject: 'matematik' | 'gjuhaShqipe' | 'anglisht'
+  ) => {
     const Icon = subjectInfo[subject].icon;
     return <Icon className={`w-4 h-4 ${subjectInfo[subject].color}`} />;
   };
@@ -56,7 +138,9 @@ export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestLis
     <div className="p-4 max-w-6xl mx-auto">
       <div className="mb-6">
         <h2>Testet</h2>
-        <p className="text-muted-foreground">Zgjidhni një test për të filluar ose për të parë rezultatet</p>
+        <p className="text-muted-foreground">
+          Zgjidhni një test për të filluar ose për të parë rezultatet
+        </p>
       </div>
 
       {/* Start New Exam Section */}
@@ -66,7 +150,8 @@ export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestLis
             <div>
               <h3 className="text-xl font-semibold mb-2">Fillo test të ri</h3>
               <p className="text-blue-100 mb-4">
-                Zgjidhni lëndën dhe filloni një test të përshtatur për nivelin tuaj
+                Zgjidhni lëndën dhe filloni një test të përshtatur për nivelin
+                tuaj
               </p>
               <div className="flex items-center space-x-4 text-sm text-blue-100">
                 <div className="flex items-center space-x-1">
@@ -79,7 +164,7 @@ export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestLis
                 </div>
               </div>
             </div>
-            <Button 
+            {/* <Button
               onClick={onStartNewExam}
               size="lg"
               variant="secondary"
@@ -87,7 +172,7 @@ export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestLis
             >
               <Plus className="w-5 h-5 mr-2" />
               Fillo test
-            </Button>
+            </Button> */}
           </div>
         </CardContent>
       </Card>
@@ -95,11 +180,19 @@ export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestLis
       {/* Subject Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         {Object.entries(subjectInfo).map(([subject, info]) => {
-          const subjectTests = mockTests.filter(test => test.subject === subject);
-          const completedTests = subjectTests.filter(test => test.completed);
-          const averageScore = completedTests.length > 0 
-            ? Math.round(completedTests.reduce((sum, test) => sum + (test.score || 0), 0) / completedTests.length)
-            : 0;
+          const subjectTests = mockTests.filter(
+            (test) => test.subject === subject
+          );
+          const completedTests = subjectTests.filter((test) => test.completed);
+          const averageScore =
+            completedTests.length > 0
+              ? Math.round(
+                  completedTests.reduce(
+                    (sum, test) => sum + (test.score || 0),
+                    0
+                  ) / completedTests.length
+                )
+              : 0;
 
           const Icon = info.icon;
 
@@ -113,14 +206,19 @@ export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestLis
                   <div>
                     <h4 className="font-medium">{info.name}</h4>
                     <p className="text-sm text-muted-foreground">
-                      {completedTests.length}/{subjectTests.length} të përfunduara
+                      {completedTests.length}/{subjectTests.length} të
+                      përfunduara
                     </p>
                   </div>
                 </div>
                 {completedTests.length > 0 && (
                   <div className="text-center">
-                    <div className="text-2xl font-bold mb-1">{averageScore}%</div>
-                    <div className="text-xs text-muted-foreground">Mesatarja</div>
+                    <div className="text-2xl font-bold mb-1">
+                      {averageScore}%
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Mesatarja
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -134,10 +232,12 @@ export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestLis
         <h3 className="font-semibold mb-4">Të gjitha testet</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {mockTests.map((test) => (
-            <Card 
-              key={test.id} 
+            <Card
+              key={test.id}
               className={`cursor-pointer transition-all hover:shadow-lg ${
-                test.completed ? 'bg-slate-900 text-white' : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700'
+                test.completed
+                  ? 'bg-slate-900 text-white'
+                  : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700'
               } ${selectedTest?.id === test.id ? 'ring-2 ring-blue-500' : ''}`}
               onClick={() => setSelectedTest(test)}
             >
@@ -152,12 +252,14 @@ export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestLis
                 <div className="text-center">
                   <p className="text-sm font-medium">{test.title}</p>
                   {test.completed && test.score && (
-                    <p className="text-xs text-muted-foreground">{test.score}%</p>
+                    <p className="text-xs text-muted-foreground">
+                      {test.score}%
+                    </p>
                   )}
                 </div>
-                <div className="flex items-center justify-center">
+                {/* <div className="flex items-center justify-center">
                   {getSubjectIcon(test.subject)}
-                </div>
+                </div> */}
               </CardContent>
             </Card>
           ))}
@@ -173,20 +275,19 @@ export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestLis
                 <div className="flex items-center justify-center w-16 h-16 rounded-lg bg-slate-900 text-white mx-auto">
                   <FileText className="w-8 h-8" />
                 </div>
-                
+
                 <div>
                   <h3>{selectedTest.title}</h3>
-                  <div className="flex items-center justify-center space-x-2 mt-2">
+                  {/* <div className="flex items-center justify-center space-x-2 mt-2">
                     {getSubjectIcon(selectedTest.subject)}
                     <span className="text-sm text-muted-foreground">
                       {subjectInfo[selectedTest.subject].name}
                     </span>
-                  </div>
+                  </div> */}
                   <p className="text-sm text-muted-foreground mt-2">
-                    {selectedTest.completed 
+                    {selectedTest.completed
                       ? `Test i përfunduar me rezultat ${selectedTest.score}%`
-                      : 'Test që përmban 100 pyetje për përgatitjen e maturës'
-                    }
+                      : 'Test që përmban 100 pyetje për përgatitjen e maturës'}
                   </p>
                 </div>
 
@@ -201,15 +302,15 @@ export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestLis
                 )}
 
                 <div className="flex space-x-2">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     onClick={() => setSelectedTest(null)}
                     className="flex-1"
                   >
                     Mbyll
                   </Button>
                   {selectedTest.completed ? (
-                    <Button 
+                    <Button
                       onClick={() => {
                         onViewResults(selectedTest.id);
                         setSelectedTest(null);
@@ -219,7 +320,7 @@ export function TestList({ onStartTest, onViewResults, onStartNewExam }: TestLis
                       Shiko rezultatet
                     </Button>
                   ) : (
-                    <Button 
+                    <Button
                       onClick={() => {
                         onStartTest(selectedTest.id);
                         setSelectedTest(null);

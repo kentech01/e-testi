@@ -1,23 +1,59 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  lazy,
+  Suspense,
+  useCallback,
+  useMemo,
+} from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Toaster } from './ui/sonner';
 import { toast } from 'sonner';
-import { GraduationCap, BookOpen, Target, Users, ChevronRight, Star } from 'lucide-react';
+import {
+  GraduationCap,
+  BookOpen,
+  Target,
+  Users,
+  ChevronRight,
+  Star,
+} from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 
 // Lazy load pages for better performance
-const AuthModal = lazy(() => import('./components/forms').then(module => ({ default: module.AuthModal })));
-const Navigation = lazy(() => import('./components/layout').then(module => ({ default: module.Navigation })));
-const Dashboard = lazy(() => import('./pages').then(module => ({ default: module.Dashboard })));
-const TestList = lazy(() => import('./pages').then(module => ({ default: module.TestList })));
-const SubjectSelection = lazy(() => import('./pages').then(module => ({ default: module.SubjectSelection })));
-const ExamInterface = lazy(() => import('./pages').then(module => ({ default: module.ExamInterface })));
-const TestTaking = lazy(() => import('./pages').then(module => ({ default: module.TestTaking })));
-const TestResults = lazy(() => import('./pages').then(module => ({ default: module.TestResults })));
-const Settings = lazy(() => import('./pages').then(module => ({ default: module.Settings })));
-const Tips = lazy(() => import('./pages').then(module => ({ default: module.Tips })));
+const AuthModal = lazy(() =>
+  import('./components/forms').then((module) => ({ default: module.AuthModal }))
+);
+const Navigation = lazy(() =>
+  import('./components/layout').then((module) => ({
+    default: module.Navigation,
+  }))
+);
+const Dashboard = lazy(() =>
+  import('./pages').then((module) => ({ default: module.Dashboard }))
+);
+const TestList = lazy(() =>
+  import('./pages').then((module) => ({ default: module.TestList }))
+);
+const SubjectSelection = lazy(() =>
+  import('./pages').then((module) => ({ default: module.SubjectSelection }))
+);
+const ExamInterface = lazy(() =>
+  import('./pages').then((module) => ({ default: module.ExamInterface }))
+);
+const TestTaking = lazy(() =>
+  import('./pages').then((module) => ({ default: module.TestTaking }))
+);
+const TestResults = lazy(() =>
+  import('./pages').then((module) => ({ default: module.TestResults }))
+);
+const Settings = lazy(() =>
+  import('./pages').then((module) => ({ default: module.Settings }))
+);
+const Tips = lazy(() =>
+  import('./pages').then((module) => ({ default: module.Tips }))
+);
 
 interface User {
   name: string;
@@ -26,7 +62,15 @@ interface User {
   school?: string;
 }
 
-type ViewType = 'dashboard' | 'tests' | 'subject-selection' | 'exam-interface' | 'taking-test' | 'test-results' | 'tips' | 'settings';
+type ViewType =
+  | 'dashboard'
+  | 'tests'
+  | 'subject-selection'
+  | 'exam-interface'
+  | 'taking-test'
+  | 'test-results'
+  | 'tips'
+  | 'settings';
 
 // Memoized constants to prevent re-creation
 const features = [
@@ -34,26 +78,26 @@ const features = [
     icon: Target,
     title: 'Teste autentike',
     description: 'Teste të ngjashme me format e maturës zyrtare',
-    badge: '100+ teste'
+    badge: '100+ teste',
   },
   {
     icon: BookOpen,
     title: 'Materiale cilësore',
     description: 'Përmbajtje e përpunuar nga mësimdhënës të përvojshëm',
-    badge: 'E përditësuar'
+    badge: 'E përditësuar',
   },
   {
     icon: Users,
     title: 'Komunitet studentësh',
     description: 'Mëso dhe garo me studentë të tjerë nga e gjithë Kosova',
-    badge: '10K+ studentë'
-  }
+    badge: '10K+ studentë',
+  },
 ];
 
 const subjects = [
   { name: 'Matematika', count: 45, color: 'bg-blue-500' },
   { name: 'Gjuha Shqipe', count: 38, color: 'bg-green-500' },
-  { name: 'Anglisht', count: 32, color: 'bg-purple-500' }
+  { name: 'Anglisht', count: 32, color: 'bg-purple-500' },
 ];
 
 // Loading component
@@ -77,7 +121,9 @@ export default function App() {
   const [currentView, setCurrentView] = useState<ViewType>('dashboard');
   const [darkMode, setDarkMode] = useState(false);
   const [currentTestId, setCurrentTestId] = useState<number | null>(null);
-  const [currentSubject, setCurrentSubject] = useState<'matematik' | 'gjuhaShqipe' | 'anglisht' | null>(null);
+  const [currentSubject, setCurrentSubject] = useState<
+    'matematik' | 'gjuhaShqipe' | 'anglisht' | null
+  >(null);
   const [testAnswers, setTestAnswers] = useState<(number | null)[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -87,11 +133,11 @@ export default function App() {
       try {
         const savedUser = localStorage.getItem('maturaUser');
         const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-        
+
         if (savedUser) {
           setUser(JSON.parse(savedUser));
         }
-        
+
         setDarkMode(savedDarkMode);
       } catch (error) {
         console.error('Error initializing app:', error);
@@ -120,28 +166,39 @@ export default function App() {
       name: 'Ardi Hoxha',
       email: email,
       grade: '12',
-      school: 'Liceu i Përgjithshëm "Sami Frashëri" - Prishtinë'
+      school: 'Liceu i Përgjithshëm "Sami Frashëri" - Prishtinë',
     };
-    
+
     setUser(mockUser);
     localStorage.setItem('maturaUser', JSON.stringify(mockUser));
     setShowAuth(false);
     toast.success('Mirë se erdhe përsëri!');
   }, []);
 
-  const handleSignup = useCallback((email: string, password: string, name: string, grade: string, school: string) => {
-    const newUser = {
-      name: name,
-      email: email,
-      grade: grade,
-      school: school
-    };
-    
-    setUser(newUser);
-    localStorage.setItem('maturaUser', JSON.stringify(newUser));
-    setShowAuth(false);
-    toast.success('Mirë se erdhe në E-test! Llogaria juaj u krijua me sukses.');
-  }, []);
+  const handleSignup = useCallback(
+    (
+      email: string,
+      password: string,
+      name: string,
+      grade: string,
+      school: string
+    ) => {
+      const newUser = {
+        name: name,
+        email: email,
+        grade: grade,
+        school: school,
+      };
+
+      setUser(newUser);
+      localStorage.setItem('maturaUser', JSON.stringify(newUser));
+      setShowAuth(false);
+      toast.success(
+        'Mirë se erdhe në E-testi! Llogaria juaj u krijua me sukses.'
+      );
+    },
+    []
+  );
 
   const handleLogout = useCallback(() => {
     setUser(null);
@@ -154,18 +211,23 @@ export default function App() {
   }, []);
 
   const handleToggleDarkMode = useCallback(() => {
-    setDarkMode(prev => !prev);
+    setDarkMode((prev) => !prev);
   }, []);
 
   const handleStartNewExam = useCallback(() => {
     setCurrentView('subject-selection');
   }, []);
 
-  const handleSubjectSelect = useCallback((subject: 'matematik' | 'gjuhaShqipe' | 'anglisht') => {
-    setCurrentSubject(subject);
-    setCurrentView('exam-interface');
-    toast.info(`Filloi testi i ${subject === 'matematik' ? 'Matematikës' : subject === 'gjuhaShqipe' ? 'Gjuhës Shqipe' : 'Gjuhës Angleze'}`);
-  }, []);
+  const handleSubjectSelect = useCallback(
+    (subject: 'matematik' | 'gjuhaShqipe' | 'anglisht') => {
+      setCurrentSubject(subject);
+      setCurrentView('exam-interface');
+      toast.info(
+        `Filloi testi i ${subject === 'matematik' ? 'Matematikës' : subject === 'gjuhaShqipe' ? 'Gjuhës Shqipe' : 'Gjuhës Angleze'}`
+      );
+    },
+    []
+  );
 
   const handleStartTest = useCallback((testId: number) => {
     setCurrentTestId(testId);
@@ -174,7 +236,9 @@ export default function App() {
   }, []);
 
   const handleCompleteExam = useCallback((answers: (number | null)[]) => {
-    const convertedAnswers = answers.map(answer => answer === null ? -1 : answer);
+    const convertedAnswers = answers.map((answer) =>
+      answer === null ? -1 : answer
+    );
     setTestAnswers(convertedAnswers);
     setCurrentView('test-results');
     toast.success('Testi u përfundua me sukses!');
@@ -188,19 +252,24 @@ export default function App() {
 
   const handleViewResults = useCallback((testId: number) => {
     setCurrentTestId(testId);
-    const mockAnswers = Array.from({ length: 100 }, () => Math.floor(Math.random() * 4));
+    const mockAnswers = Array.from({ length: 100 }, () =>
+      Math.floor(Math.random() * 4)
+    );
     setTestAnswers(mockAnswers);
     setCurrentView('test-results');
   }, []);
 
-  const handleUpdateProfile = useCallback((name: string, email: string) => {
-    if (user) {
-      const updatedUser = { ...user, name, email };
-      setUser(updatedUser);
-      localStorage.setItem('maturaUser', JSON.stringify(updatedUser));
-      toast.success('Profili u përditësua me sukses!');
-    }
-  }, [user]);
+  const handleUpdateProfile = useCallback(
+    (name: string, email: string) => {
+      if (user) {
+        const updatedUser = { ...user, name, email };
+        setUser(updatedUser);
+        localStorage.setItem('maturaUser', JSON.stringify(updatedUser));
+        toast.success('Profili u përditësua me sukses!');
+      }
+    },
+    [user]
+  );
 
   const handleBackToTests = useCallback(() => {
     setCurrentView('tests');
@@ -215,15 +284,12 @@ export default function App() {
   }, []);
 
   // Memoized computed values
-  const isExamMode = useMemo(() => 
-    ['exam-interface', 'subject-selection'].includes(currentView), 
+  const isExamMode = useMemo(
+    () => ['exam-interface', 'subject-selection'].includes(currentView),
     [currentView]
   );
 
-  const shouldShowNavigation = useMemo(() => 
-    !isExamMode, 
-    [isExamMode]
-  );
+  const shouldShowNavigation = useMemo(() => !isExamMode, [isExamMode]);
 
   // Show loading screen during initialization
   if (isLoading) {
@@ -241,8 +307,10 @@ export default function App() {
               <GraduationCap className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-xl">E-test</h1>
-              <p className="text-xs text-muted-foreground">Përgatitja për maturë</p>
+              <h1 className="font-bold text-xl">E-testi</h1>
+              <p className="text-xs text-muted-foreground">
+                Përgatitja për maturë
+              </p>
             </div>
           </div>
           <Button
@@ -262,20 +330,21 @@ export default function App() {
               <Star className="w-3 h-3 mr-1" />
               Platforma #1 për maturë në Kosovë
             </Badge>
-            
+
             <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
               Përgatitu për maturë me sukses
             </h2>
-            
+
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Mëso, praktiko dhe përgatitu për testet e maturës me platformën më moderne dhe të plotë në Kosovë. 
-              Më shumë se 10,000 studentë tashmë kanë zgjedhur E-test.
+              Mëso, praktiko dhe përgatitu për testet e maturës me platformën më
+              moderne dhe të plotë në Kosovë. Më shumë se 10,000 studentë tashmë
+              kanë zgjedhur E-test.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
-                onClick={() => setShowAuth(true)} 
-                size="lg" 
+              <Button
+                onClick={() => setShowAuth(true)}
+                size="lg"
                 className="h-14 px-8 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-lg"
               >
                 Fillo falas tani
@@ -290,14 +359,23 @@ export default function App() {
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
             {subjects.map((subject, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+              <Card
+                key={index}
+                className="text-center hover:shadow-lg transition-shadow"
+              >
                 <CardContent className="p-6">
-                  <div className={`w-12 h-12 ${subject.color} rounded-xl mx-auto mb-4 flex items-center justify-center`}>
+                  <div
+                    className={`w-12 h-12 ${subject.color} rounded-xl mx-auto mb-4 flex items-center justify-center`}
+                  >
                     <BookOpen className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-lg mb-2">{subject.name}</h3>
-                  <p className="text-2xl font-bold text-primary mb-1">{subject.count}</p>
-                  <p className="text-sm text-muted-foreground">teste të disponueshme</p>
+                  <p className="text-2xl font-bold text-primary mb-1">
+                    {subject.count}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    teste të disponueshme
+                  </p>
                 </CardContent>
               </Card>
             ))}
@@ -306,7 +384,10 @@ export default function App() {
           {/* Features */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
             {features.map((feature, index) => (
-              <Card key={index} className="text-left hover:shadow-lg transition-shadow">
+              <Card
+                key={index}
+                className="text-left hover:shadow-lg transition-shadow"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -334,9 +415,10 @@ export default function App() {
             <CardContent className="p-8 text-center">
               <h3 className="text-2xl font-bold mb-4">Gati për të filluar?</h3>
               <p className="text-blue-100 mb-6 max-w-md mx-auto">
-                Bashkohu me mijëra studentë të tjerë që po përgatiten për maturë me E-test
+                Bashkohu me mijëra studentë të tjerë që po përgatiten për maturë
+                me E-testi
               </p>
-              <Button 
+              <Button
                 onClick={() => setShowAuth(true)}
                 size="lg"
                 variant="secondary"
@@ -349,14 +431,14 @@ export default function App() {
         </main>
 
         <Suspense fallback={<LoadingFallback />}>
-          <AuthModal 
+          <AuthModal
             isOpen={showAuth}
             onClose={() => setShowAuth(false)}
             onLogin={handleLogin}
             onSignup={handleSignup}
           />
         </Suspense>
-        
+
         <Toaster />
       </div>
     );
@@ -371,7 +453,7 @@ export default function App() {
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <GraduationCap className="w-4 h-4 text-white" />
             </div>
-            <h1 className="font-bold">E-test</h1>
+            <h1 className="font-bold">E-testi </h1>
           </div>
           <Button size="sm" variant="outline" onClick={handleToggleDarkMode}>
             {darkMode ? '☀️' : '🌙'}
@@ -398,14 +480,11 @@ export default function App() {
       {/* Main Content */}
       <div className={`flex-1 overflow-auto ${isExamMode ? 'lg:ml-0' : ''}`}>
         <div className="lg:hidden h-16" /> {/* Spacer for mobile header */}
-        
         <Suspense fallback={<LoadingFallback />}>
-          {currentView === 'dashboard' && (
-            <Dashboard user={user} />
-          )}
-          
+          {currentView === 'dashboard' && <Dashboard user={user} />}
+
           {currentView === 'tests' && (
-            <TestList 
+            <TestList
               onStartTest={handleStartTest}
               onViewResults={handleViewResults}
               onStartNewExam={handleStartNewExam}
@@ -426,25 +505,26 @@ export default function App() {
               onExit={handleBackToSubjectSelection}
             />
           )}
-          
+
           {currentView === 'taking-test' && currentTestId && (
-            <TestTaking 
+            <TestTaking
               testId={currentTestId}
               onComplete={handleCompleteTest}
               onExit={handleBackToTests}
             />
           )}
-          
-          {currentView === 'test-results' && (currentTestId || currentSubject) && (
-            <TestResults 
-              testId={currentTestId || 1}
-              answers={testAnswers}
-              onBack={handleBackToTests}
-            />
-          )}
-          
+
+          {currentView === 'test-results' &&
+            (currentTestId || currentSubject) && (
+              <TestResults
+                testId={currentTestId || 1}
+                answers={testAnswers}
+                onBack={handleBackToTests}
+              />
+            )}
+
           {currentView === 'tips' && <Tips />}
-          
+
           {currentView === 'settings' && (
             <Settings
               user={user}
@@ -466,7 +546,7 @@ export default function App() {
               { id: 'tests', label: 'Testet', icon: '📝' },
               { id: 'test-results', label: 'Rezultatet', icon: '📊' },
               { id: 'tips', label: 'Këshilla', icon: '💡' },
-              { id: 'settings', label: 'Settings', icon: '⚙️' }
+              { id: 'settings', label: 'Settings', icon: '⚙️' },
             ].map((item) => (
               <Button
                 key={item.id}

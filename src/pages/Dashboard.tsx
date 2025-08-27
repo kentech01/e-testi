@@ -1,12 +1,39 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '../ui/card';
 import { Progress } from '../ui/progress';
 import { Badge } from '../ui/badge';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
-import { GraduationCap, BookOpen, Target, Star, Users, TrendingUp } from 'lucide-react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
+import {
+  GraduationCap,
+  BookOpen,
+  Target,
+  Star,
+  Users,
+  TrendingUp,
+  Plus,
+} from 'lucide-react';
 import { DashboardStats } from '../components/dashboard';
+import { useNavigate } from 'react-router-dom';
 
 interface DashboardProps {
   user: {
@@ -18,9 +45,27 @@ interface DashboardProps {
 }
 
 const subjectData = [
-  { name: 'Matematika', progress: 72, testsCompleted: 8, totalTests: 12, lastScore: 85 },
-  { name: 'Gjuha Shqipe', progress: 81, testsCompleted: 9, totalTests: 11, lastScore: 92 },
-  { name: 'Anglisht', progress: 64, testsCompleted: 7, totalTests: 10, lastScore: 78 },
+  {
+    name: 'Matematika',
+    progress: 72,
+    testsCompleted: 8,
+    totalTests: 12,
+    lastScore: 85,
+  },
+  {
+    name: 'Gjuha Shqipe',
+    progress: 81,
+    testsCompleted: 9,
+    totalTests: 11,
+    lastScore: 92,
+  },
+  {
+    name: 'Anglisht',
+    progress: 64,
+    testsCompleted: 7,
+    totalTests: 10,
+    lastScore: 78,
+  },
 ];
 
 const performanceData = [
@@ -42,28 +87,65 @@ const weeklyActivity = [
 ];
 
 const achievements = [
-  { title: 'Fillues i mire', description: 'Përfundoi testin e parë', icon: '🎯', unlocked: true },
-  { title: 'Seri fitore', description: '5 teste radhaz mbi 80%', icon: '🔥', unlocked: true },
-  { title: 'Matematikan', description: 'Rezultat perfekt në matematik', icon: '🧮', unlocked: false },
-  { title: 'Poliglot', description: 'Rezultat i shkëlqyer në gjuhë', icon: '📚', unlocked: false },
+  {
+    title: 'Fillues i mire',
+    description: 'Përfundoi testin e parë',
+    icon: '🎯',
+    unlocked: true,
+  },
+  {
+    title: 'Seri fitore',
+    description: '5 teste radhaz mbi 80%',
+    icon: '🔥',
+    unlocked: true,
+  },
+  {
+    title: 'Matematikan',
+    description: 'Rezultat perfekt në matematik',
+    icon: '🧮',
+    unlocked: false,
+  },
+  {
+    title: 'Poliglot',
+    description: 'Rezultat i shkëlqyer në gjuhë',
+    icon: '📚',
+    unlocked: false,
+  },
 ];
 
 const COLORS = ['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B'];
 
 export function Dashboard({ user }: DashboardProps) {
-  const overallProgress = Math.round(subjectData.reduce((acc, subject) => acc + subject.progress, 0) / subjectData.length);
-  const totalTestsCompleted = subjectData.reduce((acc, subject) => acc + subject.testsCompleted, 0);
-  const totalMinutesThisWeek = weeklyActivity.reduce((acc, day) => acc + day.minutes, 0);
-  const averageScore = Math.round(subjectData.reduce((acc, subject) => acc + subject.lastScore, 0) / subjectData.length);
+  // const navigate = useNavigate();
+  const overallProgress = Math.round(
+    subjectData.reduce((acc, subject) => acc + subject.progress, 0) /
+      subjectData.length
+  );
+  const totalTestsCompleted = subjectData.reduce(
+    (acc, subject) => acc + subject.testsCompleted,
+    0
+  );
+  const totalMinutesThisWeek = weeklyActivity.reduce(
+    (acc, day) => acc + day.minutes,
+    0
+  );
+  const averageScore = Math.round(
+    subjectData.reduce((acc, subject) => acc + subject.lastScore, 0) /
+      subjectData.length
+  );
 
   const pieData = subjectData.map((subject, index) => ({
     name: subject.name,
     value: subject.testsCompleted,
-    color: COLORS[index]
+    color: COLORS[index],
   }));
 
   const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
   };
 
   return (
@@ -73,13 +155,15 @@ export function Dashboard({ user }: DashboardProps) {
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Avatar className="w-16 h-16 border-2 border-white/20">
+              {/* <Avatar className="w-16 h-16 border-2 border-white/20">
                 <AvatarFallback className="bg-white/10 text-white text-lg">
                   {getInitials(user.name)}
                 </AvatarFallback>
-              </Avatar>
+              </Avatar> */}
               <div>
-                <h2 className="text-2xl font-bold">Mirë se erdhe, {user.name.split(' ')[0]}!</h2>
+                <h2 className="text-2xl font-bold">
+                  Mirë se erdhe, {user.name.split(' ')[0]}!
+                </h2>
                 <div className="flex items-center space-x-4 text-blue-100 mt-1">
                   <div className="flex items-center space-x-1">
                     <GraduationCap className="w-4 h-4" />
@@ -98,26 +182,44 @@ export function Dashboard({ user }: DashboardProps) {
             </div>
             <div className="text-right">
               <div className="text-3xl font-bold">{overallProgress}%</div>
-              <div className="text-blue-100 text-sm">Progres i përgjithshëm</div>
+              <div className="text-blue-100 text-sm">
+                Progres i përgjithshëm
+              </div>
             </div>
           </div>
           <div className="mt-6">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-blue-100">Objektivi juaj për këtë muaj</span>
+              <span className="text-blue-100">
+                Objektivi juaj për këtë muaj
+              </span>
               <span className="text-sm">{overallProgress}/85%</span>
             </div>
             <Progress value={overallProgress} className="h-3 bg-white/20" />
           </div>
         </CardContent>
+
+        <CardFooter className="flex items-end justify-end">
+          <Button
+            onClick={() => {
+              // navigate('/exam');
+            }}
+            size="lg"
+            variant="secondary"
+            className="bg-white text-blue-600 hover:bg-blue-50"
+          >
+            <Plus className="w-5 h-5 mr-2" />
+            Fillo test
+          </Button>
+        </CardFooter>
       </Card>
 
       {/* Quick Stats */}
-      <DashboardStats
+      {/* <DashboardStats
         overallProgress={overallProgress}
         totalTestsCompleted={totalTestsCompleted}
         totalMinutesThisWeek={totalMinutesThisWeek}
         averageScore={averageScore}
-      />
+      /> */}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Subject Performance */}
@@ -133,19 +235,26 @@ export function Dashboard({ user }: DashboardProps) {
               <div key={subject.name} className="space-y-3">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center space-x-3">
-                    <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: COLORS[index] }}></div>
+                    <div
+                      className={`w-3 h-3 rounded-full`}
+                      style={{ backgroundColor: COLORS[index] }}
+                    ></div>
                     <span className="font-medium">{subject.name}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Badge variant="secondary" className="text-xs">
                       {subject.lastScore}%
                     </Badge>
-                    <span className="text-sm text-muted-foreground">{subject.progress}%</span>
+                    <span className="text-sm text-muted-foreground">
+                      {subject.progress}%
+                    </span>
                   </div>
                 </div>
                 <Progress value={subject.progress} className="h-2" />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>{subject.testsCompleted} nga {subject.totalTests} teste</span>
+                  <span>
+                    {subject.testsCompleted} nga {subject.totalTests} teste
+                  </span>
                   <span>Rezultati i fundit: {subject.lastScore}%</span>
                 </div>
               </div>
@@ -180,9 +289,15 @@ export function Dashboard({ user }: DashboardProps) {
             </div>
             <div className="mt-4 space-y-2">
               {pieData.map((entry, index) => (
-                <div key={entry.name} className="flex items-center justify-between text-sm">
+                <div
+                  key={entry.name}
+                  className="flex items-center justify-between text-sm"
+                >
                   <div className="flex items-center space-x-2">
-                    <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: entry.color }}></div>
+                    <div
+                      className={`w-3 h-3 rounded-full`}
+                      style={{ backgroundColor: entry.color }}
+                    ></div>
                     <span>{entry.name}</span>
                   </div>
                   <span>{entry.value} teste</span>
@@ -208,24 +323,24 @@ export function Dashboard({ user }: DashboardProps) {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="test" />
                 <YAxis domain={[60, 100]} />
-                <Line 
-                  type="monotone" 
-                  dataKey="matematik" 
-                  stroke={COLORS[0]} 
+                <Line
+                  type="monotone"
+                  dataKey="matematik"
+                  stroke={COLORS[0]}
                   strokeWidth={3}
                   name="Matematika"
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="gjuhaShqipe" 
-                  stroke={COLORS[1]} 
+                <Line
+                  type="monotone"
+                  dataKey="gjuhaShqipe"
+                  stroke={COLORS[1]}
                   strokeWidth={3}
                   name="Gjuha Shqipe"
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="anglisht" 
-                  stroke={COLORS[2]} 
+                <Line
+                  type="monotone"
+                  dataKey="anglisht"
+                  stroke={COLORS[2]}
                   strokeWidth={3}
                   name="Anglisht"
                 />
@@ -248,13 +363,21 @@ export function Dashboard({ user }: DashboardProps) {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="day" />
                   <YAxis />
-                  <Bar dataKey="minutes" fill={COLORS[0]} radius={[4, 4, 0, 0]} />
+                  <Bar
+                    dataKey="minutes"
+                    fill={COLORS[0]}
+                    radius={[4, 4, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
             <div className="mt-4 text-center">
-              <div className="text-2xl font-bold">{totalMinutesThisWeek} min</div>
-              <div className="text-sm text-muted-foreground">Total kjo javë</div>
+              <div className="text-2xl font-bold">
+                {totalMinutesThisWeek} min
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Total kjo javë
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -267,20 +390,24 @@ export function Dashboard({ user }: DashboardProps) {
           <CardContent>
             <div className="space-y-3">
               {achievements.map((achievement, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`flex items-center space-x-3 p-3 rounded-lg border ${
-                    achievement.unlocked 
-                      ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' 
+                    achievement.unlocked
+                      ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800'
                       : 'bg-muted/30 border-muted'
                   }`}
                 >
-                  <div className={`text-2xl ${achievement.unlocked ? '' : 'grayscale opacity-50'}`}>
+                  <div
+                    className={`text-2xl ${achievement.unlocked ? '' : 'grayscale opacity-50'}`}
+                  >
                     {achievement.icon}
                   </div>
                   <div className="flex-1">
                     <div className="font-medium">{achievement.title}</div>
-                    <div className="text-sm text-muted-foreground">{achievement.description}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {achievement.description}
+                    </div>
                   </div>
                   {achievement.unlocked && (
                     <Badge variant="default" className="bg-green-500">

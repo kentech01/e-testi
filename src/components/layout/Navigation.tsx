@@ -1,16 +1,16 @@
 import React from 'react';
 import { Button } from '../../ui/button';
 import { Badge } from '../../ui/badge';
-import { 
-  LayoutDashboard, 
-  FileText, 
-  BarChart3, 
-  Settings, 
-  Lightbulb, 
+import {
+  LayoutDashboard,
+  FileText,
+  BarChart3,
+  Settings,
+  Lightbulb,
   LogOut,
   User,
   Moon,
-  Sun
+  Sun,
 } from 'lucide-react';
 
 interface NavigationProps {
@@ -28,18 +28,18 @@ interface NavigationProps {
 const menuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'tests', label: 'Testet', icon: FileText },
-  { id: 'results', label: 'Rezultatet', icon: BarChart3 },
+  // { id: 'results', label: 'Rezultatet', icon: BarChart3 },
   { id: 'tips', label: 'Këshilla', icon: Lightbulb },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
-export function Navigation({ 
-  currentView, 
-  onViewChange, 
-  user, 
-  darkMode, 
-  onToggleDarkMode, 
-  onLogout 
+export function Navigation({
+  currentView,
+  onViewChange,
+  user,
+  darkMode,
+  onToggleDarkMode,
+  onLogout,
 }: NavigationProps) {
   return (
     <div className="w-64 h-screen bg-sidebar border-r border-sidebar-border flex flex-col">
@@ -51,7 +51,9 @@ export function Navigation({
           </div>
           <div>
             <h2 className="font-medium text-sidebar-foreground">E-testi</h2>
-            <p className="text-xs text-sidebar-foreground/70">Përgatitja për maturë</p>
+            <p className="text-xs text-sidebar-foreground/70">
+              Përgatitja për maturë
+            </p>
           </div>
         </div>
       </div>
@@ -63,7 +65,9 @@ export function Navigation({
             <User className="w-4 h-4" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-sidebar-foreground truncate">{user.name}</p>
+            <p className="text-sm font-medium text-sidebar-foreground truncate">
+              {user.name}
+            </p>
             <div className="flex items-center space-x-2">
               <Badge variant="secondary" className="text-xs">
                 Klasa {user.grade}
@@ -78,14 +82,14 @@ export function Navigation({
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentView === item.id;
-          
+
           return (
             <Button
               key={item.id}
-              variant={isActive ? "default" : "ghost"}
+              variant={isActive ? 'default' : 'ghost'}
               className={`w-full justify-start h-10 ${
-                isActive 
-                  ? 'bg-sidebar-primary text-sidebar-primary-foreground' 
+                isActive
+                  ? 'bg-sidebar-primary text-sidebar-primary-foreground'
                   : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
               }`}
               onClick={() => onViewChange(item.id)}
@@ -99,19 +103,23 @@ export function Navigation({
 
       {/* Footer Actions */}
       <div className="p-4 border-t border-sidebar-border space-y-2">
-        <Button 
-          variant="ghost" 
-          size="sm" 
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={onToggleDarkMode}
           className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
         >
-          {darkMode ? <Sun className="w-4 h-4 mr-3" /> : <Moon className="w-4 h-4 mr-3" />}
+          {darkMode ? (
+            <Sun className="w-4 h-4 mr-3" />
+          ) : (
+            <Moon className="w-4 h-4 mr-3" />
+          )}
           {darkMode ? 'Light Mode' : 'Dark Mode'}
         </Button>
-        
-        <Button 
-          variant="ghost" 
-          size="sm" 
+
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={onLogout}
           className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
         >
