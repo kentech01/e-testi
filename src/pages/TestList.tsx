@@ -138,7 +138,7 @@ export function TestList({
   };
 
   const onStartNewExamClick = () => {
-    onStartNewExam();
+    // onStartNewExam();
   };
 
   const getSubjectIcon = (
@@ -151,10 +151,10 @@ export function TestList({
   return (
     <div className="p-4 max-w-6xl mx-auto">
       <div className="mb-6">
-        <h2>Testet</h2>
-        <p className="text-muted-foreground">
+        {/* <h2>Testet</h2> */}
+        {/* <p className="text-muted-foreground">
           Zgjidhni një test për të filluar ose për të parë rezultatet
-        </p>
+        </p> */}
       </div>
 
       {/* Start New Exam Section */}
@@ -163,10 +163,10 @@ export function TestList({
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xl font-semibold mb-2">Fillo test të ri</h3>
-              <p className="text-blue-100 mb-4">
+              {/* <p className="text-blue-100 mb-4">
                 Zgjidhni lëndën dhe filloni një test të përshtatur për nivelin
                 tuaj
-              </p>
+              </p> */}
               <div className="flex items-center space-x-4 text-sm text-blue-100">
                 <div className="flex items-center space-x-1">
                   <FileText className="w-4 h-4" />
@@ -241,6 +241,81 @@ export function TestList({
         })}
       </div>
 
+      <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+        <CardContent className="p-6">
+          <div className="flex items-start space-x-3">
+            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-800 rounded-lg flex items-center justify-center">
+              <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                Udhëzime për testin
+              </h3>
+              <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                <li>
+                  • Çdo test përmban 100 pyetje me zgjedhje të shumëfishta
+                </li>
+                <li>• Koha e disponueshme është 120 minuta</li>
+                <li>• 10 pyetje shfaqen në çdo faqe</li>
+                <li>• Mund të navigoni lirshëm midis faqeve</li>
+                <li>• Përgjigjet ruhen automatikisht</li>
+              </ul>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Additional Info */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 mb-8">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Format i testit</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div className="flex justify-between">
+              <span>Lloji i pyetjeve:</span>
+              <span className="font-medium">Zgjedhje të shumëfishta</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Numri i opsioneve:</span>
+              <span className="font-medium">4 (A, B, C, D)</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Pyetje për faqe:</span>
+              <span className="font-medium">10</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Ruajtja automatike:</span>
+              <span className="font-medium text-green-600">✓ Aktive</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Sistemi i pikëzimit</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div className="flex justify-between">
+              <span>Përgjigje e saktë:</span>
+              <span className="font-medium text-green-600">+1 pikë</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Përgjigje e gabuar:</span>
+              <span className="font-medium text-red-600">0 pikë</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Pa përgjigje:</span>
+              <span className="font-medium text-yellow-600">0 pikë</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Maksimumi:</span>
+              <span className="font-medium">100 pikë</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Tests Grid */}
       <div>
         <h3 className="font-semibold mb-4">Të gjitha testet</h3>
@@ -282,7 +357,7 @@ export function TestList({
 
       {/* Test Details Modal */}
       {selectedTest && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <Card className="max-w-md w-full">
             <CardContent className="p-6">
               <div className="text-center space-y-4">

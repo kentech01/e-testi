@@ -115,7 +115,7 @@ export function SubjectSelection({
         </Card>
 
         {/* Subject Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {subjects.map((subject) => {
             const Icon = subject.icon;
             return (
@@ -167,7 +167,7 @@ export function SubjectSelection({
               </Card>
             );
           })}
-        </div>
+        </div> */}
 
         {/* Additional Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
