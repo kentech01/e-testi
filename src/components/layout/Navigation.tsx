@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../../ui/button';
 import { Badge } from '../../ui/badge';
 import {
@@ -14,8 +15,6 @@ import {
 } from 'lucide-react';
 
 interface NavigationProps {
-  currentView: string;
-  onViewChange: (view: string) => void;
   user: {
     name: string;
     grade: string;
@@ -26,21 +25,26 @@ interface NavigationProps {
 }
 
 const menuItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'tests', label: 'Testet', icon: FileText },
-  // { id: 'results', label: 'Rezultatet', icon: BarChart3 },
-  { id: 'tips', label: 'Këshilla', icon: Lightbulb },
-  { id: 'settings', label: 'Settings', icon: Settings },
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    path: '/dashboard',
+  },
+  { id: 'tests', label: 'Testet', icon: FileText, path: '/tests' },
+  // { id: 'results', label: 'Rezultatet', icon: BarChart3, path: '/results' },
+  { id: 'tips', label: 'Këshilla', icon: Lightbulb, path: '/tips' },
+  { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
 ];
 
 export function Navigation({
-  currentView,
-  onViewChange,
   user,
   darkMode,
   onToggleDarkMode,
   onLogout,
 }: NavigationProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
   return (
     <div className="w-64 h-screen bg-sidebar border-r border-sidebar-border flex flex-col">
       {/* Header */}
@@ -81,7 +85,7 @@ export function Navigation({
       <nav className="flex-1 p-4 space-y-2">
         {menuItems.map((item) => {
           const Icon = item.icon;
-          const isActive = currentView === item.id;
+          const isActive = location.pathname === item.path;
 
           return (
             <Button
@@ -92,7 +96,7 @@ export function Navigation({
                   ? 'bg-sidebar-primary text-sidebar-primary-foreground'
                   : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
               }`}
-              onClick={() => onViewChange(item.id)}
+              onClick={() => navigate(item.path)}
             >
               <Icon className="w-4 h-4 mr-3" />
               {item.label}

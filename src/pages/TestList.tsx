@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -125,7 +126,20 @@ export function TestList({
   onViewResults,
   onStartNewExam,
 }: TestListProps) {
+  const navigate = useNavigate();
   const [selectedTest, setSelectedTest] = useState<Test | null>(null);
+
+  const onStartTestClick = (testId: number) => {
+    onStartTest(testId);
+  };
+
+  const onViewResultsClick = (testId: number) => {
+    onViewResults(testId);
+  };
+
+  const onStartNewExamClick = () => {
+    onStartNewExam();
+  };
 
   const getSubjectIcon = (
     subject: 'matematik' | 'gjuhaShqipe' | 'anglisht'
@@ -164,15 +178,15 @@ export function TestList({
                 </div>
               </div>
             </div>
-            {/* <Button
-              onClick={onStartNewExam}
+            <Button
+              onClick={onStartNewExamClick}
               size="lg"
               variant="secondary"
               className="bg-white text-blue-600 hover:bg-blue-50"
             >
               <Plus className="w-5 h-5 mr-2" />
               Fillo test
-            </Button> */}
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -312,7 +326,7 @@ export function TestList({
                   {selectedTest.completed ? (
                     <Button
                       onClick={() => {
-                        onViewResults(selectedTest.id);
+                        onViewResultsClick(selectedTest.id);
                         setSelectedTest(null);
                       }}
                       className="flex-1"
@@ -322,7 +336,7 @@ export function TestList({
                   ) : (
                     <Button
                       onClick={() => {
-                        onStartTest(selectedTest.id);
+                        onStartTestClick(selectedTest.id);
                         setSelectedTest(null);
                       }}
                       className="flex-1 bg-green-500 hover:bg-green-600"

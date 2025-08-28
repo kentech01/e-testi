@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  lazy,
-  Suspense,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
@@ -21,38 +14,12 @@ import {
 } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 
-// Lazy load pages for better performance
+// Lazy load components
 const AuthModal = lazy(() =>
   import('./components/forms').then((module) => ({ default: module.AuthModal }))
 );
-const Navigation = lazy(() =>
-  import('./components/layout').then((module) => ({
-    default: module.Navigation,
-  }))
-);
-const Dashboard = lazy(() =>
-  import('./pages').then((module) => ({ default: module.Dashboard }))
-);
-const TestList = lazy(() =>
-  import('./pages').then((module) => ({ default: module.TestList }))
-);
-const SubjectSelection = lazy(() =>
-  import('./pages').then((module) => ({ default: module.SubjectSelection }))
-);
-const ExamInterface = lazy(() =>
-  import('./pages').then((module) => ({ default: module.ExamInterface }))
-);
-const TestTaking = lazy(() =>
-  import('./pages').then((module) => ({ default: module.TestTaking }))
-);
-const TestResults = lazy(() =>
-  import('./pages').then((module) => ({ default: module.TestResults }))
-);
-const Settings = lazy(() =>
-  import('./pages').then((module) => ({ default: module.Settings }))
-);
-const Tips = lazy(() =>
-  import('./pages').then((module) => ({ default: module.Tips }))
+const AppRouter = lazy(() =>
+  import('./router').then((module) => ({ default: module.AppRouter }))
 );
 
 interface User {
@@ -61,16 +28,6 @@ interface User {
   grade: string;
   school?: string;
 }
-
-type ViewType =
-  | 'dashboard'
-  | 'tests'
-  | 'subject-selection'
-  | 'exam-interface'
-  | 'taking-test'
-  | 'test-results'
-  | 'tips'
-  | 'settings';
 
 // Memoized constants to prevent re-creation
 const features = [
@@ -118,13 +75,7 @@ const LoadingFallback = () => (
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [showAuth, setShowAuth] = useState(false);
-  const [currentView, setCurrentView] = useState<ViewType>('dashboard');
   const [darkMode, setDarkMode] = useState(false);
-  const [currentTestId, setCurrentTestId] = useState<number | null>(null);
-  const [currentSubject, setCurrentSubject] = useState<
-    'matematik' | 'gjuhaShqipe' | 'anglisht' | null
-  >(null);
-  const [testAnswers, setTestAnswers] = useState<(number | null)[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Initialize app state
@@ -160,8 +111,7 @@ export default function App() {
     localStorage.setItem('darkMode', darkMode.toString());
   }, [darkMode]);
 
-  // Memoized handlers to prevent unnecessary re-renders
-  const handleLogin = useCallback((email: string, password: string) => {
+  const handleLogin = (email: string, password: string) => {
     const mockUser = {
       name: 'Ardi Hoxha',
       email: email,
@@ -173,123 +123,48 @@ export default function App() {
     localStorage.setItem('maturaUser', JSON.stringify(mockUser));
     setShowAuth(false);
     toast.success('Mirë se erdhe përsëri!');
-  }, []);
+  };
 
-  const handleSignup = useCallback(
-    (
-      email: string,
-      password: string,
-      name: string,
-      grade: string,
-      school: string
-    ) => {
-      const newUser = {
-        name: name,
-        email: email,
-        grade: grade,
-        school: school,
-      };
+  const handleSignup = (
+    email: string,
+    password: string,
+    name: string,
+    grade: string,
+    school: string
+  ) => {
+    const newUser = {
+      name: name,
+      email: email,
+      grade: grade,
+      school: school,
+    };
 
-      setUser(newUser);
-      localStorage.setItem('maturaUser', JSON.stringify(newUser));
-      setShowAuth(false);
-      toast.success(
-        'Mirë se erdhe në E-testi! Llogaria juaj u krijua me sukses.'
-      );
-    },
-    []
-  );
+    setUser(newUser);
+    localStorage.setItem('maturaUser', JSON.stringify(newUser));
+    setShowAuth(false);
+    toast.success(
+      'Mirë se erdhe në E-testi! Llogaria juaj u krijua me sukses.'
+    );
+  };
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('maturaUser');
-    setCurrentView('dashboard');
-    setCurrentTestId(null);
-    setCurrentSubject(null);
-    setTestAnswers([]);
     toast.info('U dolët nga llogaria');
-  }, []);
+  };
 
-  const handleToggleDarkMode = useCallback(() => {
+  const handleToggleDarkMode = () => {
     setDarkMode((prev) => !prev);
-  }, []);
+  };
 
-  const handleStartNewExam = useCallback(() => {
-    setCurrentView('subject-selection');
-  }, []);
-
-  const handleSubjectSelect = useCallback(
-    (subject: 'matematik' | 'gjuhaShqipe' | 'anglisht') => {
-      setCurrentSubject(subject);
-      setCurrentView('exam-interface');
-      toast.info(
-        `Filloi testi i ${subject === 'matematik' ? 'Matematikës' : subject === 'gjuhaShqipe' ? 'Gjuhës Shqipe' : 'Gjuhës Angleze'}`
-      );
-    },
-    []
-  );
-
-  const handleStartTest = useCallback((testId: number) => {
-    setCurrentTestId(testId);
-    setCurrentView('taking-test');
-    toast.info(`Filloi Test ${testId}`);
-  }, []);
-
-  const handleCompleteExam = useCallback((answers: (number | null)[]) => {
-    const convertedAnswers = answers.map((answer) =>
-      answer === null ? -1 : answer
-    );
-    setTestAnswers(convertedAnswers);
-    setCurrentView('test-results');
-    toast.success('Testi u përfundua me sukses!');
-  }, []);
-
-  const handleCompleteTest = useCallback((answers: number[]) => {
-    setTestAnswers(answers);
-    setCurrentView('test-results');
-    toast.success('Testi u përfundua me sukses!');
-  }, []);
-
-  const handleViewResults = useCallback((testId: number) => {
-    setCurrentTestId(testId);
-    const mockAnswers = Array.from({ length: 100 }, () =>
-      Math.floor(Math.random() * 4)
-    );
-    setTestAnswers(mockAnswers);
-    setCurrentView('test-results');
-  }, []);
-
-  const handleUpdateProfile = useCallback(
-    (name: string, email: string) => {
-      if (user) {
-        const updatedUser = { ...user, name, email };
-        setUser(updatedUser);
-        localStorage.setItem('maturaUser', JSON.stringify(updatedUser));
-        toast.success('Profili u përditësua me sukses!');
-      }
-    },
-    [user]
-  );
-
-  const handleBackToTests = useCallback(() => {
-    setCurrentView('tests');
-    setCurrentTestId(null);
-    setCurrentSubject(null);
-    setTestAnswers([]);
-  }, []);
-
-  const handleBackToSubjectSelection = useCallback(() => {
-    setCurrentView('subject-selection');
-    setCurrentSubject(null);
-  }, []);
-
-  // Memoized computed values
-  const isExamMode = useMemo(
-    () => ['exam-interface', 'subject-selection'].includes(currentView),
-    [currentView]
-  );
-
-  const shouldShowNavigation = useMemo(() => !isExamMode, [isExamMode]);
+  const handleUpdateProfile = (name: string, email: string) => {
+    if (user) {
+      const updatedUser = { ...user, name, email };
+      setUser(updatedUser);
+      localStorage.setItem('maturaUser', JSON.stringify(updatedUser));
+      toast.success('Profili u përditësua me sukses!');
+    }
+  };
 
   // Show loading screen during initialization
   if (isLoading) {
@@ -446,123 +321,15 @@ export default function App() {
 
   return (
     <div className="flex h-screen bg-background">
-      {/* Mobile Header - Hidden on desktop */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 bg-background border-b border-border z-50 p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <GraduationCap className="w-4 h-4 text-white" />
-            </div>
-            <h1 className="font-bold">E-testi </h1>
-          </div>
-          <Button size="sm" variant="outline" onClick={handleToggleDarkMode}>
-            {darkMode ? '☀️' : '🌙'}
-          </Button>
-        </div>
-      </div>
-
-      {/* Sidebar Navigation - Hidden on mobile when in exam mode */}
-      {shouldShowNavigation && (
-        <div className="hidden lg:flex">
-          <Suspense fallback={<Skeleton className="w-64 h-full" />}>
-            <Navigation
-              currentView={currentView}
-              onViewChange={setCurrentView as (view: string) => void}
-              user={user}
-              darkMode={darkMode}
-              onToggleDarkMode={handleToggleDarkMode}
-              onLogout={handleLogout}
-            />
-          </Suspense>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className={`flex-1 overflow-auto ${isExamMode ? 'lg:ml-0' : ''}`}>
-        <div className="lg:hidden h-16" /> {/* Spacer for mobile header */}
-        <Suspense fallback={<LoadingFallback />}>
-          {currentView === 'dashboard' && <Dashboard user={user} />}
-
-          {currentView === 'tests' && (
-            <TestList
-              onStartTest={handleStartTest}
-              onViewResults={handleViewResults}
-              onStartNewExam={handleStartNewExam}
-            />
-          )}
-
-          {currentView === 'subject-selection' && (
-            <SubjectSelection
-              onSelectSubject={handleSubjectSelect}
-              onBack={handleBackToTests}
-            />
-          )}
-
-          {currentView === 'exam-interface' && currentSubject && (
-            <ExamInterface
-              subject={currentSubject}
-              onComplete={handleCompleteExam}
-              onExit={handleBackToSubjectSelection}
-            />
-          )}
-
-          {currentView === 'taking-test' && currentTestId && (
-            <TestTaking
-              testId={currentTestId}
-              onComplete={handleCompleteTest}
-              onExit={handleBackToTests}
-            />
-          )}
-
-          {currentView === 'test-results' &&
-            (currentTestId || currentSubject) && (
-              <TestResults
-                testId={currentTestId || 1}
-                answers={testAnswers}
-                onBack={handleBackToTests}
-              />
-            )}
-
-          {currentView === 'tips' && <Tips />}
-
-          {currentView === 'settings' && (
-            <Settings
-              user={user}
-              darkMode={darkMode}
-              onToggleDarkMode={handleToggleDarkMode}
-              onUpdateProfile={handleUpdateProfile}
-              onLogout={handleLogout}
-            />
-          )}
-        </Suspense>
-      </div>
-
-      {/* Mobile Bottom Navigation - Hidden when in exam mode */}
-      {shouldShowNavigation && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border p-2">
-          <div className="grid grid-cols-5 gap-1">
-            {[
-              { id: 'dashboard', label: 'Kreu', icon: '🏠' },
-              { id: 'tests', label: 'Testet', icon: '📝' },
-              { id: 'test-results', label: 'Rezultatet', icon: '📊' },
-              { id: 'tips', label: 'Këshilla', icon: '💡' },
-              { id: 'settings', label: 'Settings', icon: '⚙️' },
-            ].map((item) => (
-              <Button
-                key={item.id}
-                variant={currentView === item.id ? 'default' : 'ghost'}
-                size="sm"
-                className="flex flex-col h-auto py-2 px-1"
-                onClick={() => setCurrentView(item.id as ViewType)}
-              >
-                <span className="text-lg mb-1">{item.icon}</span>
-                <span className="text-xs">{item.label}</span>
-              </Button>
-            ))}
-          </div>
-        </div>
-      )}
-
+      <Suspense fallback={<LoadingFallback />}>
+        <AppRouter
+          user={user}
+          darkMode={darkMode}
+          onToggleDarkMode={handleToggleDarkMode}
+          onLogout={handleLogout}
+          onUpdateProfile={handleUpdateProfile}
+        />
+      </Suspense>
       <Toaster />
     </div>
   );

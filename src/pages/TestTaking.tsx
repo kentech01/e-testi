@@ -14,7 +14,7 @@ interface Question {
   subject: string;
 }
 
-interface TestTakingProps {
+export interface TestTakingProps {
   testId: number;
   onComplete: (answers: number[]) => void;
   onExit: () => void;

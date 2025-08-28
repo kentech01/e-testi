@@ -23,7 +23,15 @@ import {
   CartesianGrid,
 } from 'recharts';
 
-interface TestResultsProps {
+interface Question {
+  id: number;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  subject: string;
+}
+
+export interface TestResultsProps {
   testId: number;
   answers: number[];
   onBack: () => void;

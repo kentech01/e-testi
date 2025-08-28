@@ -1,8 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { BookOpen, Calculator, Globe, ChevronRight, Clock, FileText } from 'lucide-react';
+import {
+  BookOpen,
+  Calculator,
+  Globe,
+  ChevronRight,
+  Clock,
+  FileText,
+} from 'lucide-react';
 
 interface SubjectSelectionProps {
   onSelectSubject: (subject: 'matematik' | 'gjuhaShqipe' | 'anglisht') => void;
@@ -23,7 +31,7 @@ const subjects = [
     iconColor: 'text-blue-600 dark:text-blue-400',
     questions: 100,
     duration: '120 min',
-    difficulty: 'E vështirë'
+    difficulty: 'E vështirë',
   },
   {
     id: 'gjuhaShqipe' as const,
@@ -38,7 +46,7 @@ const subjects = [
     iconColor: 'text-green-600 dark:text-green-400',
     questions: 100,
     duration: '120 min',
-    difficulty: 'Mesatare'
+    difficulty: 'Mesatare',
   },
   {
     id: 'anglisht' as const,
@@ -53,11 +61,14 @@ const subjects = [
     iconColor: 'text-purple-600 dark:text-purple-400',
     questions: 100,
     duration: '120 min',
-    difficulty: 'Mesatare'
-  }
+    difficulty: 'Mesatare',
+  },
 ];
 
-export function SubjectSelection({ onSelectSubject, onBack }: SubjectSelectionProps) {
+export function SubjectSelection({
+  onSelectSubject,
+  onBack,
+}: SubjectSelectionProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -69,7 +80,9 @@ export function SubjectSelection({ onSelectSubject, onBack }: SubjectSelectionPr
             </Button>
             <div>
               <h1>Zgjidhni lëndën</h1>
-              <p className="text-sm text-muted-foreground">Përzgjidhni lëndën për të filluar testin</p>
+              <p className="text-sm text-muted-foreground">
+                Përzgjidhni lëndën për të filluar testin
+              </p>
             </div>
           </div>
         </div>
@@ -84,9 +97,13 @@ export function SubjectSelection({ onSelectSubject, onBack }: SubjectSelectionPr
                 <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Udhëzime për testin</h3>
+                <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                  Udhëzime për testin
+                </h3>
                 <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                  <li>• Çdo test përmban 100 pyetje me zgjedhje të shumëfishta</li>
+                  <li>
+                    • Çdo test përmban 100 pyetje me zgjedhje të shumëfishta
+                  </li>
                   <li>• Koha e disponueshme është 120 minuta</li>
                   <li>• 10 pyetje shfaqen në çdo faqe</li>
                   <li>• Mund të navigoni lirshëm midis faqeve</li>
@@ -102,14 +119,16 @@ export function SubjectSelection({ onSelectSubject, onBack }: SubjectSelectionPr
           {subjects.map((subject) => {
             const Icon = subject.icon;
             return (
-              <Card 
+              <Card
                 key={subject.id}
                 className={`hover:shadow-lg transition-all cursor-pointer group ${subject.bgColor} ${subject.borderColor}`}
                 onClick={() => onSelectSubject(subject.id)}
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between">
-                    <div className={`w-12 h-12 bg-gradient-to-br ${subject.color} rounded-xl flex items-center justify-center`}>
+                    <div
+                      className={`w-12 h-12 bg-gradient-to-br ${subject.color} rounded-xl flex items-center justify-center`}
+                    >
                       <Icon className="w-6 h-6 text-white" />
                     </div>
                     <Badge variant="secondary" className="text-xs">
@@ -120,7 +139,9 @@ export function SubjectSelection({ onSelectSubject, onBack }: SubjectSelectionPr
                 <CardContent className="space-y-4">
                   <div>
                     <CardTitle className="mb-2">{subject.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground mb-1">{subject.nameEn}</p>
+                    <p className="text-sm text-muted-foreground mb-1">
+                      {subject.nameEn}
+                    </p>
                     <p className="text-sm">{subject.description}</p>
                   </div>
 
@@ -135,7 +156,7 @@ export function SubjectSelection({ onSelectSubject, onBack }: SubjectSelectionPr
                     </div>
                   </div>
 
-                  <Button 
+                  <Button
                     className="w-full group-hover:bg-primary/90 transition-colors"
                     size="sm"
                   >

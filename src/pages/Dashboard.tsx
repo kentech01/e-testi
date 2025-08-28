@@ -33,15 +33,15 @@ import {
   Plus,
 } from 'lucide-react';
 import { DashboardStats } from '../components/dashboard';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
-interface DashboardProps {
+export interface DashboardProps {
   user: {
     name: string;
-    grade: string;
     email: string;
+    grade: string;
     school?: string;
-  };
+  } | null;
 }
 
 const subjectData = [
@@ -116,7 +116,12 @@ const achievements = [
 const COLORS = ['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B'];
 
 export function Dashboard({ user }: DashboardProps) {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+
   const overallProgress = Math.round(
     subjectData.reduce((acc, subject) => acc + subject.progress, 0) /
       subjectData.length

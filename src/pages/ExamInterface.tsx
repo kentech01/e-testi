@@ -28,7 +28,7 @@ interface Question {
   };
 }
 
-interface ExamInterfaceProps {
+export interface ExamInterfaceProps {
   subject: 'matematik' | 'gjuhaShqipe' | 'anglisht';
   onComplete: (answers: (number | null)[]) => void;
   onExit: () => void;
