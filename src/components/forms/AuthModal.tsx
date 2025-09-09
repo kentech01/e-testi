@@ -8,12 +8,11 @@ import { Badge } from '../../ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
 import { GraduationCap, Eye, EyeOff, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useFirebaseAuth } from '../../hooks/useFirebaseAuth';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLogin: (email: string, password: string) => void;
-  onSignup: (email: string, password: string, name: string, grade: string, school: string) => void;
 }
 
 // Memoized school list for better performance
@@ -40,9 +39,8 @@ const passwordRequirements = [
   { id: 'number', text: 'Një numër', check: (password: string) => /\d/.test(password) }
 ];
 
-export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps) {
+export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [currentStep, setCurrentStep] = useState<'login' | 'signup' | 'grade' | 'school'>('login');
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -53,6 +51,9 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
     school: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Use Firebase auth hook
+  const { signIn, signUp, loading } = useFirebaseAuth();
 
   // Memoized password validation
   const passwordValidation = useMemo(() => {
@@ -113,32 +114,24 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
   const handleLogin = useCallback(async () => {
     if (!validateForm()) return;
 
-    setIsLoading(true);
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      // onLogin(formData.email, formData.password);
+      await signIn(formData.email, formData.password);
+      handleClose();
     } catch (error) {
-      toast.error('Gabim gjatë hyrjes në llogari');
-    } finally {
-      setIsLoading(false);
+      // Error is already handled in the hook
     }
-  }, [formData.email, formData.password, validateForm, onLogin]);
+  }, [formData.email, formData.password, validateForm, signIn]);
 
   const handleSignup = useCallback(async () => {
     if (!validateForm()) return;
 
-    setIsLoading(true);
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      onSignup(formData.email, formData.password, formData.name, formData.grade, formData.school);
+      await signUp(formData.email, formData.password, formData.name, formData.grade, formData.school);
+      handleClose();
     } catch (error) {
-      toast.error('Gabim gjatë krijimit të llogarisë');
-    } finally {
-      setIsLoading(false);
+      // Error is already handled in the hook
     }
-  }, [formData, validateForm, onSignup]);
+  }, [formData, validateForm, signUp]);
 
   const resetForm = useCallback(() => {
     setFormData({
@@ -151,7 +144,6 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
     });
     setErrors({});
     setCurrentStep('login');
-    setIsLoading(false);
     setShowPassword(false);
   }, []);
 
@@ -192,7 +184,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 className={errors.email ? 'border-red-500' : ''}
-                disabled={isLoading}
+                disabled={loading}
               />
               {errors.email && (
                 <p className="text-sm text-red-500 flex items-center space-x-1">
@@ -212,7 +204,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
                   className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
-                  disabled={isLoading}
+                  disabled={loading}
                 />
                 <Button
                   type="button"
@@ -220,7 +212,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                   size="sm"
                   className="absolute right-0 top-0 h-full px-3"
                   onClick={() => setShowPassword(!showPassword)}
-                  disabled={isLoading}
+                  disabled={loading}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </Button>
@@ -236,10 +228,9 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
             <Button 
               onClick={handleLogin} 
               className="w-full" 
-              // disabled={isLoading || !formData.email || !formData.password}
-              disabled={true}
+              disabled={loading || !formData.email || !formData.password}
             >
-              {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               Hyr në llogari
             </Button>
 
@@ -249,7 +240,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                 variant="link"
                 className="p-0 h-auto"
                 onClick={() => setCurrentStep('signup')}
-                disabled={isLoading}
+                disabled={loading}
               >
                 Regjistrohuni këtu
               </Button>
@@ -269,7 +260,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 className={errors.name ? 'border-red-500' : ''}
-                disabled={isLoading}
+                disabled={loading}
               />
               {errors.name && (
                 <p className="text-sm text-red-500 flex items-center space-x-1">
@@ -288,7 +279,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 className={errors.email ? 'border-red-500' : ''}
-                disabled={isLoading}
+                disabled={loading}
               />
               {errors.email && (
                 <p className="text-sm text-red-500 flex items-center space-x-1">
@@ -308,7 +299,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
                   className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
-                  disabled={isLoading}
+                  disabled={loading}
                 />
                 <Button
                   type="button"
@@ -316,7 +307,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                   size="sm"
                   className="absolute right-0 top-0 h-full px-3"
                   onClick={() => setShowPassword(!showPassword)}
-                  disabled={isLoading}
+                  disabled={loading}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </Button>
@@ -353,7 +344,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                 value={formData.confirmPassword}
                 onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                 className={errors.confirmPassword ? 'border-red-500' : ''}
-                disabled={isLoading}
+                disabled={loading}
               />
               {errors.confirmPassword && (
                 <p className="text-sm text-red-500 flex items-center space-x-1">
@@ -366,7 +357,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
             <Button 
               onClick={nextStep} 
               className="w-full" 
-              disabled={isLoading || !canProceedToGrade}
+              disabled={loading || !canProceedToGrade}
             >
               Vazhdo
             </Button>
@@ -377,7 +368,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                 variant="link"
                 className="p-0 h-auto"
                 onClick={() => setCurrentStep('login')}
-                disabled={isLoading}
+                disabled={loading}
               >
                 Hyni këtu
               </Button>
@@ -442,14 +433,14 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                 variant="outline" 
                 onClick={() => setCurrentStep('signup')}
                 className="flex-1"
-                disabled={isLoading}
+                disabled={loading}
               >
                 Mbrapa
               </Button>
               <Button 
                 onClick={nextStep} 
                 className="flex-1" 
-                disabled={!formData.grade || isLoading}
+                disabled={!formData.grade || loading}
               >
                 Vazhdo
               </Button>
@@ -472,7 +463,7 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
               <Select 
                 value={formData.school} 
                 onValueChange={(value) => handleInputChange('school', value)}
-                disabled={isLoading}
+                disabled={loading}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Zgjidhni shkollën tuaj" />
@@ -492,17 +483,16 @@ export function AuthModal({ isOpen, onClose, onLogin, onSignup }: AuthModalProps
                 variant="outline" 
                 onClick={() => setCurrentStep('grade')}
                 className="flex-1"
-                disabled={isLoading}
+                disabled={loading}
               >
                 Mbrapa
               </Button>
               <Button 
                 onClick={handleSignup} 
                 className="flex-1" 
-                // disabled={!canCompleteSignup || isLoading}
-                disabled={true}
+                disabled={!canCompleteSignup || loading}
               >
-                {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Krijo llogari
               </Button>
             </div>
