@@ -27,7 +27,6 @@ export const useFirebaseAuth = () => {
           ...prev,
           isAuthenticated: true,
           user: userData,
-          firebaseUser,
           loading: false,
           error: null,
         }));
@@ -36,7 +35,6 @@ export const useFirebaseAuth = () => {
           ...prev,
           isAuthenticated: false,
           user: null,
-          firebaseUser: null,
           loading: false,
           error: null,
         }));
@@ -157,7 +155,6 @@ export const useFirebaseAuth = () => {
         ...prev,
         isAuthenticated: false,
         user: null,
-        firebaseUser: null,
         loading: false,
         error: null,
       }));

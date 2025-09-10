@@ -1,7 +1,6 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut as firebaseSignOut,
   onAuthStateChanged,
   User as FirebaseUser,
   UserCredential,
@@ -9,6 +8,7 @@ import {
   signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
+  signOut as firebaseSignOut,
 } from 'firebase/auth';
 import { auth } from './config';
 
@@ -92,21 +92,11 @@ export const authService = {
     }
   },
 
-  // Sign out - using a more reliable approach
+  // Sign out
   async signOut(): Promise<void> {
     try {
-      console.log('Calling Firebase signOut...');
-
-      // Check if user is actually signed in before attempting sign out
-      if (auth.currentUser) {
-        await firebaseSignOut(auth);
-        console.log('Firebase signOut completed');
-      } else {
-        console.log('No user to sign out');
-      }
+      await firebaseSignOut(auth);
     } catch (error) {
-      console.error('Firebase signOut error:', error);
-      // Don't throw the error - let the calling code handle it
       throw error;
     }
   },

@@ -15,7 +15,9 @@ import {
 } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
+
 import { auth } from './lib/firebase/config';
+import { authService } from './lib/firebase/auth';
 
 // Lazy load components
 const AuthModal = lazy(() =>
@@ -72,7 +74,7 @@ const LoadingFallback = () => (
 function AppContent() {
   const [showAuth, setShowAuth] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const { user, loading, signOut } = useFirebaseAuth();
+  const { user, loading, signOut } = useFirebaseAuth(); // Get signOut from the hook
 
   // Initialize app state
   useEffect(() => {
@@ -93,8 +95,7 @@ function AppContent() {
 
   const handleLogout = async () => {
     try {
-      await signOut();
-      // Remove the auth parameter - signOut doesn't expect any arguments
+      await signOut(); // Use the signOut from the hook, not Firebase directly
     } catch (error) {
       console.error('Error signing out:', error);
       // Even if there's an error, we should still show success

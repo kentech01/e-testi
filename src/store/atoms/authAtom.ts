@@ -1,5 +1,4 @@
 import { atom } from 'recoil';
-import { User as FirebaseUser } from 'firebase/auth';
 
 export interface User {
   uid: string;
@@ -12,7 +11,6 @@ export interface User {
 export interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
-  firebaseUser: FirebaseUser | null;
   loading: boolean;
   error: string | null;
 }
@@ -22,7 +20,6 @@ export const authAtom = atom<AuthState>({
   default: {
     isAuthenticated: false,
     user: null,
-    firebaseUser: null,
     loading: true, // Start with loading true to handle initial auth state
     error: null,
   },
