@@ -121,6 +121,33 @@ export const useFirebaseAuth = () => {
     }
   };
 
+  const signInWithGoogle = async () => {
+    try {
+      setAuthState((prev) => ({ ...prev, loading: true, error: null }));
+
+      const userCredential = await authService.signInWithGoogle();
+      const userData = authService.convertFirebaseUser(userCredential.user);
+
+      setAuthState((prev) => ({
+        ...prev,
+        user: userData,
+        loading: false,
+      }));
+
+      toast.success('U hytë me sukses me Google!');
+      return userCredential;
+    } catch (error: any) {
+      const errorMessage = getFirebaseErrorMessage(error.code);
+      setAuthState((prev) => ({
+        ...prev,
+        loading: false,
+        error: errorMessage,
+      }));
+      toast.error(errorMessage);
+      throw error;
+    }
+  };
+
   const signOut = async () => {
     try {
       console.log('Starting sign out process...');
@@ -157,6 +184,7 @@ export const useFirebaseAuth = () => {
     ...authState,
     signUp,
     signIn,
+    signInWithGoogle,
     signOut,
   };
 };
@@ -182,6 +210,22 @@ const getFirebaseErrorMessage = (errorCode: string): string => {
       return 'Operacioni nuk lejohet. Kontaktoni administratorin';
     case 'auth/requires-recent-login':
       return 'Kërkohet hyrje e re për të vazhduar';
+    case 'auth/popup-closed-by-user':
+      return 'Dritarja e hyrjes u mbyll. Provo përsëri';
+    case 'auth/popup-blocked':
+      return 'Dritarja e hyrjes u bllokua. Lejo popup-et për këtë faqe';
+    case 'auth/cancelled-popup-request':
+      return 'Kërkesa u anulua. Provo përsëri';
+    case 'auth/account-exists-with-different-credential':
+      return 'Ekziston një llogari me këtë email por me metodë tjetër hyrjeje';
+    case 'auth/invalid-credential':
+      return 'Kredencialet janë të pavlefshme';
+    case 'auth/user-disabled':
+      return 'Llogaria është e çaktivizuar';
+    case 'auth/invalid-verification-code':
+      return 'Kodi i verifikimit është i pavlefshëm';
+    case 'auth/invalid-verification-id':
+      return 'ID-ja e verifikimit është e pavlefshme';
     default:
       return 'Ndodhi një gabim. Provo përsëri';
   }

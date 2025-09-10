@@ -72,7 +72,7 @@ const LoadingFallback = () => (
 function AppContent() {
   const [showAuth, setShowAuth] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const { user, loading } = useFirebaseAuth();
+  const { user, loading, signOut } = useFirebaseAuth();
 
   // Initialize app state
   useEffect(() => {
@@ -93,6 +93,7 @@ function AppContent() {
 
   const handleLogout = async () => {
     try {
+      await signOut();
       // Remove the auth parameter - signOut doesn't expect any arguments
     } catch (error) {
       console.error('Error signing out:', error);

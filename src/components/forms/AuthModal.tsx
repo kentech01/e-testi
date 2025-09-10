@@ -1,12 +1,31 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../ui/dialog';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '../../ui/dialog';
 import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
 import { Label } from '../../ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 import { Badge } from '../../ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
-import { GraduationCap, Eye, EyeOff, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../ui/select';
+import {
+  GraduationCap,
+  Eye,
+  EyeOff,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+  Chrome,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { useFirebaseAuth } from '../../hooks/useFirebaseAuth';
 
@@ -24,23 +43,83 @@ const kosovoSchools = [
   'Shkolla e Mesme Teknike "7 Shtatori" - Prizren',
   'Liceu "Lidhja e Prizrenit" - Prizren',
   'Shkolla e Mesme "Bahri Haxhiu" - Ferizaj',
-  'Liceu "Zenel Hajdini" - Gjilan',
+  'Liceu "Hajdar Dushi" - Pejë',
   'Shkolla e Mesme "11 Marsi" - Gjakovë',
   'Liceu "Hajdar Dushi" - Pejë',
   'Shkolla e Mesme "Abdyl Frashëri" - Mitrovicë',
   'Liceu "Ukshin Hoti" - Vushtrri',
-  'Shkolla e Mesme "Ismail Qemali" - Istog'
+  'Shkolla e Mesme "Ismail Qemali" - Istog',
 ];
 
 const passwordRequirements = [
-  { id: 'length', text: 'Të paktën 8 karaktere', check: (password: string) => password.length >= 8 },
-  { id: 'uppercase', text: 'Një shkronjë të madhe', check: (password: string) => /[A-Z]/.test(password) },
-  { id: 'lowercase', text: 'Një shkronjë të vogël', check: (password: string) => /[a-z]/.test(password) },
-  { id: 'number', text: 'Një numër', check: (password: string) => /\d/.test(password) }
+  {
+    id: 'length',
+    text: 'Të paktën 8 karaktere',
+    check: (password: string) => password.length >= 8,
+  },
+  {
+    id: 'uppercase',
+    text: 'Një shkronjë të madhe',
+    check: (password: string) => /[A-Z]/.test(password),
+  },
+  {
+    id: 'lowercase',
+    text: 'Një shkronjë të vogël',
+    check: (password: string) => /[a-z]/.test(password),
+  },
+  {
+    id: 'number',
+    text: 'Një numër',
+    check: (password: string) => /\d/.test(password),
+  },
 ];
 
+// Helper function to convert Firebase error codes to user-friendly messages
+const getFirebaseErrorMessage = (errorCode: string): string => {
+  switch (errorCode) {
+    case 'auth/email-already-in-use':
+      return 'Kjo adresë email është tashmë në përdorim';
+    case 'auth/weak-password':
+      return 'Fjalëkalimi është shumë i dobët';
+    case 'auth/invalid-email':
+      return 'Adresa email nuk është e vlefshme';
+    case 'auth/user-not-found':
+      return 'Nuk u gjet përdorues me këtë email';
+    case 'auth/wrong-password':
+      return 'Fjalëkalimi është i gabuar';
+    case 'auth/too-many-requests':
+      return 'Shumë përpjekje të gabuara. Provo përsëri më vonë';
+    case 'auth/network-request-failed':
+      return 'Gabim në rrjet. Kontrollo lidhjen tuaj';
+    case 'auth/operation-not-allowed':
+      return 'Operacioni nuk lejohet. Kontaktoni administratorin';
+    case 'auth/requires-recent-login':
+      return 'Kërkohet hyrje e re për të vazhduar';
+    case 'auth/popup-closed-by-user':
+      return 'Dritarja e hyrjes u mbyll. Provo përsëri';
+    case 'auth/popup-blocked':
+      return 'Dritarja e hyrjes u bllokua. Lejo popup-et për këtë faqe';
+    case 'auth/cancelled-popup-request':
+      return 'Kërkesa u anulua. Provo përsëri';
+    case 'auth/account-exists-with-different-credential':
+      return 'Ekziston një llogari me këtë email por me metodë tjetër hyrjeje';
+    case 'auth/invalid-credential':
+      return 'Kredencialet janë të pavlefshme';
+    case 'auth/user-disabled':
+      return 'Llogaria është e çaktivizuar';
+    case 'auth/invalid-verification-code':
+      return 'Kodi i verifikimit është i pavlefshëm';
+    case 'auth/invalid-verification-id':
+      return 'ID-ja e verifikimit është e pavlefshme';
+    default:
+      return 'Ndodhi një gabim. Provo përsëri';
+  }
+};
+
 export function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const [currentStep, setCurrentStep] = useState<'login' | 'signup' | 'grade' | 'school'>('login');
+  const [currentStep, setCurrentStep] = useState<
+    'login' | 'signup' | 'grade' | 'school'
+  >('login');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -48,23 +127,36 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     confirmPassword: '',
     name: '',
     grade: '',
-    school: ''
+    school: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Use Firebase auth hook
-  const { signIn, signUp, loading } = useFirebaseAuth();
+  const { signIn, signUp, signInWithGoogle, loading } = useFirebaseAuth();
+
+  // Clear auth error when modal opens or step changes
+  useEffect(() => {
+    if (isOpen) {
+      setAuthError(null);
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    setAuthError(null);
+  }, [currentStep]);
 
   // Memoized password validation
   const passwordValidation = useMemo(() => {
-    return passwordRequirements.map(req => ({
+    return passwordRequirements.map((req) => ({
       ...req,
-      isValid: req.check(formData.password)
+      isValid: req.check(formData.password),
     }));
   }, [formData.password]);
 
   const isPasswordValid = useMemo(() => {
-    return passwordValidation.every(req => req.isValid);
+    return passwordValidation.every((req) => req.isValid);
   }, [passwordValidation]);
 
   // Memoized email validation
@@ -104,32 +196,75 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   }, [formData, currentStep, isEmailValid, isPasswordValid]);
 
   // Optimized input handlers
-  const handleInputChange = useCallback((field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
-  }, [errors]);
+  const handleInputChange = useCallback(
+    (field: string, value: string) => {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+      if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: '' }));
+      }
+      // Clear auth error when user starts typing
+      if (authError) {
+        setAuthError(null);
+      }
+    },
+    [errors, authError]
+  );
 
   const handleLogin = useCallback(async () => {
     if (!validateForm()) return;
 
+    setIsLoading(true);
+    setAuthError(null);
+
     try {
       await signIn(formData.email, formData.password);
       handleClose();
-    } catch (error) {
-      // Error is already handled in the hook
+    } catch (error: any) {
+      const errorMessage = getFirebaseErrorMessage(error.code);
+      setAuthError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   }, [formData.email, formData.password, validateForm, signIn]);
+
+  const handleGoogleLogin = useCallback(async () => {
+    setIsLoading(true);
+    setAuthError(null);
+
+    try {
+      await signInWithGoogle();
+      handleClose();
+    } catch (error: any) {
+      const errorMessage = getFirebaseErrorMessage(error.code);
+      setAuthError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [signInWithGoogle]);
 
   const handleSignup = useCallback(async () => {
     if (!validateForm()) return;
 
+    setIsLoading(true);
+    setAuthError(null);
+
     try {
-      await signUp(formData.email, formData.password, formData.name, formData.grade, formData.school);
+      await signUp(
+        formData.email,
+        formData.password,
+        formData.name,
+        formData.grade,
+        formData.school
+      );
       handleClose();
-    } catch (error) {
-      // Error is already handled in the hook
+    } catch (error: any) {
+      const errorMessage = getFirebaseErrorMessage(error.code);
+      setAuthError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   }, [formData, validateForm, signUp]);
 
@@ -140,9 +275,10 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       confirmPassword: '',
       name: '',
       grade: '',
-      school: ''
+      school: '',
     });
     setErrors({});
+    setAuthError(null);
     setCurrentStep('login');
     setShowPassword(false);
   }, []);
@@ -161,13 +297,23 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   }, [currentStep, validateForm, formData.grade]);
 
   const canProceedToGrade = useMemo(() => {
-    return formData.name && formData.email && formData.password && formData.confirmPassword && 
-           isEmailValid && isPasswordValid && formData.password === formData.confirmPassword;
+    return (
+      formData.name &&
+      formData.email &&
+      formData.password &&
+      formData.confirmPassword &&
+      isEmailValid &&
+      isPasswordValid &&
+      formData.password === formData.confirmPassword
+    );
   }, [formData, isEmailValid, isPasswordValid]);
 
   const canCompleteSignup = useMemo(() => {
     return canProceedToGrade && formData.grade && formData.school;
   }, [canProceedToGrade, formData.grade, formData.school]);
+
+  // Use local loading state instead of global
+  const isFormLoading = isLoading || loading;
 
   // Render step content
   const renderStepContent = () => {
@@ -175,6 +321,32 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       case 'login':
         return (
           <div className="space-y-4">
+            {/* Google Sign In Button */}
+            <Button
+              onClick={handleGoogleLogin}
+              variant="outline"
+              className="w-full"
+              disabled={isFormLoading}
+            >
+              {isFormLoading ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Chrome className="w-4 h-4 mr-2" />
+              )}
+              Vazhdo me Google
+            </Button>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Ose
+                </span>
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -184,7 +356,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 className={errors.email ? 'border-red-500' : ''}
-                disabled={loading}
+                disabled={isFormLoading}
               />
               {errors.email && (
                 <p className="text-sm text-red-500 flex items-center space-x-1">
@@ -202,9 +374,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Shkruani fjalëkalimin tuaj"
                   value={formData.password}
-                  onChange={(e) => handleInputChange('password', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange('password', e.target.value)
+                  }
                   className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
-                  disabled={loading}
+                  disabled={isFormLoading}
                 />
                 <Button
                   type="button"
@@ -212,9 +386,13 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   size="sm"
                   className="absolute right-0 top-0 h-full px-3"
                   onClick={() => setShowPassword(!showPassword)}
-                  disabled={loading}
+                  disabled={isFormLoading}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </Button>
               </div>
               {errors.password && (
@@ -225,12 +403,24 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               )}
             </div>
 
-            <Button 
-              onClick={handleLogin} 
-              className="w-full" 
-              disabled={loading || !formData.email || !formData.password}
+            {/* Display Firebase auth errors */}
+            {authError && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600 flex items-center space-x-1">
+                  <AlertCircle className="w-4 h-4" />
+                  <span>{authError}</span>
+                </p>
+              </div>
+            )}
+
+            <Button
+              onClick={handleLogin}
+              className="w-full"
+              disabled={isFormLoading || !formData.email || !formData.password}
             >
-              {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {isFormLoading && (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              )}
               Hyr në llogari
             </Button>
 
@@ -240,7 +430,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 variant="link"
                 className="p-0 h-auto"
                 onClick={() => setCurrentStep('signup')}
-                disabled={loading}
+                disabled={isFormLoading}
               >
                 Regjistrohuni këtu
               </Button>
@@ -251,6 +441,32 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       case 'signup':
         return (
           <div className="space-y-4">
+            {/* Google Sign Up Button */}
+            <Button
+              onClick={handleGoogleLogin}
+              variant="outline"
+              className="w-full"
+              disabled={isFormLoading}
+            >
+              {isFormLoading ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Chrome className="w-4 h-4 mr-2" />
+              )}
+              Regjistrohu me Google
+            </Button>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Ose
+                </span>
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="name">Emri i plotë</Label>
               <Input
@@ -260,7 +476,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 className={errors.name ? 'border-red-500' : ''}
-                disabled={loading}
+                disabled={isFormLoading}
               />
               {errors.name && (
                 <p className="text-sm text-red-500 flex items-center space-x-1">
@@ -279,7 +495,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 className={errors.email ? 'border-red-500' : ''}
-                disabled={loading}
+                disabled={isFormLoading}
               />
               {errors.email && (
                 <p className="text-sm text-red-500 flex items-center space-x-1">
@@ -297,9 +513,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Krijoni një fjalëkalim të sigurt"
                   value={formData.password}
-                  onChange={(e) => handleInputChange('password', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange('password', e.target.value)
+                  }
                   className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
-                  disabled={loading}
+                  disabled={isFormLoading}
                 />
                 <Button
                   type="button"
@@ -307,25 +525,33 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   size="sm"
                   className="absolute right-0 top-0 h-full px-3"
                   onClick={() => setShowPassword(!showPassword)}
-                  disabled={loading}
+                  disabled={isFormLoading}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </Button>
               </div>
 
               {/* Password Requirements */}
               {formData.password && (
                 <div className="space-y-2 p-3 bg-muted rounded-lg">
-                  <p className="text-sm font-medium">Kërkesat për fjalëkalimin:</p>
+                  <p className="text-sm font-medium">
+                    Kërkesat për fjalëkalimin:
+                  </p>
                   <div className="space-y-1">
-                    {passwordValidation.map(req => (
+                    {passwordValidation.map((req) => (
                       <div key={req.id} className="flex items-center space-x-2">
                         {req.isValid ? (
                           <CheckCircle2 className="w-4 h-4 text-green-500" />
                         ) : (
                           <AlertCircle className="w-4 h-4 text-muted-foreground" />
                         )}
-                        <span className={`text-sm ${req.isValid ? 'text-green-600' : 'text-muted-foreground'}`}>
+                        <span
+                          className={`text-sm ${req.isValid ? 'text-green-600' : 'text-muted-foreground'}`}
+                        >
                           {req.text}
                         </span>
                       </div>
@@ -342,9 +568,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 type="password"
                 placeholder="Shkruani përsëri fjalëkalimin"
                 value={formData.confirmPassword}
-                onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange('confirmPassword', e.target.value)
+                }
                 className={errors.confirmPassword ? 'border-red-500' : ''}
-                disabled={loading}
+                disabled={isFormLoading}
               />
               {errors.confirmPassword && (
                 <p className="text-sm text-red-500 flex items-center space-x-1">
@@ -354,10 +582,20 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               )}
             </div>
 
-            <Button 
-              onClick={nextStep} 
-              className="w-full" 
-              disabled={loading || !canProceedToGrade}
+            {/* Display Firebase auth errors */}
+            {authError && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600 flex items-center space-x-1">
+                  <AlertCircle className="w-4 h-4" />
+                  <span>{authError}</span>
+                </p>
+              </div>
+            )}
+
+            <Button
+              onClick={nextStep}
+              className="w-full"
+              disabled={isFormLoading || !canProceedToGrade}
             >
               Vazhdo
             </Button>
@@ -368,7 +606,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 variant="link"
                 className="p-0 h-auto"
                 onClick={() => setCurrentStep('login')}
-                disabled={loading}
+                disabled={isFormLoading}
               >
                 Hyni këtu
               </Button>
@@ -387,9 +625,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <Card 
+              <Card
                 className={`cursor-pointer transition-all hover:shadow-md ${
-                  formData.grade === '9' ? 'ring-2 ring-primary bg-primary/5' : ''
+                  formData.grade === '9'
+                    ? 'ring-2 ring-primary bg-primary/5'
+                    : ''
                 }`}
                 onClick={() => handleInputChange('grade', '9')}
               >
@@ -407,9 +647,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 </CardContent>
               </Card>
 
-              <Card 
+              <Card
                 className={`cursor-pointer transition-all hover:shadow-md ${
-                  formData.grade === '12' ? 'ring-2 ring-primary bg-primary/5' : ''
+                  formData.grade === '12'
+                    ? 'ring-2 ring-primary bg-primary/5'
+                    : ''
                 }`}
                 onClick={() => handleInputChange('grade', '12')}
               >
@@ -429,18 +671,18 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             </div>
 
             <div className="flex space-x-2">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setCurrentStep('signup')}
                 className="flex-1"
-                disabled={loading}
+                disabled={isFormLoading}
               >
                 Mbrapa
               </Button>
-              <Button 
-                onClick={nextStep} 
-                className="flex-1" 
-                disabled={!formData.grade || loading}
+              <Button
+                onClick={nextStep}
+                className="flex-1"
+                disabled={!formData.grade || isFormLoading}
               >
                 Vazhdo
               </Button>
@@ -454,22 +696,23 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <div className="text-center space-y-2">
               <h3>Zgjidhni shkollën tuaj</h3>
               <p className="text-sm text-muted-foreground">
-                Kjo do të na ndihmojë të krijojmë një eksperiencë të personalizuar
+                Kjo do të na ndihmojë të krijojmë një eksperiencë të
+                personalizuar
               </p>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="school">Shkolla</Label>
-              <Select 
-                value={formData.school} 
+              <Select
+                value={formData.school}
                 onValueChange={(value) => handleInputChange('school', value)}
-                disabled={loading}
+                disabled={isFormLoading}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Zgjidhni shkollën tuaj" />
                 </SelectTrigger>
                 <SelectContent>
-                  {kosovoSchools.map(school => (
+                  {kosovoSchools.map((school) => (
                     <SelectItem key={school} value={school}>
                       {school}
                     </SelectItem>
@@ -478,21 +721,33 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               </Select>
             </div>
 
+            {/* Display Firebase auth errors */}
+            {authError && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600 flex items-center space-x-1">
+                  <AlertCircle className="w-4 h-4" />
+                  <span>{authError}</span>
+                </p>
+              </div>
+            )}
+
             <div className="flex space-x-2">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setCurrentStep('grade')}
                 className="flex-1"
-                disabled={loading}
+                disabled={isFormLoading}
               >
                 Mbrapa
               </Button>
-              <Button 
-                onClick={handleSignup} 
-                className="flex-1" 
-                disabled={!canCompleteSignup || loading}
+              <Button
+                onClick={handleSignup}
+                className="flex-1"
+                disabled={!canCompleteSignup || isFormLoading}
               >
-                {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                {isFormLoading && (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                )}
                 Krijo llogari
               </Button>
             </div>
@@ -514,14 +769,22 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             </div>
             <div>
               <DialogTitle>
-                {currentStep === 'login' ? 'Hyr në llogari' : 
-                 currentStep === 'signup' ? 'Krijo llogari' :
-                 currentStep === 'grade' ? 'Zgjidhni klasën' : 'Zgjidhni shkollën'}
+                {currentStep === 'login'
+                  ? 'Hyr në llogari'
+                  : currentStep === 'signup'
+                    ? 'Krijo llogari'
+                    : currentStep === 'grade'
+                      ? 'Zgjidhni klasën'
+                      : 'Zgjidhni shkollën'}
               </DialogTitle>
               <p className="text-sm text-muted-foreground">
-                {currentStep === 'login' ? 'Mirë se erdhe përsëri!' : 
-                 currentStep === 'signup' ? 'Filloni udhëtimin tuaj për në maturë' :
-                 currentStep === 'grade' ? 'Hapi 2 nga 3' : 'Hapi 3 nga 3'}
+                {currentStep === 'login'
+                  ? 'Mirë se erdhe përsëri!'
+                  : currentStep === 'signup'
+                    ? 'Filloni udhëtimin tuaj për në maturë'
+                    : currentStep === 'grade'
+                      ? 'Hapi 2 nga 3'
+                      : 'Hapi 3 nga 3'}
               </p>
             </div>
           </div>
@@ -530,15 +793,25 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         {/* Progress indicator for multi-step signup */}
         {currentStep !== 'login' && (
           <div className="flex space-x-2 mb-6">
-            <div className={`h-2 flex-1 rounded ${
-              ['signup', 'grade', 'school'].includes(currentStep) ? 'bg-primary' : 'bg-muted'
-            }`} />
-            <div className={`h-2 flex-1 rounded ${
-              ['grade', 'school'].includes(currentStep) ? 'bg-primary' : 'bg-muted'
-            }`} />
-            <div className={`h-2 flex-1 rounded ${
-              currentStep === 'school' ? 'bg-primary' : 'bg-muted'
-            }`} />
+            <div
+              className={`h-2 flex-1 rounded ${
+                ['signup', 'grade', 'school'].includes(currentStep)
+                  ? 'bg-primary'
+                  : 'bg-muted'
+              }`}
+            />
+            <div
+              className={`h-2 flex-1 rounded ${
+                ['grade', 'school'].includes(currentStep)
+                  ? 'bg-primary'
+                  : 'bg-muted'
+              }`}
+            />
+            <div
+              className={`h-2 flex-1 rounded ${
+                currentStep === 'school' ? 'bg-primary' : 'bg-muted'
+              }`}
+            />
           </div>
         )}
 
