@@ -4,15 +4,31 @@ import { authAtom } from '../atoms/authAtom';
 export const isAuthenticatedSelector = selector({
   key: 'isAuthenticatedSelector',
   get: ({ get }) => {
-    const auth = get(authAtom);
-    return auth.isAuthenticated && !!auth.accessToken;
+    const authState = get(authAtom);
+    return authState.isAuthenticated;
   },
 });
 
-export const userRoleSelector = selector({
-  key: 'userRoleSelector',
+export const currentUserSelector = selector({
+  key: 'currentUserSelector',
   get: ({ get }) => {
-    const auth = get(authAtom);
-    return auth.user?.role || null;
+    const authState = get(authAtom);
+    return authState.user;
+  },
+});
+
+export const authLoadingSelector = selector({
+  key: 'authLoadingSelector',
+  get: ({ get }) => {
+    const authState = get(authAtom);
+    return authState.loading;
+  },
+});
+
+export const authErrorSelector = selector({
+  key: 'authErrorSelector',
+  get: ({ get }) => {
+    const authState = get(authAtom);
+    return authState.error;
   },
 });

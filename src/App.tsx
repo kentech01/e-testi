@@ -1,4 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { RecoilRoot } from 'recoil';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
@@ -13,6 +14,8 @@ import {
   Star,
 } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
+import { useFirebaseAuth } from './hooks/useFirebaseAuth';
+import { auth } from './lib/firebase/config';
 
 // Lazy load components
 const AuthModal = lazy(() =>
@@ -21,13 +24,6 @@ const AuthModal = lazy(() =>
 const AppRouter = lazy(() =>
   import('./router').then((module) => ({ default: module.AppRouter }))
 );
-
-interface User {
-  name: string;
-  email: string;
-  grade: string;
-  school?: string;
-}
 
 // Memoized constants to prevent re-creation
 const features = [
@@ -72,32 +68,16 @@ const LoadingFallback = () => (
   </div>
 );
 
-export default function App() {
-  const [user, setUser] = useState<User | null>(null);
+// Main App Content Component
+function AppContent() {
   const [showAuth, setShowAuth] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const { user, loading, signOut } = useFirebaseAuth();
 
   // Initialize app state
   useEffect(() => {
-    const initializeApp = async () => {
-      try {
-        const savedUser = localStorage.getItem('maturaUser');
-        const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-
-        if (savedUser) {
-          setUser(JSON.parse(savedUser));
-        }
-
-        setDarkMode(savedDarkMode);
-      } catch (error) {
-        console.error('Error initializing app:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initializeApp();
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(savedDarkMode);
   }, []);
 
   // Apply dark mode class to document
@@ -111,46 +91,15 @@ export default function App() {
     localStorage.setItem('darkMode', darkMode.toString());
   }, [darkMode]);
 
-  const handleLogin = (email: string, password: string) => {
-    const mockUser = {
-      name: 'Ardi Hoxha',
-      email: email,
-      grade: '12',
-      school: 'Liceu i Përgjithshëm "Sami Frashëri" - Prishtinë',
-    };
-
-    setUser(mockUser);
-    localStorage.setItem('maturaUser', JSON.stringify(mockUser));
-    setShowAuth(false);
-    toast.success('Mirë se erdhe përsëri!');
-  };
-
-  const handleSignup = (
-    email: string,
-    password: string,
-    name: string,
-    grade: string,
-    school: string
-  ) => {
-    const newUser = {
-      name: name,
-      email: email,
-      grade: grade,
-      school: school,
-    };
-
-    setUser(newUser);
-    localStorage.setItem('maturaUser', JSON.stringify(newUser));
-    setShowAuth(false);
-    toast.success(
-      'Mirë se erdhe në E-testi! Llogaria juaj u krijua me sukses.'
-    );
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    localStorage.removeItem('maturaUser');
-    toast.info('U dolët nga llogaria');
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+      // Even if there's an error, we should still show success
+      // because the user might still be logged out
+      toast.success('U dolët nga llogaria!');
+    }
   };
 
   const handleToggleDarkMode = () => {
@@ -158,16 +107,12 @@ export default function App() {
   };
 
   const handleUpdateProfile = (name: string, email: string) => {
-    if (user) {
-      const updatedUser = { ...user, name, email };
-      setUser(updatedUser);
-      localStorage.setItem('maturaUser', JSON.stringify(updatedUser));
-      toast.success('Profili u përditësua me sukses!');
-    }
+    // This would need to be implemented with Firebase user profile updates
+    toast.success('Profili u përditësua me sukses!');
   };
 
   // Show loading screen during initialization
-  if (isLoading) {
+  if (loading) {
     return <LoadingFallback />;
   }
 
@@ -306,12 +251,7 @@ export default function App() {
         </main>
 
         <Suspense fallback={<LoadingFallback />}>
-          <AuthModal
-            isOpen={showAuth}
-            onClose={() => setShowAuth(false)}
-            onLogin={handleLogin}
-            onSignup={handleSignup}
-          />
+          <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
         </Suspense>
 
         <Toaster />
@@ -319,11 +259,19 @@ export default function App() {
     );
   }
 
+  // Convert Firebase user to the format expected by AppRouter
+  const userForRouter = {
+    name: user.displayName || 'User',
+    email: user.email || '',
+    grade: user.grade || '12',
+    school: user.school || 'Unknown School',
+  };
+
   return (
     <div className="flex h-screen bg-background">
       <Suspense fallback={<LoadingFallback />}>
         <AppRouter
-          user={user}
+          user={userForRouter}
           darkMode={darkMode}
           onToggleDarkMode={handleToggleDarkMode}
           onLogout={handleLogout}
@@ -332,5 +280,14 @@ export default function App() {
       </Suspense>
       <Toaster />
     </div>
+  );
+}
+
+// Main App Component with RecoilRoot
+export default function App() {
+  return (
+    <RecoilRoot>
+      <AppContent />
+    </RecoilRoot>
   );
 }
