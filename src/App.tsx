@@ -94,6 +94,7 @@ function AppContent() {
   const handleLogout = async () => {
     try {
       await signOut();
+      // Remove the auth parameter - signOut doesn't expect any arguments
     } catch (error) {
       console.error('Error signing out:', error);
       // Even if there's an error, we should still show success
