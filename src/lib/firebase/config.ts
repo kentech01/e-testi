@@ -2,15 +2,14 @@ import { initializeApp, getApps } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDO2DD3sAn1Uet9suZmy6I_7gwv3MqB48Q',
-  authDomain: 'e-testi-2400b.firebaseapp.com',
-  projectId: 'e-testi-2400b',
-  storageBucket: 'e-testi-2400b.firebasestorage.app',
-  messagingSenderId: '781268602382',
-  appId: '1:781268602382:web:0c4bf3c83f4c62ee80365f',
-  measurementId: 'G-1X7K3Y0GDF',
+  apiKey: 'AIzaSyAw2qPzKkC4dQCI15oylKJEnW2e8REgz9o',
+  authDomain: 'e-testi-f3a58.firebaseapp.com',
+  projectId: 'e-testi-f3a58',
+  storageBucket: 'e-testi-f3a58.firebasestorage.app',
+  messagingSenderId: '624254973631',
+  appId: '1:624254973631:web:6f9addb7b108d074a1f80a',
+  measurementId: 'G-NB99HZ4XS7',
 };
-
 // Initialize Firebase only if no apps exist
 let app;
 if (getApps().length === 0) {

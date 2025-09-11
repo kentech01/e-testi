@@ -1,1 +1,2 @@
-export { AuthModal } from './AuthModal'; 
+export { AuthModal } from './AuthModal';
+export { CreateExamForm } from './CreateExamForm'; 

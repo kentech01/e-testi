@@ -5,4 +5,6 @@ export { ExamInterface } from './ExamInterface';
 export { TestResults } from './TestResults';
 export { TestTaking } from './TestTaking';
 export { SubjectSelection } from './SubjectSelection';
-export { TestList } from './TestList'; 
+export { TestList } from './TestList';
+export { TestManagement } from './TestManagement';
+export { CreateExam } from './CreateExam';

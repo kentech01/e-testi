@@ -29,6 +29,12 @@ const Dashboard = React.lazy(() =>
 const TestList = React.lazy(() =>
   import('../pages').then((module) => ({ default: module.TestList }))
 );
+const TestManagement = React.lazy(() =>
+  import('../pages').then((module) => ({ default: module.TestManagement }))
+);
+const CreateExam = React.lazy(() =>
+  import('../pages').then((module) => ({ default: module.CreateExam }))
+);
 const SubjectSelection = React.lazy(() =>
   import('../pages').then((module) => ({ default: module.SubjectSelection }))
 );
@@ -320,6 +326,24 @@ const AppRouter: React.FC<AppRouterProps> = ({
                     onUpdateProfile={onUpdateProfile}
                     onLogout={onLogout}
                   />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/test-management"
+              element={
+                <ProtectedRoute>
+                  <TestManagement />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/test-management/create"
+              element={
+                <ProtectedRoute>
+                  <CreateExam />
                 </ProtectedRoute>
               }
             />
