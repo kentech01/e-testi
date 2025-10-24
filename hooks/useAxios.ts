@@ -3,7 +3,7 @@ import axios from 'axios';
 import type { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { useMemo } from 'react';
 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'http://localhost:3001';
 
 const useAxios = (): AxiosInstance => {
   const accessToken = '';

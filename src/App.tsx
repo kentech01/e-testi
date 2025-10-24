@@ -50,9 +50,9 @@ const features = [
 ];
 
 const subjects = [
-  { name: 'Matematika', count: 45, color: 'bg-blue-500' },
-  { name: 'Gjuha Shqipe', count: 38, color: 'bg-green-500' },
-  { name: 'Anglisht', count: 32, color: 'bg-purple-500' },
+  { name: 'Matematika', count: 45 },
+  { name: 'Gjuha Shqipe', count: 38 },
+  { name: 'Anglisht', count: 32 },
 ];
 
 // Loading component
@@ -121,15 +121,15 @@ function AppContent() {
   // Show landing page if no user
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="min-h-screen bg-background">
         {/* Header */}
         <header className="p-4 flex justify-between items-center max-w-6xl mx-auto">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center">
               <GraduationCap className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-xl">E-testi</h1>
+              <h1 className="font-bold  text-xl text-foreground">E-testi</h1>
               <p className="text-xs text-muted-foreground">
                 Përgatitja për maturë
               </p>
@@ -148,12 +148,12 @@ function AppContent() {
         {/* Hero Section */}
         <main className="max-w-6xl mx-auto px-4 py-12 text-center space-y-12">
           <div className="space-y-6">
-            <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 px-4 py-1">
+            <Badge className="bg-gradient-primary text-white border-0 px-4 py-1">
               <Star className="w-3 h-3 mr-1" />
               Platforma #1 për maturë në Kosovë
             </Badge>
 
-            <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
+            <h2 className="text-4xl md:text-6xl font-bold text-gradient-primary leading-tight">
               Përgatitu për maturë me sukses
             </h2>
 
@@ -167,12 +167,16 @@ function AppContent() {
               <Button
                 onClick={() => setShowAuth(true)}
                 size="lg"
-                className="h-14 px-8 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-lg"
+                className="h-14 px-8 bg-gradient-primary hover:bg-gradient-primary-hover text-white text-lg font-semibold border-0"
               >
                 Fillo falas tani
                 <ChevronRight className="w-5 h-5 ml-2" />
               </Button>
-              <Button variant="outline" size="lg" className="h-14 px-8 text-lg">
+              <Button
+                variant="outline"
+                size="lg"
+                className="h-14 px-8 text-lg border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
                 Shiko demonstrimin
               </Button>
             </div>
@@ -187,7 +191,13 @@ function AppContent() {
               >
                 <CardContent className="p-6">
                   <div
-                    className={`w-12 h-12 ${subject.color} rounded-xl mx-auto mb-4 flex items-center justify-center`}
+                    className={`w-12 h-12 ${
+                      subject.name === 'Matematika'
+                        ? 'subject-math'
+                        : subject.name === 'Gjuha Shqipe'
+                          ? 'subject-albanian'
+                          : 'subject-english'
+                    } rounded-xl mx-auto mb-4 flex items-center justify-center`}
                   >
                     <BookOpen className="w-6 h-6 text-white" />
                   </div>
@@ -212,7 +222,7 @@ function AppContent() {
               >
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center flex-shrink-0">
                       <feature.icon className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1">
@@ -233,10 +243,10 @@ function AppContent() {
           </div>
 
           {/* CTA Section */}
-          <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 mt-16">
+          <Card className="card-gradient text-white border-0 mt-16">
             <CardContent className="p-8 text-center">
               <h3 className="text-2xl font-bold mb-4">Gati për të filluar?</h3>
-              <p className="text-blue-100 mb-6 max-w-md mx-auto">
+              <p className="text-white/90 mb-6 max-w-md mx-auto">
                 Bashkohu me mijëra studentë të tjerë që po përgatiten për maturë
                 me E-testi
               </p>
@@ -244,7 +254,7 @@ function AppContent() {
                 onClick={() => setShowAuth(true)}
                 size="lg"
                 variant="secondary"
-                className="h-12 px-8 bg-white text-blue-600 hover:bg-blue-50"
+                className="h-12 px-8 bg-white text-purple-600 hover:bg-gray-50"
               >
                 Krijo llogari falas
               </Button>
