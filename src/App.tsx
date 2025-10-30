@@ -121,7 +121,7 @@ function AppContent() {
   // Show landing page if no user
   if (!user) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         {/* Header */}
         <header className="p-4 flex justify-between items-center max-w-6xl mx-auto">
           <div className="flex items-center space-x-3">
@@ -167,16 +167,12 @@ function AppContent() {
               <Button
                 onClick={() => setShowAuth(true)}
                 size="lg"
-                className="h-14 px-8 bg-gradient-primary hover:bg-gradient-primary-hover text-white text-lg font-semibold border-0"
+                className="h-14 px-8 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-lg"
               >
                 Fillo falas tani
                 <ChevronRight className="w-5 h-5 ml-2" />
               </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="h-14 px-8 text-lg border-gray-300 text-gray-700 hover:bg-gray-50"
-              >
+              <Button variant="outline" size="lg" className="h-14 px-8 text-lg">
                 Shiko demonstrimin
               </Button>
             </div>
