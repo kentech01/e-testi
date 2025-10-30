@@ -1,9 +1,9 @@
-import axios, { AxiosInstance } from 'axios';
-import { API_BASE_URL } from '../config/api';
 import type {
   Question as ExamQuestion,
   QuestionOption as ExamQuestionOption,
 } from './exams';
+import { AxiosInstance } from 'axios';
+import HttpClient from './httpClient';
 
 export interface QuestionOption
   extends Omit<
@@ -62,24 +62,7 @@ class QuestionsService {
   private api: AxiosInstance;
 
   constructor() {
-    this.api = axios.create({
-      baseURL: API_BASE_URL,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      timeout: 30000,
-    });
-
-    this.api.interceptors.request.use(
-      (config) => {
-        const token = localStorage.getItem('authToken');
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-      },
-      (error) => Promise.reject(error)
-    );
+    this.api = HttpClient.instance;
   }
 
   async getQuestionsByExam(examId: string): Promise<Question[]> {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
@@ -15,6 +15,9 @@ import {
   ChevronRight,
   Save,
 } from 'lucide-react';
+import examService from '../services/exams';
+import questionsService from '../services/questions';
+import { storageService } from '../lib/firebase';
 
 interface AnswerOption {
   id: string;
@@ -27,6 +30,8 @@ interface Question {
   title: string;
   description: string;
   answerOptions: AnswerOption[];
+  imageFile?: File | null;
+  imageUrl?: string;
 }
 
 const TOTAL_QUESTIONS = 100;
@@ -36,6 +41,20 @@ export function CreateExam() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [examTitle, setExamTitle] = useState('');
   const [examDescription, setExamDescription] = useState('');
+  const [sectorId, setSectorId] = useState<number>(1);
+  const [passingScoreText, setPassingScoreText] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [examId, setExamId] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{
+    examTitle?: string;
+    examDescription?: string;
+    sectorId?: string;
+    passingScore?: string;
+    questionTitle?: string;
+    questionOptions?: string;
+  }>({});
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [questions, setQuestions] = useState<Question[]>(() => {
     // Initialize with 100 empty questions
     return Array.from({ length: TOTAL_QUESTIONS }, (_, index) => ({
@@ -43,11 +62,13 @@ export function CreateExam() {
       title: '',
       description: '',
       answerOptions: [
-        { id: `${index + 1}-1`, text: 'Option 1', isCorrect: false },
-        { id: `${index + 1}-2`, text: 'Option 2', isCorrect: false },
-        { id: `${index + 1}-3`, text: 'Option 3', isCorrect: false },
-        { id: `${index + 1}-4`, text: 'Option 4', isCorrect: false },
+        { id: `${index + 1}-1`, text: '', isCorrect: false },
+        { id: `${index + 1}-2`, text: '', isCorrect: false },
+        { id: `${index + 1}-3`, text: '', isCorrect: false },
+        { id: `${index + 1}-4`, text: '', isCorrect: false },
       ],
+      imageFile: null,
+      imageUrl: undefined,
     }));
   });
 
@@ -132,9 +153,123 @@ export function CreateExam() {
     );
   };
 
-  const handleNext = () => {
+  const handleChooseImage = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImageSelected: React.ChangeEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    const file = e.target.files?.[0] || null;
+    setQuestions(
+      questions.map((q, index) =>
+        index === currentQuestionIndex ? { ...q, imageFile: file } : q
+      )
+    );
+  };
+
+  const optionLetterForIndex = (i: number): string => {
+    return String.fromCharCode('A'.charCodeAt(0) + i);
+  };
+
+  const validateExam = (): boolean => {
+    const newErrors: typeof errors = {};
+    if (!examTitle.trim()) newErrors.examTitle = 'Exam title is required.';
+    if (!examDescription.trim())
+      newErrors.examDescription = 'Exam description is required.';
+    if (!(sectorId === 1 || sectorId === 2))
+      newErrors.sectorId = 'Select KLASA_9 or KLASA_12.';
+    const parsedPassing =
+      passingScoreText === '' ? NaN : Number(passingScoreText);
+    if (!Number.isFinite(parsedPassing) || parsedPassing < 0)
+      newErrors.passingScore = 'Passing score must be a number ≥ 0.';
+    setErrors((prev) => ({ ...prev, ...newErrors }));
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateQuestion = (q: Question): boolean => {
+    const newErrors: typeof errors = {};
+    if (!q.title.trim())
+      newErrors.questionTitle = `Question ${q.id} title is required.`;
+    if (!q.answerOptions.some((o) => o.isCorrect))
+      newErrors.questionOptions = 'At least one option must be marked correct.';
+    setErrors((prev) => ({ ...prev, ...newErrors }));
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const persistCurrentQuestion = async (): Promise<boolean> => {
+    setApiError(null);
+    // Validate
+    const q = questions[currentQuestionIndex];
+    const examOk = validateExam();
+    const questionOk = validateQuestion(q);
+    if (!examOk || !questionOk) return false;
+
+    const parsedPassing = Number(passingScoreText);
+
+    // Create exam if this is the first persist
+    let ensuredExamId = examId;
+    try {
+      if (!ensuredExamId) {
+        const created = await examService.createExam({
+          title: examTitle,
+          description: examDescription,
+          sectorId: sectorId,
+          isActive: true,
+          totalQuestions: TOTAL_QUESTIONS,
+          passingScore: parsedPassing,
+        } as any);
+        ensuredExamId = String((created as any).id);
+        setExamId(ensuredExamId);
+      }
+
+      // Upload image if selected
+      let imageUrl: string | undefined = undefined;
+      if (q.imageFile) {
+        const safeName = q.imageFile.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
+        const path = `exams/${ensuredExamId}/questions/${q.id}/${Date.now()}_${safeName}`;
+        imageUrl = await storageService.uploadFileWithProgress(
+          q.imageFile,
+          path
+        );
+      }
+
+      // Build options
+      const options = q.answerOptions.map((opt, idx) => ({
+        text: opt.text || `Option ${idx + 1}`,
+        optionLetter: optionLetterForIndex(idx),
+        isCorrect: !!opt.isCorrect,
+      }));
+
+      // Create question
+      await questionsService.createQuestion({
+        text: q.title,
+        imageUrl,
+        examId: ensuredExamId!,
+        subject: 'general',
+        orderNumber: q.id,
+        points: 1,
+        isActive: true,
+        options,
+      });
+      return true;
+    } catch (e: any) {
+      setApiError(
+        e?.response?.data?.message || e?.message || 'Failed to save.'
+      );
+      return false;
+    }
+  };
+
+  const handleNext = async () => {
     if (currentQuestionIndex < TOTAL_QUESTIONS - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setIsSubmitting(true);
+      const ok = await persistCurrentQuestion();
+      setIsSubmitting(false);
+      if (ok) {
+        setErrors({});
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      }
     }
   };
 
@@ -144,28 +279,13 @@ export function CreateExam() {
     }
   };
 
-  const handleSave = () => {
-    // Validate that all questions have at least one correct answer
-    const invalidQuestions = questions.filter(
-      (q) => !q.answerOptions.some((option) => option.isCorrect)
-    );
-
-    if (invalidQuestions.length > 0) {
-      alert(
-        `Please ensure all questions have at least one correct answer. Invalid questions: ${invalidQuestions.map((q) => q.id).join(', ')}`
-      );
-      return;
+  const handleSave = async () => {
+    setIsSubmitting(true);
+    const ok = await persistCurrentQuestion();
+    setIsSubmitting(false);
+    if (ok) {
+      navigate('/test-management');
     }
-
-    // Here you would typically save to your backend/database
-    console.log('Saving exam with 100 questions:', {
-      title: examTitle,
-      description: examDescription,
-      questions,
-    });
-
-    // Navigate back to test management
-    navigate('/test-management');
   };
 
   const handleBack = () => {
@@ -215,7 +335,11 @@ export function CreateExam() {
               value={examTitle}
               onChange={(e) => setExamTitle(e.target.value)}
               className="w-full"
+              disabled={!!examId}
             />
+            {errors.examTitle && (
+              <p className="mt-1 text-sm text-red-600">{errors.examTitle}</p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -226,7 +350,56 @@ export function CreateExam() {
               value={examDescription}
               onChange={(e) => setExamDescription(e.target.value)}
               className="w-full"
+              disabled={!!examId}
             />
+            {errors.examDescription && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.examDescription}
+              </p>
+            )}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Sector
+              </label>
+              <select
+                className="w-full border rounded-md h-10 px-3"
+                value={sectorId}
+                onChange={(e) => setSectorId(Number(e.target.value))}
+                disabled={!!examId}
+              >
+                <option value={1}>KLASA_9</option>
+                <option value={2}>KLASA_12</option>
+              </select>
+              {errors.sectorId && (
+                <p className="mt-1 text-sm text-red-600">{errors.sectorId}</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Passing Score
+              </label>
+              <Input
+                type="text"
+                inputMode="numeric"
+                value={passingScoreText}
+                placeholder="e.g. 60"
+                onChange={(e) => setPassingScoreText(e.target.value)}
+                disabled={!!examId}
+              />
+              {errors.passingScore && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.passingScore}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Total Questions
+              </label>
+              <Input type="number" value={TOTAL_QUESTIONS} disabled />
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -258,6 +431,11 @@ export function CreateExam() {
           <CardTitle>Question {currentQuestionIndex + 1}</CardTitle>
         </CardHeader>
         <CardContent className="p-6">
+          {apiError && (
+            <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+              {apiError}
+            </div>
+          )}
           {/* Question Details */}
           <div className="space-y-6">
             <div>
@@ -269,7 +447,13 @@ export function CreateExam() {
                 value={currentQuestion.title}
                 onChange={(e) => handleQuestionTitleChange(e.target.value)}
                 className="w-full"
+                disabled={isSubmitting}
               />
+              {errors.questionTitle && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.questionTitle}
+                </p>
+              )}
             </div>
 
             <div>
@@ -283,6 +467,7 @@ export function CreateExam() {
                   handleQuestionDescriptionChange(e.target.value)
                 }
                 className="w-full min-h-[100px]"
+                disabled={isSubmitting}
               />
             </div>
 
@@ -291,10 +476,27 @@ export function CreateExam() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Question Image (Optional)
               </label>
-              <Button variant="outline" className="w-full h-20 border-dashed">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageSelected}
+              />
+              <Button
+                variant="outline"
+                className="w-full h-20 border-dashed"
+                onClick={handleChooseImage}
+                disabled={isSubmitting}
+              >
                 <Upload className="w-5 h-5 mr-2" />
-                Choose Image
+                {currentQuestion.imageFile ? 'Change Image' : 'Choose Image'}
               </Button>
+              {currentQuestion.imageFile && (
+                <p className="mt-2 text-sm text-gray-600">
+                  Selected: {currentQuestion.imageFile.name}
+                </p>
+              )}
             </div>
 
             {/* Answer Options */}
@@ -308,6 +510,7 @@ export function CreateExam() {
                   size="sm"
                   onClick={handleAddOption}
                   className="text-gray-600"
+                  disabled={isSubmitting}
                 >
                   <Plus className="w-4 h-4 mr-1" />
                   Add Option
@@ -315,33 +518,43 @@ export function CreateExam() {
               </div>
 
               <div className="space-y-3">
-                {currentQuestion.answerOptions.map((option) => (
+                {currentQuestion.answerOptions.map((option, idx) => (
                   <div key={option.id} className="flex items-center space-x-3">
                     <Checkbox
                       checked={option.isCorrect}
-                      onCheckedChange={(checked) =>
+                      onCheckedChange={(checked: boolean | 'indeterminate') =>
                         handleOptionCorrectChange(option.id, checked as boolean)
                       }
                     />
                     <Input
                       value={option.text}
+                      placeholder={`Option ${idx + 1}`}
                       onChange={(e) =>
                         handleOptionTextChange(option.id, e.target.value)
                       }
                       className="flex-1"
+                      disabled={isSubmitting}
                     />
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => handleRemoveOption(option.id)}
                       className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
-                      disabled={currentQuestion.answerOptions.length <= 1}
+                      disabled={
+                        currentQuestion.answerOptions.length <= 1 ||
+                        isSubmitting
+                      }
                     >
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
                 ))}
               </div>
+              {errors.questionOptions && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.questionOptions}
+                </p>
+              )}
 
               <p className="text-sm text-gray-500 mt-3">
                 Check the correct answer(s) for this question. At least one
@@ -355,7 +568,7 @@ export function CreateExam() {
             <Button
               variant="outline"
               onClick={handlePrevious}
-              disabled={currentQuestionIndex === 0}
+              disabled={currentQuestionIndex === 0 || isSubmitting}
             >
               <ChevronLeft className="w-4 h-4 mr-2" />
               Previous
@@ -363,7 +576,7 @@ export function CreateExam() {
 
             <div className="flex space-x-2">
               {currentQuestionIndex < TOTAL_QUESTIONS - 1 ? (
-                <Button onClick={handleNext}>
+                <Button onClick={handleNext} disabled={isSubmitting}>
                   Next
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </Button>
@@ -371,6 +584,7 @@ export function CreateExam() {
                 <Button
                   onClick={handleSave}
                   className="bg-green-600 hover:bg-green-700"
+                  disabled={isSubmitting}
                 >
                   <Save className="w-4 h-4 mr-2" />
                   Save Exam

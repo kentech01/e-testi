@@ -134,7 +134,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   // Use Firebase auth hook
-  const { signIn, signUp, signInWithGoogle, loading } = useFirebaseAuth();
+  const { signIn, signUp, signInWithGoogle, loading, token } =
+    useFirebaseAuth();
 
   // Clear auth error when modal opens or step changes
   useEffect(() => {

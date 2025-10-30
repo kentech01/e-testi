@@ -26,6 +26,10 @@ export const useFirebaseAuth = () => {
         firebaseUser
           .getIdToken()
           .then((token) => {
+            // mirror token to localStorage for HttpClient
+            try {
+              localStorage.setItem('authToken', token);
+            } catch {}
             setAuthState((prev) => ({
               ...prev,
               isAuthenticated: true,
@@ -36,6 +40,9 @@ export const useFirebaseAuth = () => {
             }));
           })
           .catch(() => {
+            try {
+              localStorage.removeItem('authToken');
+            } catch {}
             setAuthState((prev) => ({
               ...prev,
               isAuthenticated: true,
@@ -46,6 +53,9 @@ export const useFirebaseAuth = () => {
             }));
           });
       } else {
+        try {
+          localStorage.removeItem('authToken');
+        } catch {}
         setAuthState((prev) => ({
           ...prev,
           isAuthenticated: false,
@@ -88,6 +98,10 @@ export const useFirebaseAuth = () => {
       const userData = authService.convertFirebaseUser(userCredential.user);
       const token = await userCredential.user.getIdToken();
 
+      try {
+        localStorage.setItem('authToken', token);
+      } catch {}
+
       // Store additional user data (grade, school) in the auth state
       setAuthState((prev) => ({
         ...prev,
@@ -119,6 +133,10 @@ export const useFirebaseAuth = () => {
       const userData = authService.convertFirebaseUser(userCredential.user);
       const token = await userCredential.user.getIdToken();
 
+      try {
+        localStorage.setItem('authToken', token);
+      } catch {}
+
       setAuthState((prev) => ({
         ...prev,
         isAuthenticated: true,
@@ -148,6 +166,10 @@ export const useFirebaseAuth = () => {
       const userCredential = await authService.signInWithGoogle();
       const userData = authService.convertFirebaseUser(userCredential.user);
       const token = await userCredential.user.getIdToken();
+
+      try {
+        localStorage.setItem('authToken', token);
+      } catch {}
 
       setAuthState((prev) => ({
         ...prev,
@@ -184,6 +206,9 @@ export const useFirebaseAuth = () => {
         loading: false,
         error: null,
       }));
+      try {
+        localStorage.removeItem('authToken');
+      } catch {}
 
       // Try Firebase signOut in the background
       try {
