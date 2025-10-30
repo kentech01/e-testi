@@ -10,7 +10,17 @@ import {
   getRedirectResult,
   signOut as firebaseSignOut,
 } from 'firebase/auth';
-import { auth } from './config';
+import {
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+  StorageError,
+  UploadTask,
+  UploadTaskSnapshot,
+} from 'firebase/storage';
+import { auth, storage } from './config';
 
 export interface UserData {
   uid: string;
@@ -123,5 +133,105 @@ export const authService = {
       // Note: grade and school would need to be stored in Firestore for persistence
       // For now, we'll handle them in the component state
     };
+  },
+};
+
+// Firebase Storage Service
+export const storageService = {
+  /**
+   * Upload a file to Firebase Storage
+   * @param file - The file to upload
+   * @param path - The path in storage (e.g., 'uploads/images/example.jpg')
+   * @returns The download URL of the uploaded file
+   */
+  async uploadFile(file: File, path: string): Promise<string> {
+    try {
+      const storageRef = ref(storage, path);
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+      return downloadURL;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Upload a file with progress tracking
+   * @param file - The file to upload
+   * @param path - The path in storage
+   * @param onProgress - Progress callback function
+   * @returns A promise that resolves to the download URL
+   */
+  async uploadFileWithProgress(
+    file: File,
+    path: string,
+    onProgress?: (progress: number) => void
+  ): Promise<string> {
+    try {
+      const storageRef = ref(storage, path);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      return new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot: UploadTaskSnapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            if (onProgress) {
+              onProgress(progress);
+            }
+          },
+          (error: StorageError) => {
+            reject(error);
+          },
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(downloadURL);
+            } catch (error) {
+              reject(error);
+            }
+          }
+        );
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Get download URL for a file
+   * @param path - The path in storage
+   * @returns The download URL
+   */
+  async getDownloadURL(path: string): Promise<string> {
+    try {
+      const storageRef = ref(storage, path);
+      return await getDownloadURL(storageRef);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Delete a file from Firebase Storage
+   * @param path - The path in storage
+   */
+  async deleteFile(path: string): Promise<void> {
+    try {
+      const storageRef = ref(storage, path);
+      await deleteObject(storageRef);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Create a storage reference
+   * @param path - The path in storage
+   * @returns Storage reference
+   */
+  getStorageRef(path: string) {
+    return ref(storage, path);
   },
 };

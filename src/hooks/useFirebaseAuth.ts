@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { authAtom } from '../store/atoms/authAtom';
-import { authService, UserData } from '../lib/firebase/auth';
+import { authService } from '../lib/firebase/auth';
 import { toast } from 'sonner';
 
 export const useFirebaseAuth = () => {
@@ -23,18 +23,34 @@ export const useFirebaseAuth = () => {
 
       if (firebaseUser) {
         const userData = authService.convertFirebaseUser(firebaseUser);
-        setAuthState((prev) => ({
-          ...prev,
-          isAuthenticated: true,
-          user: userData,
-          loading: false,
-          error: null,
-        }));
+        firebaseUser
+          .getIdToken()
+          .then((token) => {
+            setAuthState((prev) => ({
+              ...prev,
+              isAuthenticated: true,
+              user: userData,
+              token,
+              loading: false,
+              error: null,
+            }));
+          })
+          .catch(() => {
+            setAuthState((prev) => ({
+              ...prev,
+              isAuthenticated: true,
+              user: userData,
+              token: null,
+              loading: false,
+              error: null,
+            }));
+          });
       } else {
         setAuthState((prev) => ({
           ...prev,
           isAuthenticated: false,
           user: null,
+          token: null,
           loading: false,
           error: null,
         }));
@@ -70,11 +86,14 @@ export const useFirebaseAuth = () => {
         school
       );
       const userData = authService.convertFirebaseUser(userCredential.user);
+      const token = await userCredential.user.getIdToken();
 
       // Store additional user data (grade, school) in the auth state
       setAuthState((prev) => ({
         ...prev,
+        isAuthenticated: true,
         user: userData ? { ...userData, grade, school } : null,
+        token,
         loading: false,
       }));
 
@@ -98,10 +117,13 @@ export const useFirebaseAuth = () => {
 
       const userCredential = await authService.signIn(email, password);
       const userData = authService.convertFirebaseUser(userCredential.user);
+      const token = await userCredential.user.getIdToken();
 
       setAuthState((prev) => ({
         ...prev,
+        isAuthenticated: true,
         user: userData,
+        token,
         loading: false,
       }));
 
@@ -125,10 +147,13 @@ export const useFirebaseAuth = () => {
 
       const userCredential = await authService.signInWithGoogle();
       const userData = authService.convertFirebaseUser(userCredential.user);
+      const token = await userCredential.user.getIdToken();
 
       setAuthState((prev) => ({
         ...prev,
+        isAuthenticated: true,
         user: userData,
+        token,
         loading: false,
       }));
 
@@ -155,6 +180,7 @@ export const useFirebaseAuth = () => {
         ...prev,
         isAuthenticated: false,
         user: null,
+        token: null,
         loading: false,
         error: null,
       }));

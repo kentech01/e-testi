@@ -13,7 +13,7 @@ export const currentUserSelector = selector({
   key: 'currentUserSelector',
   get: ({ get }) => {
     const authState = get(authAtom);
-    return authState.user;
+    return authState;
   },
 });
 
@@ -30,5 +30,13 @@ export const authErrorSelector = selector({
   get: ({ get }) => {
     const authState = get(authAtom);
     return authState.error;
+  },
+});
+
+export const authTokenSelector = selector({
+  key: 'authTokenSelector',
+  get: ({ get }) => {
+    const authState = get(authAtom);
+    return authState.token;
   },
 });

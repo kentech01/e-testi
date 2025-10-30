@@ -13,6 +13,7 @@ export interface AuthState {
   user: User | null;
   loading: boolean;
   error: string | null;
+  token: string | null;
 }
 
 export const authAtom = atom<AuthState>({
@@ -22,5 +23,6 @@ export const authAtom = atom<AuthState>({
     user: null,
     loading: true, // Start with loading true to handle initial auth state
     error: null,
+    token: null,
   },
 });

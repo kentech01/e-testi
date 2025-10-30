@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { RecoilRoot } from 'recoil';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
@@ -15,10 +15,6 @@ import {
 } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
-
-import { auth } from './lib/firebase/config';
-import { authService } from './lib/firebase/auth';
-
 // Lazy load components
 const AuthModal = lazy(() =>
   import('./components/forms').then((module) => ({ default: module.AuthModal }))
