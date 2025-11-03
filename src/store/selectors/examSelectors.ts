@@ -127,7 +127,7 @@ export const examByIdSelector = (id: number) =>
     },
   });
 
-export const examsBySectorSelector = (sectorId: number) =>
+export const examsBySectorSelector = (sectorId: string) =>
   selector({
     key: `examsBySectorSelector_${sectorId}`,
     get: ({ get }) => {

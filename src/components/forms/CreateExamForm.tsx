@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Button } from '../../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 import { Input } from '../../ui/input';
@@ -7,7 +7,9 @@ import { Checkbox } from '../../ui/checkbox';
 import { ArrowLeft, Plus, X, Upload } from 'lucide-react';
 import examService from '../../services/exams';
 import questionsService from '../../services/questions';
+import sectorService from '../../services/sectors';
 import { storageService } from '../../lib/firebase';
+import { Sector } from '../../services/sectors';
 
 interface AnswerOption {
   id: string;
@@ -23,11 +25,13 @@ interface CreateExamFormProps {
 export function CreateExamForm({ onBack, onSave }: CreateExamFormProps) {
   const [examTitle, setExamTitle] = useState('');
   const [examDescription, setExamDescription] = useState('');
-  const [sectorId, setSectorId] = useState<number>(1);
-  const [passingScoreText, setPassingScoreText] = useState<string>('');
+  const [sectorId, setSectorId] = useState<string>('');
+  const [passingScoreText, setPassingScoreText] = useState<string>('40');
   const [examId, setExamId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [sectors, setSectors] = useState<Sector[]>([]);
+  const [loadingSectors, setLoadingSectors] = useState(false);
   const [errors, setErrors] = useState<{
     examTitle?: string;
     examDescription?: string;
@@ -47,6 +51,27 @@ export function CreateExamForm({ onBack, onSave }: CreateExamFormProps) {
     { id: '3', text: '', isCorrect: false },
     { id: '4', text: '', isCorrect: false },
   ]);
+
+  // Fetch sectors on mount
+  useEffect(() => {
+    const fetchSectors = async () => {
+      try {
+        setLoadingSectors(true);
+        const fetchedSectors = await sectorService.getSectors();
+        setSectors(fetchedSectors);
+        if (fetchedSectors.length > 0 && !sectorId) {
+          setSectorId(fetchedSectors[0].id);
+        }
+      } catch (error) {
+        console.error('Failed to fetch sectors:', error);
+        setApiError('Failed to load sectors. Please refresh the page.');
+      } finally {
+        setLoadingSectors(false);
+      }
+    };
+
+    fetchSectors();
+  }, []);
 
   const handleAddOption = () => {
     const newOption: AnswerOption = {
@@ -96,8 +121,7 @@ export function CreateExamForm({ onBack, onSave }: CreateExamFormProps) {
     if (!examTitle.trim()) v.examTitle = 'Exam title is required.';
     if (!examDescription.trim())
       v.examDescription = 'Exam description is required.';
-    if (!(sectorId === 1 || sectorId === 2))
-      v.sectorId = 'Select KLASA_9 or KLASA_12.';
+    if (!sectorId) v.sectorId = 'Please select a sector.';
     const parsedPassing =
       passingScoreText === '' ? NaN : Number(passingScoreText);
     if (!Number.isFinite(parsedPassing) || parsedPassing < 0)
@@ -232,11 +256,14 @@ export function CreateExamForm({ onBack, onSave }: CreateExamFormProps) {
             <select
               className="w-full border rounded-md h-10 px-3"
               value={sectorId}
-              onChange={(e) => setSectorId(Number(e.target.value))}
-              disabled={!!examId}
+              onChange={(e) => setSectorId(e.target.value)}
+              disabled={!!examId || loadingSectors}
             >
-              <option value={1}>KLASA_9</option>
-              <option value={2}>KLASA_12</option>
+              {sectors.map((sector) => (
+                <option key={sector.id} value={sector.id}>
+                  {sector.displayName}
+                </option>
+              ))}
             </select>
             {errors.sectorId && (
               <p className="mt-1 text-sm text-red-600">{errors.sectorId}</p>
@@ -250,9 +277,9 @@ export function CreateExamForm({ onBack, onSave }: CreateExamFormProps) {
               type="text"
               inputMode="numeric"
               value={passingScoreText}
-              placeholder="e.g. 60"
+              placeholder="40"
               onChange={(e) => setPassingScoreText(e.target.value)}
-              disabled={!!examId}
+              disabled={true}
             />
             {errors.passingScore && (
               <p className="mt-1 text-sm text-red-600">{errors.passingScore}</p>

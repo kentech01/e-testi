@@ -9,18 +9,10 @@ import {
   signInWithRedirect,
   getRedirectResult,
   signOut as firebaseSignOut,
+  updateProfile,
 } from 'firebase/auth';
-import {
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-  StorageError,
-  UploadTask,
-  UploadTaskSnapshot,
-} from 'firebase/storage';
-import { auth, storage } from './config';
+import { auth } from './config';
+import { supabase, getSupabaseBucket } from '../supabase/client';
 
 export interface UserData {
   uid: string;
@@ -55,9 +47,7 @@ export const authService = {
 
       // Update the user's display name
       if (userCredential.user) {
-        await userCredential.user.updateProfile({
-          displayName: name,
-        });
+        await updateProfile(userCredential.user, { displayName: name });
       }
 
       return userCredential;
@@ -146,12 +136,41 @@ export const storageService = {
    */
   async uploadFile(file: File, path: string): Promise<string> {
     try {
-      const storageRef = ref(storage, path);
-      await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(storageRef);
-      return downloadURL;
+      const bucket = getSupabaseBucket();
+      const { error } = await supabase.storage.from(bucket).upload(path, file, {
+        upsert: true,
+        contentType: file.type,
+        cacheControl: '3600',
+      });
+
+      if (error) {
+        // Provide more helpful error messages
+        if (
+          error.message?.includes('row-level security') ||
+          error.statusCode === '403'
+        ) {
+          throw new Error(
+            'Storage upload failed: RLS policy violation. Please configure Supabase Storage policies to allow public uploads. See SUPABASE_STORAGE_SETUP.md for instructions.'
+          );
+        }
+        if (error.statusCode === '404') {
+          throw new Error(
+            `Storage bucket "${bucket}" not found. Please create the bucket in Supabase Dashboard.`
+          );
+        }
+        throw error;
+      }
+
+      const { data } = supabase.storage.from(bucket).getPublicUrl(path);
+      if (!data?.publicUrl) {
+        throw new Error(
+          `No public URL returned. Make sure bucket "${bucket}" is Public in Supabase Storage (or switch to signed URLs).`
+        );
+      }
+      return data.publicUrl;
     } catch (error) {
-      throw error;
+      çç;
+      throw error as any;
     }
   },
 
@@ -168,34 +187,13 @@ export const storageService = {
     onProgress?: (progress: number) => void
   ): Promise<string> {
     try {
-      const storageRef = ref(storage, path);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      return new Promise((resolve, reject) => {
-        uploadTask.on(
-          'state_changed',
-          (snapshot: UploadTaskSnapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            if (onProgress) {
-              onProgress(progress);
-            }
-          },
-          (error: StorageError) => {
-            reject(error);
-          },
-          async () => {
-            try {
-              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-              resolve(downloadURL);
-            } catch (error) {
-              reject(error);
-            }
-          }
-        );
-      });
+      // Supabase SDK does not expose upload progress; emit start/end
+      if (onProgress) onProgress(10);
+      const url = await this.uploadFile(file, path);
+      if (onProgress) onProgress(100);
+      return url;
     } catch (error) {
-      throw error;
+      throw error as any;
     }
   },
 
@@ -206,10 +204,11 @@ export const storageService = {
    */
   async getDownloadURL(path: string): Promise<string> {
     try {
-      const storageRef = ref(storage, path);
-      return await getDownloadURL(storageRef);
+      const bucket = getSupabaseBucket();
+      const { data } = supabase.storage.from(bucket).getPublicUrl(path);
+      return data.publicUrl;
     } catch (error) {
-      throw error;
+      throw error as any;
     }
   },
 
@@ -219,10 +218,11 @@ export const storageService = {
    */
   async deleteFile(path: string): Promise<void> {
     try {
-      const storageRef = ref(storage, path);
-      await deleteObject(storageRef);
+      const bucket = getSupabaseBucket();
+      const { error } = await supabase.storage.from(bucket).remove([path]);
+      if (error) throw error;
     } catch (error) {
-      throw error;
+      throw error as any;
     }
   },
 
@@ -232,6 +232,6 @@ export const storageService = {
    * @returns Storage reference
    */
   getStorageRef(path: string) {
-    return ref(storage, path);
+    return path;
   },
 };

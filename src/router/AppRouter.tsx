@@ -130,6 +130,10 @@ const TestResultsWrapper = ({
   );
 };
 
+const CreateExamWrapper = () => {
+  return <CreateExam />;
+};
+
 const AppRouter: React.FC<AppRouterProps> = ({
   user,
   darkMode,
@@ -221,12 +225,14 @@ const AppRouter: React.FC<AppRouterProps> = ({
       {/* Sidebar Navigation */}
       <div className="hidden lg:flex">
         <Suspense fallback={<Skeleton className="w-64 h-full" />}>
-          <Navigation
-            user={user}
-            darkMode={darkMode}
-            onToggleDarkMode={onToggleDarkMode}
-            onLogout={onLogout}
-          />
+          {user && (
+            <Navigation
+              user={user}
+              darkMode={darkMode}
+              onToggleDarkMode={onToggleDarkMode}
+              onLogout={onLogout}
+            />
+          )}
         </Suspense>
       </div>
 
@@ -344,6 +350,15 @@ const AppRouter: React.FC<AppRouterProps> = ({
               element={
                 <ProtectedRoute>
                   <CreateExam />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/test-management/edit/:examId/:questionId?"
+              element={
+                <ProtectedRoute>
+                  <CreateExamWrapper />
                 </ProtectedRoute>
               }
             />

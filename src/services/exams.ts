@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
 import HttpClient from './httpClient';
+import { Sector } from './sectors';
 
 // Types based on backend entities
 export interface QuestionOption {
@@ -17,7 +18,7 @@ export interface Question {
   id: number;
   text: string;
   imageUrl?: string;
-  examId: number;
+  examId: string | number;
   subject: string;
   examPart?: string;
   parentId?: number;
@@ -30,21 +31,11 @@ export interface Question {
   updatedAt?: string;
 }
 
-export interface Sector {
-  id: number;
-  name: string;
-  code: string;
-  description?: string;
-  isActive: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
 export interface Exam {
-  id: number;
+  id: string | number;
   title: string;
   description?: string;
-  sectorId: number;
+  sectorId: string;
   sector?: Sector;
   isActive: boolean;
   totalQuestions: number;
@@ -57,7 +48,7 @@ export interface Exam {
 export interface CreateExamRequest {
   title: string;
   description?: string;
-  sectorId: number;
+  sectorId: string;
   isActive?: boolean;
   totalQuestions: number;
   passingScore: number;
@@ -86,7 +77,7 @@ export interface QuestionRequest {
 export interface CreateCompleteExamRequest {
   title: string;
   description?: string;
-  sectorId: number;
+  sectorId: string;
   isActive?: boolean;
   totalQuestions?: number;
   passingScore?: number;
@@ -119,8 +110,8 @@ export class ExamService {
   }
 
   // Get exam by ID
-  async getExamById(id: number): Promise<Exam> {
-    const response = await this.api.get<Exam>(`exams/${id}`);
+  async getExamById(id: string | number): Promise<Exam> {
+    const response = await this.api.get<Exam>(`exams/${String(id)}`);
     return response.data;
   }
 
@@ -149,7 +140,7 @@ export class ExamService {
 
   // Update exam
   async updateExam(
-    id: number,
+    id: string | number,
     examData: Partial<CreateExamRequest>
   ): Promise<Exam> {
     const response = await this.api.put<Exam>(`exams/${id}`, examData);
@@ -157,7 +148,7 @@ export class ExamService {
   }
 
   // Delete exam
-  async deleteExam(id: number): Promise<void> {
+  async deleteExam(id: string | number): Promise<void> {
     await this.api.delete(`exams/${id}`);
   }
 }

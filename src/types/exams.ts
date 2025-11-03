@@ -3,12 +3,14 @@ export type {
   Exam,
   Question,
   QuestionOption,
-  Sector,
   CreateExamRequest,
   QuestionOptionRequest,
   QuestionRequest,
   CreateCompleteExamRequest,
   CreateCompleteExamResponse,
 } from '../services/exams';
+
+// Re-export Sector for backward compatibility
+export type { Sector } from '../services/sectors';
 
 export { ExamService } from '../services/exams';

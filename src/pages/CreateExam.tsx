@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
@@ -17,7 +18,12 @@ import {
 } from 'lucide-react';
 import examService from '../services/exams';
 import questionsService from '../services/questions';
+import sectorService from '../services/sectors';
+import { Sector } from '../services/sectors';
 import { storageService } from '../lib/firebase';
+import { examCacheAtom } from '../store/atoms/createExamAtom';
+import type { Exam } from '../services/exams';
+import type { Question as ServiceQuestion } from '../services/questions';
 
 interface AnswerOption {
   id: string;
@@ -38,14 +44,28 @@ const TOTAL_QUESTIONS = 100;
 
 export function CreateExam() {
   const navigate = useNavigate();
+  const params = useParams<{ examId?: string; questionId?: string }>();
+
+  // Recoil state
+  const [examCache, setExamCache] = useRecoilState(examCacheAtom);
+
+  // Local state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [examTitle, setExamTitle] = useState('');
   const [examDescription, setExamDescription] = useState('');
-  const [sectorId, setSectorId] = useState<number>(1);
-  const [passingScoreText, setPassingScoreText] = useState<string>('');
+  const [sectorId, setSectorId] = useState<string>('');
+  const [passingScoreText, setPassingScoreText] = useState<string>('40');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [examId, setExamId] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [sectors, setSectors] = useState<Sector[]>([]);
+  const [loadingSectors, setLoadingSectors] = useState(false);
+  const [createdQuestionIds, setCreatedQuestionIds] = useState<Set<number>>(
+    new Set()
+  );
+  const [questionIdMap, setQuestionIdMap] = useState<Map<number, string>>(
+    new Map()
+  );
   const [errors, setErrors] = useState<{
     examTitle?: string;
     examDescription?: string;
@@ -72,7 +92,139 @@ export function CreateExam() {
     }));
   });
 
+  // Fetch sectors on mount
+  useEffect(() => {
+    const fetchSectors = async () => {
+      try {
+        setLoadingSectors(true);
+        const fetchedSectors = await sectorService.getSectors();
+        setSectors(fetchedSectors);
+        if (fetchedSectors.length > 0 && !sectorId) {
+          setSectorId(fetchedSectors[0].id);
+        }
+      } catch (error) {
+        console.error('Failed to fetch sectors:', error);
+        setApiError('Failed to load sectors. Please refresh the page.');
+      } finally {
+        setLoadingSectors(false);
+      }
+    };
+
+    fetchSectors();
+  }, []);
+
+  // Fetch exam and question data if params are present
+  useEffect(() => {
+    const fetchExamData = async () => {
+      if (!params.examId) return;
+
+      try {
+        setExamId(params.examId);
+
+        // Check cache first
+        const cachedExam = examCache.exams.get(params.examId);
+        const cachedQuestions = examCache.questions.get(params.examId);
+
+        let fetchedExam: Exam;
+        let fetchedQuestions: ServiceQuestion[];
+
+        if (cachedExam && cachedQuestions) {
+          // Use cached data
+          fetchedExam = cachedExam;
+          fetchedQuestions = cachedQuestions;
+        } else {
+          // Fetch exam details (accept string IDs as well)
+          fetchedExam = await examService.getExamById(params.examId!);
+
+          // Fetch all questions for this exam
+          fetchedQuestions = await questionsService.getQuestionsByExam(
+            params.examId
+          );
+
+          // Update cache (params.examId is guaranteed to be defined at this point due to early return)
+          const examIdKey = params.examId!;
+          setExamCache((prev) => ({
+            ...prev,
+            exams: new Map([...prev.exams, [examIdKey, fetchedExam]]),
+            questions: new Map([
+              ...prev.questions,
+              [examIdKey, fetchedQuestions],
+            ]),
+          }));
+        }
+
+        setExamTitle(fetchedExam.title);
+        setExamDescription(fetchedExam.description || '');
+        setSectorId(fetchedExam.sectorId);
+        setPassingScoreText(String(fetchedExam.passingScore));
+
+        // Build maps and populate questions
+        const newCreatedIds = new Set<number>();
+        const newIdMap = new Map<number, string>();
+
+        fetchedQuestions.forEach((dbQuestion) => {
+          const localId = dbQuestion.orderNumber;
+          newCreatedIds.add(localId);
+          newIdMap.set(localId, dbQuestion.id);
+
+          // Populate the question in state
+          setQuestions((prev) =>
+            prev.map((q) => {
+              if (q.id === localId) {
+                return {
+                  ...q,
+                  title: dbQuestion.text,
+                  description: dbQuestion.displayText || '',
+                  imageUrl: dbQuestion.imageUrl,
+                  answerOptions:
+                    dbQuestion.options?.map((opt, idx) => ({
+                      id: `${localId}-${idx + 1}`,
+                      text: opt.text,
+                      isCorrect: opt.isCorrect,
+                    })) || [],
+                };
+              }
+              return q;
+            })
+          );
+        });
+
+        setCreatedQuestionIds(newCreatedIds);
+        setQuestionIdMap(newIdMap);
+
+        // Set current question index if questionId is provided
+        if (params.questionId) {
+          const questionIndex = Array.from(newIdMap.entries()).findIndex(
+            ([_, dbId]) => dbId === params.questionId
+          );
+          if (questionIndex !== -1) {
+            const localId = Array.from(newIdMap.keys())[questionIndex];
+            setCurrentQuestionIndex(localId - 1); // localId is 1-based, index is 0-based
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch exam data:', error);
+        setApiError('Failed to load exam data. Please refresh the page.');
+      }
+    };
+
+    fetchExamData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.examId, params.questionId]);
+
   const currentQuestion = questions[currentQuestionIndex];
+
+  // Memoized local preview URL for selected (not yet uploaded) image
+  const imageObjectUrl = useMemo(() => {
+    return currentQuestion?.imageFile
+      ? URL.createObjectURL(currentQuestion.imageFile)
+      : null;
+  }, [currentQuestion?.imageFile]);
+  useEffect(() => {
+    return () => {
+      if (imageObjectUrl) URL.revokeObjectURL(imageObjectUrl);
+    };
+  }, [imageObjectUrl]);
 
   const handleAddOption = () => {
     const newOption: AnswerOption = {
@@ -177,8 +329,7 @@ export function CreateExam() {
     if (!examTitle.trim()) newErrors.examTitle = 'Exam title is required.';
     if (!examDescription.trim())
       newErrors.examDescription = 'Exam description is required.';
-    if (!(sectorId === 1 || sectorId === 2))
-      newErrors.sectorId = 'Select KLASA_9 or KLASA_12.';
+    if (!sectorId) newErrors.sectorId = 'Please select a sector.';
     const parsedPassing =
       passingScoreText === '' ? NaN : Number(passingScoreText);
     if (!Number.isFinite(parsedPassing) || parsedPassing < 0)
@@ -197,13 +348,17 @@ export function CreateExam() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const persistCurrentQuestion = async (): Promise<boolean> => {
+  const persistCurrentQuestion = async (): Promise<{
+    success: boolean;
+    dbQuestionId?: string;
+  }> => {
+    const q = questions[currentQuestionIndex];
+
     setApiError(null);
     // Validate
-    const q = questions[currentQuestionIndex];
     const examOk = validateExam();
     const questionOk = validateQuestion(q);
-    if (!examOk || !questionOk) return false;
+    if (!examOk || !questionOk) return { success: false };
 
     const parsedPassing = Number(passingScoreText);
 
@@ -223,8 +378,8 @@ export function CreateExam() {
         setExamId(ensuredExamId);
       }
 
-      // Upload image if selected
-      let imageUrl: string | undefined = undefined;
+      // Upload image if selected, otherwise use existing imageUrl
+      let imageUrl: string | undefined = q.imageUrl || undefined;
       if (q.imageFile) {
         const safeName = q.imageFile.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
         const path = `exams/${ensuredExamId}/questions/${q.id}/${Date.now()}_${safeName}`;
@@ -241,8 +396,7 @@ export function CreateExam() {
         isCorrect: !!opt.isCorrect,
       }));
 
-      // Create question
-      await questionsService.createQuestion({
+      const questionData = {
         text: q.title,
         imageUrl,
         examId: ensuredExamId!,
@@ -251,40 +405,105 @@ export function CreateExam() {
         points: 1,
         isActive: true,
         options,
-      });
-      return true;
+      };
+
+      let dbQuestionId: string;
+      const isQuestionCreated = createdQuestionIds.has(q.id);
+
+      if (isQuestionCreated) {
+        // Update existing question
+        const existingDbId = questionIdMap.get(q.id);
+        if (!existingDbId) {
+          throw new Error('Question database ID not found for update');
+        }
+        await questionsService.updateQuestion(existingDbId, questionData);
+        dbQuestionId = existingDbId;
+      } else {
+        // Create new question
+        const created = await questionsService.createQuestion(questionData);
+        dbQuestionId = created.id;
+        setCreatedQuestionIds((prev) => new Set([...prev, q.id]));
+        setQuestionIdMap((prev) => new Map([...prev, [q.id, dbQuestionId]]));
+      }
+
+      // Persist uploaded imageUrl back into local state so it gets previewed
+      if (imageUrl) {
+        setQuestions((prev) =>
+          prev.map((question, index) =>
+            index === currentQuestionIndex
+              ? { ...question, imageUrl, imageFile: null }
+              : question
+          )
+        );
+      }
+
+      return { success: true, dbQuestionId };
     } catch (e: any) {
       setApiError(
         e?.response?.data?.message || e?.message || 'Failed to save.'
       );
-      return false;
+      return { success: false };
+    }
+  };
+
+  const updateUrl = (targetIndex?: number, dbQuestionId?: string) => {
+    if (examId) {
+      const index =
+        typeof targetIndex === 'number' ? targetIndex : currentQuestionIndex;
+      const questionDbId =
+        dbQuestionId || questionIdMap.get(questions[index].id) || '';
+      // Navigate with questionId if available, otherwise just examId
+      const url = questionDbId
+        ? `/test-management/edit/${examId}/${questionDbId}`
+        : `/test-management/edit/${examId}`;
+      navigate(url, { replace: true });
     }
   };
 
   const handleNext = async () => {
     if (currentQuestionIndex < TOTAL_QUESTIONS - 1) {
       setIsSubmitting(true);
-      const ok = await persistCurrentQuestion();
-      setIsSubmitting(false);
-      if (ok) {
-        setErrors({});
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      try {
+        const result = await persistCurrentQuestion();
+        if (result.success) {
+          setErrors({});
+          const nextIndex = currentQuestionIndex + 1;
+          setCurrentQuestionIndex(nextIndex);
+          // Update URL for next question (will use questionIdMap if available)
+          updateUrl(nextIndex);
+        } else {
+          // Validation failed - errors should be displayed
+          console.log('Validation failed, errors:', errors);
+        }
+      } catch (error) {
+        console.error('Error in handleNext:', error);
+        setApiError('An error occurred while saving. Please try again.');
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
 
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
+      const prevIndex = currentQuestionIndex - 1;
+      setCurrentQuestionIndex(prevIndex);
+      updateUrl(prevIndex);
     }
   };
 
   const handleSave = async () => {
     setIsSubmitting(true);
-    const ok = await persistCurrentQuestion();
-    setIsSubmitting(false);
-    if (ok) {
-      navigate('/test-management');
+    try {
+      const result = await persistCurrentQuestion();
+      if (result.success) {
+        navigate('/test-management');
+      }
+    } catch (error) {
+      console.error('Error in handleSave:', error);
+      setApiError('An error occurred while saving. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -366,11 +585,15 @@ export function CreateExam() {
               <select
                 className="w-full border rounded-md h-10 px-3"
                 value={sectorId}
-                onChange={(e) => setSectorId(Number(e.target.value))}
-                disabled={!!examId}
+                onChange={(e) => setSectorId(e.target.value)}
+                disabled={!!examId || loadingSectors}
               >
-                <option value={1}>KLASA_9</option>
-                <option value={2}>KLASA_12</option>
+                <option value="">Select a sector...</option>
+                {sectors.map((sector) => (
+                  <option key={sector.id} value={sector.id}>
+                    {sector.displayName}
+                  </option>
+                ))}
               </select>
               {errors.sectorId && (
                 <p className="mt-1 text-sm text-red-600">{errors.sectorId}</p>
@@ -384,9 +607,9 @@ export function CreateExam() {
                 type="text"
                 inputMode="numeric"
                 value={passingScoreText}
-                placeholder="e.g. 60"
+                placeholder="40"
                 onChange={(e) => setPassingScoreText(e.target.value)}
-                disabled={!!examId}
+                disabled={true}
               />
               {errors.passingScore && (
                 <p className="mt-1 text-sm text-red-600">
@@ -496,6 +719,15 @@ export function CreateExam() {
                 <p className="mt-2 text-sm text-gray-600">
                   Selected: {currentQuestion.imageFile.name}
                 </p>
+              )}
+              {(currentQuestion.imageUrl || imageObjectUrl) && (
+                <div className="mt-3">
+                  <img
+                    src={currentQuestion.imageUrl || (imageObjectUrl as string)}
+                    alt="Question"
+                    className="max-h-64 rounded border"
+                  />
+                </div>
               )}
             </div>
 
