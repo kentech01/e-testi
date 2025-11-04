@@ -1,6 +1,13 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import { examCacheAtom } from '../store/atoms/createExamAtom';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
@@ -18,12 +25,10 @@ import {
 } from 'lucide-react';
 import examService from '../services/exams';
 import questionsService from '../services/questions';
-import sectorService from '../services/sectors';
-import { Sector } from '../services/sectors';
 import { storageService } from '../lib/firebase';
-import { examCacheAtom } from '../store/atoms/createExamAtom';
 import type { Exam } from '../services/exams';
 import type { Question as ServiceQuestion } from '../services/questions';
+import useSectors from '../hooks/useSectors';
 
 interface AnswerOption {
   id: string;
@@ -46,7 +51,7 @@ export function CreateExam() {
   const navigate = useNavigate();
   const params = useParams<{ examId?: string; questionId?: string }>();
 
-  // Recoil state
+  // Recoil cache state
   const [examCache, setExamCache] = useRecoilState(examCacheAtom);
 
   // Local state
@@ -58,8 +63,12 @@ export function CreateExam() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [examId, setExamId] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
-  const [sectors, setSectors] = useState<Sector[]>([]);
-  const [loadingSectors, setLoadingSectors] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    sectors,
+    loading: loadingSectors,
+    ensureSectorsLoaded,
+  } = useSectors();
   const [createdQuestionIds, setCreatedQuestionIds] = useState<Set<number>>(
     new Set()
   );
@@ -92,125 +101,236 @@ export function CreateExam() {
     }));
   });
 
-  // Fetch sectors on mount
+  // Ensure sectors are loaded only if not cached
   useEffect(() => {
-    const fetchSectors = async () => {
-      try {
-        setLoadingSectors(true);
-        const fetchedSectors = await sectorService.getSectors();
-        setSectors(fetchedSectors);
-        if (fetchedSectors.length > 0 && !sectorId) {
-          setSectorId(fetchedSectors[0].id);
-        }
-      } catch (error) {
-        console.error('Failed to fetch sectors:', error);
-        setApiError('Failed to load sectors. Please refresh the page.');
-      } finally {
-        setLoadingSectors(false);
-      }
-    };
+    ensureSectorsLoaded();
+  }, [ensureSectorsLoaded]);
 
-    fetchSectors();
-  }, []);
-
-  // Fetch exam and question data if params are present
+  // Default sector selection after sectors are available
   useEffect(() => {
+    if (sectors.length > 0 && !sectorId) {
+      setSectorId(sectors[0].id);
+    }
+  }, [sectors, sectorId]);
+
+  // Track which examId we've initialized for to prevent effect from resetting navigation
+  const initializedExamIdRef = useRef<string | null>(null);
+  // Track last questionId we set index from to avoid unnecessary resets
+  const lastQuestionIdRef = useRef<string | null>(null);
+  // Track if we're currently processing to prevent concurrent runs
+  const isProcessingRef = useRef(false);
+  // Track if we're navigating programmatically to skip effect re-runs
+  const isNavigatingRef = useRef(false);
+  // Ref to access questions without causing re-renders
+  const questionsRef = useRef(questions);
+  useEffect(() => {
+    questionsRef.current = questions;
+  }, [questions]);
+
+  console.log('questions', questions);
+
+  // Refs to access Set/Map without causing re-renders in callbacks
+  const createdQuestionIdsRef = useRef(createdQuestionIds);
+  useEffect(() => {
+    createdQuestionIdsRef.current = createdQuestionIds;
+  }, [createdQuestionIds]);
+
+  const questionIdMapRef = useRef(questionIdMap);
+  useEffect(() => {
+    questionIdMapRef.current = questionIdMap;
+  }, [questionIdMap]);
+
+  // Ref to access examCache without causing re-renders in callbacks
+  const examCacheRef = useRef(examCache);
+  useEffect(() => {
+    examCacheRef.current = examCache;
+  }, [examCache]);
+
+  // Fetch exam and question data if params are present (always fresh)
+  useEffect(() => {
+    // Only fetch if examId is provided and we haven't initialized for this examId
+    if (!params.examId || initializedExamIdRef.current === params.examId) {
+      return;
+    }
+
+    // Skip if we're navigating programmatically
+    if (isNavigatingRef.current) {
+      return;
+    }
+
+    // Prevent concurrent runs or re-runs
+    if (isProcessingRef.current) {
+      return;
+    }
+
+    console.log('examCache', examCache);
+
     const fetchExamData = async () => {
-      if (!params.examId) return;
+      // Mark as processing immediately to prevent concurrent runs
+      isProcessingRef.current = true;
+      initializedExamIdRef.current = params.examId!; // Set this immediately to prevent re-runs
+      setIsLoading(true);
 
       try {
-        setExamId(params.examId);
+        // Reset questionId ref when switching to a different exam
+        lastQuestionIdRef.current = null;
 
-        // Check cache first
-        const cachedExam = examCache.exams.get(params.examId);
-        const cachedQuestions = examCache.questions.get(params.examId);
+        const examIdToFetch = params.examId!;
+        setExamId(examIdToFetch);
 
+        // Check cache first, then fetch if not available
         let fetchedExam: Exam;
         let fetchedQuestions: ServiceQuestion[];
+
+        const cachedExam = examCache.exams.get(examIdToFetch);
+        const cachedQuestions = examCache.questions.get(examIdToFetch);
 
         if (cachedExam && cachedQuestions) {
           // Use cached data
           fetchedExam = cachedExam;
           fetchedQuestions = cachedQuestions;
         } else {
-          // Fetch exam details (accept string IDs as well)
-          fetchedExam = await examService.getExamById(params.examId!);
+          // Fetch fresh data
+          fetchedExam = await examService.getExamById(examIdToFetch);
+          fetchedQuestions =
+            await questionsService.getQuestionsByExam(examIdToFetch);
 
-          // Fetch all questions for this exam
-          fetchedQuestions = await questionsService.getQuestionsByExam(
-            params.examId
-          );
-
-          // Update cache (params.examId is guaranteed to be defined at this point due to early return)
-          const examIdKey = params.examId!;
+          // Cache the fetched data
           setExamCache((prev) => ({
             ...prev,
-            exams: new Map([...prev.exams, [examIdKey, fetchedExam]]),
+            exams: new Map([...prev.exams, [examIdToFetch, fetchedExam]]),
             questions: new Map([
               ...prev.questions,
-              [examIdKey, fetchedQuestions],
+              [examIdToFetch, fetchedQuestions],
             ]),
           }));
         }
 
-        setExamTitle(fetchedExam.title);
-        setExamDescription(fetchedExam.description || '');
-        setSectorId(fetchedExam.sectorId);
-        setPassingScoreText(String(fetchedExam.passingScore));
-
         // Build maps and populate questions
         const newCreatedIds = new Set<number>();
         const newIdMap = new Map<number, string>();
+        const updatedQuestions: Question[] = [];
 
         fetchedQuestions.forEach((dbQuestion) => {
           const localId = dbQuestion.orderNumber;
           newCreatedIds.add(localId);
           newIdMap.set(localId, dbQuestion.id);
-
-          // Populate the question in state
-          setQuestions((prev) =>
-            prev.map((q) => {
-              if (q.id === localId) {
-                return {
-                  ...q,
-                  title: dbQuestion.text,
-                  description: dbQuestion.displayText || '',
-                  imageUrl: dbQuestion.imageUrl,
-                  answerOptions:
-                    dbQuestion.options?.map((opt, idx) => ({
-                      id: `${localId}-${idx + 1}`,
-                      text: opt.text,
-                      isCorrect: opt.isCorrect,
-                    })) || [],
-                };
-              }
-              return q;
-            })
-          );
         });
 
+        // Create updated questions array
+        for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+          const localId = i + 1;
+          const dbQuestion = fetchedQuestions.find(
+            (q) => q.orderNumber === localId
+          );
+          if (dbQuestion) {
+            updatedQuestions.push({
+              id: localId,
+              title: dbQuestion.text,
+              description: dbQuestion.description || '',
+              answerOptions:
+                dbQuestion.options?.map((opt, idx) => ({
+                  id: `${localId}-${idx + 1}`,
+                  text: opt.text,
+                  isCorrect: opt.isCorrect,
+                })) || [],
+              imageUrl: dbQuestion.imageUrl,
+              imageFile: null,
+            });
+          } else {
+            // Keep existing question structure
+            updatedQuestions.push({
+              id: localId,
+              title: '',
+              description: '',
+              answerOptions: [
+                { id: `${localId}-1`, text: '', isCorrect: false },
+                { id: `${localId}-2`, text: '', isCorrect: false },
+                { id: `${localId}-3`, text: '', isCorrect: false },
+                { id: `${localId}-4`, text: '', isCorrect: false },
+              ],
+              imageFile: null,
+              imageUrl: undefined,
+            });
+          }
+        }
+
+        // Batch all state updates together - only on initial load
+        setExamTitle(fetchedExam.title);
+        setExamDescription(fetchedExam.description || '');
+        setSectorId(fetchedExam.sectorId);
+        setPassingScoreText(String(fetchedExam.passingScore));
+        setQuestions(updatedQuestions);
         setCreatedQuestionIds(newCreatedIds);
         setQuestionIdMap(newIdMap);
 
-        // Set current question index if questionId is provided
-        if (params.questionId) {
-          const questionIndex = Array.from(newIdMap.entries()).findIndex(
-            ([_, dbId]) => dbId === params.questionId
-          );
-          if (questionIndex !== -1) {
-            const localId = Array.from(newIdMap.keys())[questionIndex];
-            setCurrentQuestionIndex(localId - 1); // localId is 1-based, index is 0-based
+        // On initial load, navigate to the last question (highest orderNumber) if editing
+        if (fetchedQuestions.length > 0) {
+          // If questionId is in URL, navigate to that question
+          if (params.questionId) {
+            const questionIndex = Array.from(newIdMap.entries()).findIndex(
+              ([_, dbId]) => dbId === params.questionId
+            );
+            if (questionIndex !== -1) {
+              const localId = Array.from(newIdMap.keys())[questionIndex];
+              const targetIndex = localId - 1; // localId is 1-based, index is 0-based
+              setCurrentQuestionIndex(targetIndex);
+              lastQuestionIdRef.current = params.questionId;
+            } else {
+              // Question not found, navigate to last question
+              const maxOrderNumber = Math.max(
+                ...fetchedQuestions.map((q) => q.orderNumber)
+              );
+              const lastQuestion = fetchedQuestions.find(
+                (q) => q.orderNumber === maxOrderNumber
+              );
+              const targetIndex = maxOrderNumber - 1;
+              const safeIndex = Math.min(targetIndex, TOTAL_QUESTIONS - 1);
+              setCurrentQuestionIndex(safeIndex);
+              if (lastQuestion?.id) {
+                lastQuestionIdRef.current = lastQuestion.id;
+                const url = `/test-management/edit/${params.examId}/${lastQuestion.id}`;
+                isNavigatingRef.current = true;
+                navigate(url, { replace: true });
+                setTimeout(() => {
+                  isNavigatingRef.current = false;
+                }, 100);
+              }
+            }
+          } else {
+            // No questionId in URL, navigate to last question
+            const maxOrderNumber = Math.max(
+              ...fetchedQuestions.map((q) => q.orderNumber)
+            );
+            const lastQuestion = fetchedQuestions.find(
+              (q) => q.orderNumber === maxOrderNumber
+            );
+            const targetIndex = maxOrderNumber - 1;
+            const safeIndex = Math.min(targetIndex, TOTAL_QUESTIONS - 1);
+            setCurrentQuestionIndex(safeIndex);
+            if (lastQuestion?.id) {
+              lastQuestionIdRef.current = lastQuestion.id;
+              const url = `/test-management/edit/${params.examId}/${lastQuestion.id}`;
+              isNavigatingRef.current = true;
+              navigate(url, { replace: true });
+              setTimeout(() => {
+                isNavigatingRef.current = false;
+              }, 100);
+            }
           }
         }
       } catch (error) {
         console.error('Failed to fetch exam data:', error);
         setApiError('Failed to load exam data. Please refresh the page.');
+      } finally {
+        isProcessingRef.current = false;
+        setIsLoading(false);
       }
     };
 
     fetchExamData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.examId, params.questionId]);
+  }, [params.examId]);
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -315,7 +435,14 @@ export function CreateExam() {
     const file = e.target.files?.[0] || null;
     setQuestions(
       questions.map((q, index) =>
-        index === currentQuestionIndex ? { ...q, imageFile: file } : q
+        index === currentQuestionIndex
+          ? {
+              ...q,
+              // Clear previously uploaded image when a new image is chosen
+              imageUrl: file ? undefined : q.imageUrl,
+              imageFile: file,
+            }
+          : q
       )
     );
   };
@@ -324,7 +451,7 @@ export function CreateExam() {
     return String.fromCharCode('A'.charCodeAt(0) + i);
   };
 
-  const validateExam = (): boolean => {
+  const validateExam = useCallback((): boolean => {
     const newErrors: typeof errors = {};
     if (!examTitle.trim()) newErrors.examTitle = 'Exam title is required.';
     if (!examDescription.trim())
@@ -336,9 +463,9 @@ export function CreateExam() {
       newErrors.passingScore = 'Passing score must be a number ≥ 0.';
     setErrors((prev) => ({ ...prev, ...newErrors }));
     return Object.keys(newErrors).length === 0;
-  };
+  }, [examTitle, examDescription, sectorId, passingScoreText]);
 
-  const validateQuestion = (q: Question): boolean => {
+  const validateQuestion = useCallback((q: Question): boolean => {
     const newErrors: typeof errors = {};
     if (!q.title.trim())
       newErrors.questionTitle = `Question ${q.id} title is required.`;
@@ -346,13 +473,81 @@ export function CreateExam() {
       newErrors.questionOptions = 'At least one option must be marked correct.';
     setErrors((prev) => ({ ...prev, ...newErrors }));
     return Object.keys(newErrors).length === 0;
-  };
+  }, []);
 
-  const persistCurrentQuestion = async (): Promise<{
+  // Check if current question has validation errors
+  const hasQuestionErrors = useMemo(() => {
+    const q = currentQuestion;
+    if (!q) return false;
+    const hasTitleError = !q.title.trim();
+    const hasOptionsError = !q.answerOptions.some((o) => o.isCorrect);
+    return hasTitleError || hasOptionsError;
+  }, [currentQuestion]);
+
+  // Check if exam has validation errors
+  const hasExamErrors = useMemo(() => {
+    return !examTitle.trim() || !examDescription.trim() || !sectorId;
+  }, [examTitle, examDescription, sectorId]);
+
+  // Check if there are any errors that would prevent navigation
+  const hasErrors = hasExamErrors || hasQuestionErrors;
+
+  // Check if current question has changed compared to cached version
+  const hasQuestionChanged = useCallback((): boolean => {
+    const q = questionsRef.current[currentQuestionIndex];
+    if (!q || !examId) return true; // If no question or exam, treat as changed
+
+    const currentCache = examCacheRef.current;
+    const cachedQuestions = currentCache.questions.get(examId);
+    if (!cachedQuestions) return true; // No cache, treat as changed
+
+    const cachedQuestion = cachedQuestions.find(
+      (cq) => cq.orderNumber === q.id
+    );
+    if (!cachedQuestion) return true; // Question not in cache, treat as changed
+
+    // Check if question fields changed
+    if (q.title !== (cachedQuestion.text || '')) return true;
+    if (q.description !== (cachedQuestion.description || '')) return true;
+    if (!!q.imageFile) return true; // New image file selected
+    if (q.imageUrl !== cachedQuestion.imageUrl) return true;
+
+    // Check if options changed
+    const cachedOpts = cachedQuestion.options || [];
+    if (q.answerOptions.length !== cachedOpts.length) return true;
+
+    for (let i = 0; i < q.answerOptions.length; i++) {
+      const local = q.answerOptions[i];
+      const remote = cachedOpts[i];
+      if (!remote) return true;
+      if (local.text !== (remote.text || '')) return true;
+      if (!!local.isCorrect !== !!remote.isCorrect) return true;
+    }
+
+    return false; // No changes detected
+  }, [currentQuestionIndex, examId]);
+
+  // Check if exam data has changed
+  const hasExamChanged = useCallback((): boolean => {
+    if (!examId) return true; // No exam yet, treat as changed
+
+    const currentCache = examCacheRef.current;
+    const cachedExam = currentCache.exams.get(examId);
+    if (!cachedExam) return true; // No cache, treat as changed
+
+    // Check if exam fields changed
+    if (examTitle !== (cachedExam.title || '')) return true;
+    if (examDescription !== (cachedExam.description || '')) return true;
+    if (sectorId !== cachedExam.sectorId) return true;
+
+    return false; // No changes detected
+  }, [examId, examTitle, examDescription, sectorId]);
+
+  const persistCurrentQuestion = useCallback(async (): Promise<{
     success: boolean;
     dbQuestionId?: string;
   }> => {
-    const q = questions[currentQuestionIndex];
+    const q = questionsRef.current[currentQuestionIndex];
 
     setApiError(null);
     // Validate
@@ -362,7 +557,20 @@ export function CreateExam() {
 
     const parsedPassing = Number(passingScoreText);
 
-    // Create exam if this is the first persist
+    // Check if question exists
+    const currentCreatedIds = createdQuestionIdsRef.current;
+    const isCreated = currentCreatedIds.has(q.id);
+    const allQuestionsCreated = currentCreatedIds.size >= TOTAL_QUESTIONS;
+
+    // If all 100 questions are created and this question is not one of them, don't allow creating it
+    if (allQuestionsCreated && !isCreated) {
+      setApiError(
+        'All 100 questions have been created. You can only edit existing questions.'
+      );
+      return { success: false };
+    }
+
+    // Create exam if this is the first persist; also update title/description/sector if editing
     let ensuredExamId = examId;
     try {
       if (!ensuredExamId) {
@@ -376,6 +584,22 @@ export function CreateExam() {
         } as any);
         ensuredExamId = String((created as any).id);
         setExamId(ensuredExamId);
+      } else {
+        // Always update exam fields
+        const updatedExam = await examService.updateExam(ensuredExamId, {
+          title: examTitle,
+          description: examDescription,
+          sectorId: sectorId,
+        });
+
+        // Update cache with updated exam
+        if (ensuredExamId) {
+          const examIdKey = ensuredExamId;
+          setExamCache((prev) => ({
+            ...prev,
+            exams: new Map([...prev.exams, [examIdKey, updatedExam as Exam]]),
+          }));
+        }
       }
 
       // Upload image if selected, otherwise use existing imageUrl
@@ -404,38 +628,93 @@ export function CreateExam() {
         orderNumber: q.id,
         points: 1,
         isActive: true,
+        description: q.description,
         options,
       };
 
       let dbQuestionId: string;
-      const isQuestionCreated = createdQuestionIds.has(q.id);
+      const isQuestionCreated = currentCreatedIds.has(q.id);
+
+      const currentIdMap = questionIdMapRef.current;
 
       if (isQuestionCreated) {
         // Update existing question
-        const existingDbId = questionIdMap.get(q.id);
+        const existingDbId = currentIdMap.get(q.id);
         if (!existingDbId) {
           throw new Error('Question database ID not found for update');
         }
-        await questionsService.updateQuestion(existingDbId, questionData);
+        const updated = await questionsService.updateQuestion(
+          existingDbId,
+          questionData
+        );
         dbQuestionId = existingDbId;
+
+        // Update cache with updated question
+        if (ensuredExamId) {
+          const examIdKey = ensuredExamId;
+          setExamCache((prev) => {
+            const existing = prev.questions.get(examIdKey) || [];
+            const updatedQuestions = existing.map((ques) =>
+              ques.id === dbQuestionId ? (updated as ServiceQuestion) : ques
+            );
+            return {
+              ...prev,
+              questions: new Map([
+                ...prev.questions,
+                [examIdKey, updatedQuestions],
+              ]),
+            };
+          });
+        }
       } else {
         // Create new question
         const created = await questionsService.createQuestion(questionData);
         dbQuestionId = created.id;
         setCreatedQuestionIds((prev) => new Set([...prev, q.id]));
         setQuestionIdMap((prev) => new Map([...prev, [q.id, dbQuestionId]]));
+
+        // Update cache with new question
+        if (ensuredExamId) {
+          const examIdKey = ensuredExamId;
+          setExamCache((prev) => {
+            const existing = prev.questions.get(examIdKey) || [];
+            const updated = [...existing, created as ServiceQuestion];
+            return {
+              ...prev,
+              questions: new Map([...prev.questions, [examIdKey, updated]]),
+            };
+          });
+        }
+
+        // Check if we just reached 100 questions
+        const updatedCreatedIds = new Set([...currentCreatedIds, q.id]);
+        if (updatedCreatedIds.size >= TOTAL_QUESTIONS) {
+          // Navigate back to test-management after a short delay
+          setTimeout(() => {
+            navigate('/test-management');
+          }, 500);
+          return { success: true, dbQuestionId };
+        }
       }
 
-      // Persist uploaded imageUrl back into local state so it gets previewed
-      if (imageUrl) {
-        setQuestions((prev) =>
-          prev.map((question, index) =>
-            index === currentQuestionIndex
-              ? { ...question, imageUrl, imageFile: null }
-              : question
-          )
-        );
-      }
+      // Persist saved data back into local state (title, description, options, image)
+      setQuestions((prev) =>
+        prev.map((question, index) => {
+          if (index !== currentQuestionIndex) return question;
+          return {
+            ...question,
+            title: q.title,
+            description: q.description,
+            answerOptions: q.answerOptions.map((opt, idx) => ({
+              id: opt.id,
+              text: opt.text || `Option ${idx + 1}`,
+              isCorrect: !!opt.isCorrect,
+            })),
+            imageUrl: imageUrl || question.imageUrl,
+            imageFile: null,
+          };
+        })
+      );
 
       return { success: true, dbQuestionId };
     } catch (e: any) {
@@ -444,36 +723,293 @@ export function CreateExam() {
       );
       return { success: false };
     }
-  };
+  }, [
+    currentQuestionIndex,
+    examId,
+    examTitle,
+    examDescription,
+    sectorId,
+    passingScoreText,
+    validateExam,
+    validateQuestion,
+    navigate,
+  ]);
 
-  const updateUrl = (targetIndex?: number, dbQuestionId?: string) => {
-    if (examId) {
+  const ensureQuestionExists = useCallback(
+    async (localId: number): Promise<string | undefined> => {
+      if (!examId) return undefined;
+
+      // Check if all 100 questions are already created
+      const currentCreatedIds = createdQuestionIdsRef.current;
+      const allQuestionsCreated = currentCreatedIds.size >= TOTAL_QUESTIONS;
+
+      // If all questions are created, don't allow creating more
+      if (allQuestionsCreated && !currentCreatedIds.has(localId)) {
+        throw new Error(
+          'All 100 questions have been created. You can only edit existing questions.'
+        );
+      }
+
+      const currentIdMap = questionIdMapRef.current;
+      const existing = currentIdMap.get(localId);
+      if (existing) return existing;
+
+      const defaultOptions = Array.from({ length: 4 }, (_, idx) => ({
+        text: `Option ${idx + 1}`,
+        optionLetter: optionLetterForIndex(idx),
+        isCorrect: false,
+      }));
+
+      const created = await questionsService.createQuestion({
+        text: '',
+        imageUrl: undefined,
+        examId: examId,
+        subject: 'general',
+        orderNumber: localId,
+        points: 1,
+        isActive: true,
+        options: defaultOptions,
+      });
+
+      const dbId = created.id;
+      const newCreatedIds = new Set([...currentCreatedIds, localId]);
+      setCreatedQuestionIds(newCreatedIds);
+      setQuestionIdMap((prev) => new Map([...prev, [localId, dbId]]));
+
+      // Update cache with new question
+      if (examId) {
+        setExamCache((prev) => {
+          const existing = prev.questions.get(examId) || [];
+          const updated = [...existing, created as ServiceQuestion];
+          return {
+            ...prev,
+            questions: new Map([...prev.questions, [examId, updated]]),
+          };
+        });
+      }
+
+      // Check if we just reached 100 questions
+      if (newCreatedIds.size >= TOTAL_QUESTIONS) {
+        // Navigate back to test-management after a short delay
+        setTimeout(() => {
+          navigate('/test-management');
+        }, 500);
+      }
+
+      return dbId;
+    },
+    [examId, setExamCache, navigate]
+  );
+
+  const updateUrl = useCallback(
+    (targetIndex?: number, dbQuestionId?: string) => {
+      if (!examId) return;
+
       const index =
         typeof targetIndex === 'number' ? targetIndex : currentQuestionIndex;
+      // Use ref to avoid dependency on questions array
+      const questionLocalId = questionsRef.current[index]?.id;
       const questionDbId =
-        dbQuestionId || questionIdMap.get(questions[index].id) || '';
-      // Navigate with questionId if available, otherwise just examId
-      const url = questionDbId
+        dbQuestionId || questionIdMap.get(questionLocalId) || '';
+
+      // Check if URL actually needs to change
+      const currentUrl = questionDbId
         ? `/test-management/edit/${examId}/${questionDbId}`
         : `/test-management/edit/${examId}`;
-      navigate(url, { replace: true });
-    }
-  };
+      const expectedUrl = window.location.pathname;
 
-  const handleNext = async () => {
+      // Only navigate if URL is different
+      if (currentUrl !== expectedUrl || params.questionId !== questionDbId) {
+        isNavigatingRef.current = true;
+        navigate(currentUrl, { replace: true });
+        // Update ref to prevent effect from resetting index on URL change
+        if (questionDbId) {
+          lastQuestionIdRef.current = questionDbId;
+        } else {
+          lastQuestionIdRef.current = null;
+        }
+        // Reset flag after navigation completes
+        setTimeout(() => {
+          isNavigatingRef.current = false;
+        }, 50);
+      } else {
+        // Still update ref even if URL doesn't change
+        if (questionDbId) {
+          lastQuestionIdRef.current = questionDbId;
+        } else {
+          lastQuestionIdRef.current = null;
+        }
+      }
+    },
+    [examId, currentQuestionIndex, questionIdMap, navigate, params.questionId]
+  );
+
+  const handleNext = useCallback(async () => {
     if (currentQuestionIndex < TOTAL_QUESTIONS - 1) {
+      const nextIndex = currentQuestionIndex + 1;
+      const nextQuestionLocalId = nextIndex + 1; // index is 0-based, localId is 1-based
+
+      // Check if all 100 questions are already created
+      const currentCreatedIds = createdQuestionIdsRef.current;
+      const allQuestionsCreated = currentCreatedIds.size >= TOTAL_QUESTIONS;
+
+      // If all questions are created, only allow navigating to existing questions
+      if (allQuestionsCreated && !currentCreatedIds.has(nextQuestionLocalId)) {
+        // Find the next existing question
+        const sortedCreatedIds = Array.from(currentCreatedIds).sort(
+          (a, b) => a - b
+        );
+        const currentLocalId = currentQuestionIndex + 1;
+        const nextCreatedId = sortedCreatedIds.find(
+          (id) => id > currentLocalId
+        );
+
+        if (nextCreatedId) {
+          const nextCreatedIndex = nextCreatedId - 1;
+          setCurrentQuestionIndex(nextCreatedIndex);
+          updateUrl(nextCreatedIndex);
+          return;
+        } else {
+          // No more questions to navigate to
+          return;
+        }
+      }
+
+      // Check if current question or exam has changed
+      const questionChanged = hasQuestionChanged();
+      const examChanged = hasExamChanged();
+
+      // If nothing changed, just navigate without saving
+      if (!questionChanged && !examChanged) {
+        // If next question does not exist yet, check if we can create it
+        let nextDbId = questionIdMapRef.current.get(nextQuestionLocalId);
+        if (!nextDbId) {
+          // Check if all 100 questions are already created
+          if (currentCreatedIds.size >= TOTAL_QUESTIONS) {
+            // All questions created, can't create more
+            setApiError(
+              'All 100 questions have been created. You can only navigate to existing questions.'
+            );
+            return;
+          }
+
+          setIsSubmitting(true);
+          try {
+            nextDbId = await ensureQuestionExists(nextQuestionLocalId);
+          } catch (error) {
+            console.error('Error creating placeholder question:', error);
+            setApiError(
+              error instanceof Error
+                ? error.message
+                : 'An error occurred. Please try again.'
+            );
+            return;
+          } finally {
+            setIsSubmitting(false);
+          }
+        }
+
+        // If next question already exists, load its data from cache
+        const isNextQuestionCreated =
+          currentCreatedIds.has(nextQuestionLocalId);
+        if (isNextQuestionCreated && examId) {
+          const currentCache = examCacheRef.current;
+          const cachedQuestions = currentCache.questions.get(examId);
+          if (cachedQuestions) {
+            const cachedQuestion = cachedQuestions.find(
+              (q) => q.orderNumber === nextQuestionLocalId
+            );
+            if (cachedQuestion) {
+              // Update local state with cached question data
+              setQuestions((prev) =>
+                prev.map((question, index) => {
+                  if (index === nextIndex) {
+                    return {
+                      ...question,
+                      title: cachedQuestion.text || '',
+                      description: cachedQuestion.description || '',
+                      answerOptions:
+                        cachedQuestion.options?.map((opt, idx) => ({
+                          id: `${nextQuestionLocalId}-${idx + 1}`,
+                          text: opt.text || '',
+                          isCorrect: opt.isCorrect || false,
+                        })) || question.answerOptions,
+                      imageUrl: cachedQuestion.imageUrl,
+                      imageFile: null,
+                    };
+                  }
+                  return question;
+                })
+              );
+            }
+          }
+        }
+
+        setCurrentQuestionIndex(nextIndex);
+        updateUrl(nextIndex, nextDbId);
+        return;
+      }
+
+      // If there are changes, save first
       setIsSubmitting(true);
       try {
         const result = await persistCurrentQuestion();
         if (result.success) {
           setErrors({});
-          const nextIndex = currentQuestionIndex + 1;
+          // If next question does not exist yet, check if we can create it
+          let nextDbId = questionIdMapRef.current.get(nextQuestionLocalId);
+          if (!nextDbId) {
+            // Check if all 100 questions are already created
+            const currentCreatedIds = createdQuestionIdsRef.current;
+            if (currentCreatedIds.size >= TOTAL_QUESTIONS) {
+              // All questions created, can't create more - navigate to test-management
+              navigate('/test-management');
+              return;
+            }
+
+            nextDbId = await ensureQuestionExists(nextQuestionLocalId);
+          }
+
+          // If next question already exists, load its data from cache
+          const isNextQuestionCreated =
+            currentCreatedIds.has(nextQuestionLocalId);
+          if (isNextQuestionCreated && examId) {
+            const currentCache = examCacheRef.current;
+            const cachedQuestions = currentCache.questions.get(examId);
+            if (cachedQuestions) {
+              const cachedQuestion = cachedQuestions.find(
+                (q) => q.orderNumber === nextQuestionLocalId
+              );
+              if (cachedQuestion) {
+                // Update local state with cached question data
+                setQuestions((prev) =>
+                  prev.map((question, index) => {
+                    if (index === nextIndex) {
+                      return {
+                        ...question,
+                        title: cachedQuestion.text || '',
+                        description: cachedQuestion.description || '',
+                        answerOptions:
+                          cachedQuestion.options?.map((opt, idx) => ({
+                            id: `${nextQuestionLocalId}-${idx + 1}`,
+                            text: opt.text || '',
+                            isCorrect: opt.isCorrect || false,
+                          })) || question.answerOptions,
+                        imageUrl: cachedQuestion.imageUrl,
+                        imageFile: null,
+                      };
+                    }
+                    return question;
+                  })
+                );
+              }
+            }
+          }
+
           setCurrentQuestionIndex(nextIndex);
-          // Update URL for next question (will use questionIdMap if available)
-          updateUrl(nextIndex);
+          updateUrl(nextIndex, nextDbId);
         } else {
           // Validation failed - errors should be displayed
-          console.log('Validation failed, errors:', errors);
         }
       } catch (error) {
         console.error('Error in handleNext:', error);
@@ -482,15 +1018,86 @@ export function CreateExam() {
         setIsSubmitting(false);
       }
     }
-  };
+  }, [
+    currentQuestionIndex,
+    persistCurrentQuestion,
+    updateUrl,
+    ensureQuestionExists,
+    examId,
+    hasQuestionChanged,
+    hasExamChanged,
+  ]);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     if (currentQuestionIndex > 0) {
       const prevIndex = currentQuestionIndex - 1;
+      const prevQuestionLocalId = prevIndex + 1; // index is 0-based, localId is 1-based
+
+      // Check if all 100 questions are already created
+      const currentCreatedIds = createdQuestionIdsRef.current;
+      const allQuestionsCreated = currentCreatedIds.size >= TOTAL_QUESTIONS;
+
+      // If all questions are created, only allow navigating to existing questions
+      if (allQuestionsCreated && !currentCreatedIds.has(prevQuestionLocalId)) {
+        // Find the previous existing question (largest ID that's less than current)
+        const sortedCreatedIds = Array.from(currentCreatedIds).sort(
+          (a, b) => b - a
+        ); // descending
+        const currentLocalId = currentQuestionIndex + 1;
+        const prevCreatedId = sortedCreatedIds.find(
+          (id) => id < currentLocalId
+        );
+
+        if (prevCreatedId) {
+          const prevCreatedIndex = prevCreatedId - 1;
+          setCurrentQuestionIndex(prevCreatedIndex);
+          updateUrl(prevCreatedIndex);
+          return;
+        } else {
+          // No previous questions to navigate to
+          return;
+        }
+      }
+
+      // If previous question already exists, load its data from cache
+      const isPrevQuestionCreated = currentCreatedIds.has(prevQuestionLocalId);
+      if (isPrevQuestionCreated && examId) {
+        const currentCache = examCacheRef.current;
+        const cachedQuestions = currentCache.questions.get(examId);
+        if (cachedQuestions) {
+          const cachedQuestion = cachedQuestions.find(
+            (q) => q.orderNumber === prevQuestionLocalId
+          );
+          if (cachedQuestion) {
+            // Update local state with cached question data
+            setQuestions((prev) =>
+              prev.map((question, index) => {
+                if (index === prevIndex) {
+                  return {
+                    ...question,
+                    title: cachedQuestion.text || '',
+                    description: cachedQuestion.description || '',
+                    answerOptions:
+                      cachedQuestion.options?.map((opt, idx) => ({
+                        id: `${prevQuestionLocalId}-${idx + 1}`,
+                        text: opt.text || '',
+                        isCorrect: opt.isCorrect || false,
+                      })) || question.answerOptions,
+                    imageUrl: cachedQuestion.imageUrl,
+                    imageFile: null,
+                  };
+                }
+                return question;
+              })
+            );
+          }
+        }
+      }
+
       setCurrentQuestionIndex(prevIndex);
       updateUrl(prevIndex);
     }
-  };
+  }, [currentQuestionIndex, updateUrl, examId]);
 
   const handleSave = async () => {
     setIsSubmitting(true);
@@ -517,6 +1124,20 @@ export function CreateExam() {
       q.title.trim() !== '' &&
       q.answerOptions.some((option) => option.isCorrect)
   ).length;
+
+  // Show loading state while fetching exam data
+  if (isLoading) {
+    return (
+      <div className="p-6 max-w-6xl mx-auto">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading exam data...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -554,7 +1175,7 @@ export function CreateExam() {
               value={examTitle}
               onChange={(e) => setExamTitle(e.target.value)}
               className="w-full"
-              disabled={!!examId}
+              disabled={false}
             />
             {errors.examTitle && (
               <p className="mt-1 text-sm text-red-600">{errors.examTitle}</p>
@@ -569,7 +1190,7 @@ export function CreateExam() {
               value={examDescription}
               onChange={(e) => setExamDescription(e.target.value)}
               className="w-full"
-              disabled={!!examId}
+              disabled={false}
             />
             {errors.examDescription && (
               <p className="mt-1 text-sm text-red-600">
@@ -586,7 +1207,7 @@ export function CreateExam() {
                 className="w-full border rounded-md h-10 px-3"
                 value={sectorId}
                 onChange={(e) => setSectorId(e.target.value)}
-                disabled={!!examId || loadingSectors}
+                disabled={loadingSectors}
               >
                 <option value="">Select a sector...</option>
                 {sectors.map((sector) => (
@@ -653,7 +1274,12 @@ export function CreateExam() {
         <CardHeader>
           <CardTitle>Question {currentQuestionIndex + 1}</CardTitle>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-6 relative">
+          {isSubmitting && (
+            <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-10">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+            </div>
+          )}
           {apiError && (
             <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
               {apiError}
@@ -808,7 +1434,10 @@ export function CreateExam() {
 
             <div className="flex space-x-2">
               {currentQuestionIndex < TOTAL_QUESTIONS - 1 ? (
-                <Button onClick={handleNext} disabled={isSubmitting}>
+                <Button
+                  onClick={handleNext}
+                  disabled={isSubmitting || hasErrors}
+                >
                   Next
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </Button>
@@ -816,7 +1445,7 @@ export function CreateExam() {
                 <Button
                   onClick={handleSave}
                   className="bg-green-600 hover:bg-green-700"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || hasErrors}
                 >
                   <Save className="w-4 h-4 mr-2" />
                   Save Exam

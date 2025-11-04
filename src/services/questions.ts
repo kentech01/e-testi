@@ -35,6 +35,7 @@ export interface Question
   options?: QuestionOption[];
   createdAt?: string;
   updatedAt?: string;
+  description?: string;
 }
 
 export interface CreateQuestionRequest {
