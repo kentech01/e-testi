@@ -2,7 +2,119 @@ import { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { authAtom } from '../store/atoms/authAtom';
 import { authService } from '../lib/firebase/auth';
+import { userService } from '../services/users';
 import { toast } from 'sonner';
+
+// Helper function to parse name into firstName and lastName
+const parseName = (
+  name: string | null | undefined
+): { firstName: string; lastName: string } => {
+  if (!name || name.trim() === '') {
+    return { firstName: '', lastName: '' };
+  }
+
+  const nameParts = name
+    .trim()
+    .split(/\s+/)
+    .filter((part) => part.length > 0);
+
+  if (nameParts.length === 0) {
+    return { firstName: '', lastName: '' };
+  } else if (nameParts.length === 1) {
+    return { firstName: nameParts[0], lastName: '' };
+  } else {
+    // First part is firstName, rest is lastName
+    return {
+      firstName: nameParts[0],
+      lastName: nameParts.slice(1).join(' '),
+    };
+  }
+};
+
+// Helper function to ensure user exists in database
+const ensureUserInDatabase = async (
+  firebaseUser: any,
+  providedName?: string
+) => {
+  // Small delay to ensure token is in localStorage
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  try {
+    // Try to get user profile - if it exists, user is already in DB
+    const profile = await userService.getUserProfile();
+    console.log('User already exists in database:', profile);
+    return profile;
+  } catch (error: any) {
+    console.log('getUserProfile error:', {
+      status: error?.response?.status,
+      message: error?.response?.data?.error || error?.message,
+      data: error?.response?.data,
+    });
+
+    // If user doesn't exist (404), create them
+    // 401 might mean auth issue, but we'll try to create anyway
+    if (error?.response?.status === 404 || error?.response?.status === 401) {
+      try {
+        console.log('User not found in database, creating...', {
+          displayName: firebaseUser.displayName,
+          providedName,
+          email: firebaseUser.email,
+          photoURL: firebaseUser.photoURL,
+        });
+
+        // Use provided name if available, otherwise use displayName, otherwise use email prefix
+        const nameToUse = providedName || firebaseUser.displayName || '';
+        const { firstName, lastName } = parseName(nameToUse);
+
+        // If we still don't have a firstName, use email prefix as fallback
+        const finalFirstName =
+          firstName || firebaseUser.email?.split('@')[0] || 'User';
+        const finalLastName = lastName || '';
+
+        console.log('Creating user with data:', {
+          firstName: finalFirstName,
+          lastName: finalLastName,
+          avatarUrl: firebaseUser.photoURL || undefined,
+          email: firebaseUser.email,
+        });
+
+        const createdUser = await userService.createUser({
+          firstName: finalFirstName,
+          lastName: finalLastName,
+          avatarUrl: firebaseUser.photoURL || undefined,
+        });
+
+        console.log('User created successfully in database:', createdUser);
+        return createdUser;
+      } catch (createError: any) {
+        console.error('Failed to create user in database:', {
+          status: createError?.response?.status,
+          message: createError?.response?.data?.error || createError?.message,
+          data: createError?.response?.data,
+          error: createError,
+        });
+
+        // If user already exists (400), that's okay
+        if (createError?.response?.status === 400) {
+          console.log(
+            'User already exists (race condition or validation error)'
+          );
+        } else {
+          // Log the full error for debugging
+          console.error('Full create error:', createError);
+        }
+        // Don't throw - allow login to continue even if DB creation fails
+        // The error is already logged above
+      }
+    } else {
+      console.error('Unexpected error checking user profile:', {
+        status: error?.response?.status,
+        message: error?.response?.data?.error || error?.message,
+        error,
+      });
+    }
+  }
+};
 
 export const useFirebaseAuth = () => {
   const [authState, setAuthState] = useRecoilState(authAtom);
@@ -25,11 +137,23 @@ export const useFirebaseAuth = () => {
         const userData = authService.convertFirebaseUser(firebaseUser);
         firebaseUser
           .getIdToken()
-          .then((token) => {
+          .then(async (token) => {
             // mirror token to localStorage for HttpClient
             try {
               localStorage.setItem('authToken', token);
-            } catch {}
+              console.log('Token saved to localStorage');
+            } catch (e) {
+              console.error('Failed to save token to localStorage:', e);
+            }
+
+            // Ensure user exists in database (non-blocking)
+            // Wait a bit to ensure token is available
+            setTimeout(() => {
+              ensureUserInDatabase(firebaseUser).catch((err) => {
+                console.error('Error ensuring user in database:', err);
+              });
+            }, 300);
+
             setAuthState((prev) => ({
               ...prev,
               isAuthenticated: true,
@@ -111,6 +235,15 @@ export const useFirebaseAuth = () => {
         loading: false,
       }));
 
+      // Create user in database (non-blocking)
+      // Pass the name from signup to ensure proper firstName/lastName
+      // Wait a bit to ensure token is available
+      setTimeout(() => {
+        ensureUserInDatabase(userCredential.user, name).catch((err) => {
+          console.error('Error ensuring user in database:', err);
+        });
+      }, 300);
+
       toast.success('Llogaria u krijua me sukses!');
       return userCredential;
     } catch (error: any) {
@@ -135,7 +268,18 @@ export const useFirebaseAuth = () => {
 
       try {
         localStorage.setItem('authToken', token);
-      } catch {}
+        console.log('Token saved to localStorage');
+      } catch (e) {
+        console.error('Failed to save token to localStorage:', e);
+      }
+
+      // Ensure user exists in database (non-blocking)
+      // Wait a bit to ensure token is available
+      setTimeout(() => {
+        ensureUserInDatabase(userCredential.user).catch((err) => {
+          console.error('Error ensuring user in database:', err);
+        });
+      }, 300);
 
       setAuthState((prev) => ({
         ...prev,
@@ -169,7 +313,18 @@ export const useFirebaseAuth = () => {
 
       try {
         localStorage.setItem('authToken', token);
-      } catch {}
+        console.log('Token saved to localStorage');
+      } catch (e) {
+        console.error('Failed to save token to localStorage:', e);
+      }
+
+      // Ensure user exists in database (non-blocking)
+      // Wait a bit to ensure token is available
+      setTimeout(() => {
+        ensureUserInDatabase(userCredential.user).catch((err) => {
+          console.error('Error ensuring user in database:', err);
+        });
+      }, 300);
 
       setAuthState((prev) => ({
         ...prev,

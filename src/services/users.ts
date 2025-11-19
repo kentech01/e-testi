@@ -42,10 +42,10 @@ export class UserService {
 
   /**
    * Create a new user
-   * POST /users
+   * POST /users/profile
    */
   async createUser(data: CreateUserRequest): Promise<User> {
-    const response = await this.api.post<User>('users', data);
+    const response = await this.api.post<User>('users/profile', data);
     return response.data;
   }
 
@@ -60,23 +60,22 @@ export class UserService {
 
   /**
    * Update current user
-   * PUT /users
+   * PUT /users/profile
    */
   async updateUser(data: UpdateUserRequest): Promise<User> {
-    const response = await this.api.put<User>('users', data);
+    const response = await this.api.put<User>('users/profile', data);
     return response.data;
   }
 
   /**
    * Delete current user
-   * DELETE /users
+   * DELETE /users/profile
    */
   async deleteUser(): Promise<void> {
-    await this.api.delete('users');
+    await this.api.delete('users/profile');
   }
 }
 
 // Export singleton instance
 export const userService = new UserService();
 export default userService;
-
