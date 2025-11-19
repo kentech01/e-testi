@@ -12,7 +12,9 @@ import {
   User,
   Moon,
   Sun,
+  ClipboardList,
 } from 'lucide-react';
+import { useIsAdmin } from '../../utils/admin';
 
 interface NavigationProps {
   user: {
@@ -33,6 +35,12 @@ const menuItems = [
   },
   { id: 'tests', label: 'Testet', icon: FileText, path: '/tests' },
   // { id: 'results', label: 'Rezultatet', icon: BarChart3, path: '/results' },
+  {
+    id: 'test-management',
+    label: 'Menaxhimi i Testeve',
+    icon: ClipboardList,
+    path: '/test-management',
+  },
   { id: 'tips', label: 'Këshilla', icon: Lightbulb, path: '/tips' },
   { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
 ];
@@ -45,6 +53,16 @@ export function Navigation({
 }: NavigationProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const isAdmin = useIsAdmin();
+
+  // Filter menu items based on admin status
+  const visibleMenuItems = menuItems.filter((item) => {
+    if (item.id === 'test-management') {
+      return isAdmin;
+    }
+    return true;
+  });
+
   return (
     <div className="w-64 h-screen bg-sidebar border-r border-sidebar-border flex flex-col">
       {/* Header */}
@@ -83,9 +101,12 @@ export function Navigation({
 
       {/* Navigation Menu */}
       <nav className="flex-1 p-4 space-y-2">
-        {menuItems.map((item) => {
+        {visibleMenuItems.map((item) => {
           const Icon = item.icon;
-          const isActive = location.pathname === item.path;
+          const isActive =
+            location.pathname === item.path ||
+            (item.path === '/test-management' &&
+              location.pathname.startsWith('/test-management'));
 
           return (
             <Button

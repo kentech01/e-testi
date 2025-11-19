@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import { Skeleton } from '../ui/skeleton';
 import { toast } from 'sonner';
+import { useIsAdmin } from '../utils/admin';
 
 // Lazy load components
 const Navigation = React.lazy(() =>
@@ -46,6 +47,9 @@ const TestTaking = React.lazy(() =>
 );
 const TestResults = React.lazy(() =>
   import('../pages').then((module) => ({ default: module.TestResults }))
+);
+const TestReview = React.lazy(() =>
+  import('../pages').then((module) => ({ default: module.TestReview }))
 );
 const Settings = React.lazy(() =>
   import('../pages').then((module) => ({ default: module.Settings }))
@@ -91,11 +95,24 @@ interface AppRouterProps {
 const TestTakingWrapper = ({
   onComplete,
   onExit,
-}: Omit<TestTakingProps, 'testId'>) => {
-  const { testId } = useParams();
+}: Omit<TestTakingProps, 'examId' | 'questionId'>) => {
+  const { examId, questionId } = useParams();
+  const navigate = useNavigate();
+
+  // Validate examId - can be string UUID or number
+  if (!examId || examId === 'NaN') {
+    toast.error('Invalid exam ID');
+    navigate('/tests');
+    return null;
+  }
+
+  // Try to parse as number, but keep as string if it's a UUID
+  const parsedExamId = !isNaN(Number(examId)) ? Number(examId) : examId;
+
   return (
     <TestTaking
-      testId={Number(testId)}
+      examId={parsedExamId}
+      questionId={questionId}
       onComplete={onComplete}
       onExit={onExit}
     />
@@ -120,10 +137,10 @@ const TestResultsWrapper = ({
   answers,
   onBack,
 }: Omit<TestResultsProps, 'testId'>) => {
-  const { testId } = useParams();
+  const { examId } = useParams<{ examId?: string }>();
   return (
     <TestResults
-      testId={Number(testId) || 1}
+      testId={examId ? (Number(examId) || examId) : 1}
       answers={answers}
       onBack={onBack}
     />
@@ -150,8 +167,17 @@ const AppRouter: React.FC<AppRouterProps> = ({
   const [testAnswers, setTestAnswers] = useState<number[]>([]);
 
   // Handlers
-  const handleStartTest = (testId: number) => {
-    setCurrentTestId(testId);
+  const handleStartTest = (testId: string | number) => {
+    // Validate testId
+    if (
+      !testId ||
+      testId === 'NaN' ||
+      (typeof testId === 'number' && isNaN(testId))
+    ) {
+      toast.error('Invalid test ID');
+      return;
+    }
+    setCurrentTestId(typeof testId === 'number' ? testId : null);
     navigate(`/tests/${testId}`);
     toast.info(`Filloi Test ${testId}`);
   };
@@ -181,12 +207,33 @@ const AppRouter: React.FC<AppRouterProps> = ({
 
   const handleCompleteTest = (answers: number[]) => {
     setTestAnswers(answers);
-    navigate(`/results/${currentTestId}`);
+    if (currentTestId !== null) {
+      navigate(`/results/${currentTestId}`);
+    } else {
+      // If testId is a string UUID, get it from the current location
+      const testIdFromPath = location.pathname
+        .split('/tests/')[1]
+        ?.split('/')[0];
+      if (testIdFromPath) {
+        navigate(`/results/${testIdFromPath}`);
+      } else {
+        navigate('/results');
+      }
+    }
     toast.success('Testi u përfundua me sukses!');
   };
 
-  const handleViewResults = (testId: number) => {
-    setCurrentTestId(testId);
+  const handleViewResults = (testId: string | number) => {
+    // Validate testId
+    if (
+      !testId ||
+      testId === 'NaN' ||
+      (typeof testId === 'number' && isNaN(testId))
+    ) {
+      toast.error('Invalid test ID');
+      return;
+    }
+    setCurrentTestId(typeof testId === 'number' ? testId : null);
     const mockAnswers = Array.from({ length: 100 }, () =>
       Math.floor(Math.random() * 4)
     );
@@ -216,6 +263,21 @@ const AppRouter: React.FC<AppRouterProps> = ({
   }) => {
     if (!user) {
       return <Navigate to="/" replace />;
+    }
+    return <>{children}</>;
+  };
+
+  // Admin route wrapper - requires admin privileges
+  const AdminRoute: React.FC<{ children: React.ReactNode }> = ({
+    children,
+  }) => {
+    const isAdmin = useIsAdmin();
+    if (!user) {
+      return <Navigate to="/" replace />;
+    }
+    if (!isAdmin) {
+      toast.error('Nuk keni të drejta për të hyrë në këtë faqe');
+      return <Navigate to="/dashboard" replace />;
     }
     return <>{children}</>;
   };
@@ -265,13 +327,22 @@ const AppRouter: React.FC<AppRouterProps> = ({
             />
 
             <Route
-              path="/tests/:testId"
+              path="/tests/:examId/:questionId?"
               element={
                 <ProtectedRoute>
                   <TestTakingWrapper
                     onComplete={handleCompleteTest}
                     onExit={handleBackToTests}
                   />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/tests/:examId/review"
+              element={
+                <ProtectedRoute>
+                  <TestReview />
                 </ProtectedRoute>
               }
             />
@@ -301,7 +372,7 @@ const AppRouter: React.FC<AppRouterProps> = ({
             />
 
             <Route
-              path="/results/:testId?"
+              path="/results/:examId?"
               element={
                 <ProtectedRoute>
                   <TestResultsWrapper
@@ -339,27 +410,27 @@ const AppRouter: React.FC<AppRouterProps> = ({
             <Route
               path="/test-management"
               element={
-                <ProtectedRoute>
+                <AdminRoute>
                   <TestManagement />
-                </ProtectedRoute>
+                </AdminRoute>
               }
             />
 
             <Route
               path="/test-management/create"
               element={
-                <ProtectedRoute>
+                <AdminRoute>
                   <CreateExam />
-                </ProtectedRoute>
+                </AdminRoute>
               }
             />
 
             <Route
               path="/test-management/edit/:examId/:questionId?"
               element={
-                <ProtectedRoute>
+                <AdminRoute>
                   <CreateExamWrapper />
-                </ProtectedRoute>
+                </AdminRoute>
               }
             />
 

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
+import { Skeleton } from '../ui/skeleton';
 import {
   CheckCircle2,
   FileText,
@@ -13,103 +14,25 @@ import {
   Calculator,
   Globe,
 } from 'lucide-react';
+import { examService, Exam } from '../services/exams';
+import { userAnswerService } from '../services/userAnswers';
+import { toast } from 'sonner';
 
 interface Test {
-  id: number;
+  id: string | number;
   title: string;
   completed: boolean;
   score?: number;
   timeSpent?: string;
-  subject: 'matematik' | 'gjuhaShqipe' | 'anglisht';
+  subject?: string;
+  exam: Exam;
 }
 
 interface TestListProps {
-  onStartTest: (testId: number) => void;
-  onViewResults: (testId: number) => void;
+  onStartTest: (testId: string | number) => void;
+  onViewResults: (testId: string | number) => void;
   onStartNewExam: () => void;
 }
-
-const mockTests: Test[] = [
-  {
-    id: 1,
-    title: 'Test 1',
-    completed: true,
-    score: 85,
-    timeSpent: '45 min',
-    subject: 'matematik',
-  },
-  {
-    id: 2,
-    title: 'Test 2',
-    completed: true,
-    score: 78,
-    timeSpent: '52 min',
-    subject: 'matematik',
-  },
-  {
-    id: 3,
-    title: 'Test 3',
-    completed: true,
-    score: 92,
-    timeSpent: '38 min',
-    subject: 'gjuhaShqipe',
-  },
-  {
-    id: 4,
-    title: 'Test 4',
-    completed: true,
-    score: 75,
-    timeSpent: '48 min',
-    subject: 'anglisht',
-  },
-  { id: 5, title: 'Test 5', completed: false, subject: 'matematik' },
-  {
-    id: 6,
-    title: 'Test 6',
-    completed: true,
-    score: 88,
-    timeSpent: '42 min',
-    subject: 'gjuhaShqipe',
-  },
-  {
-    id: 7,
-    title: 'Test 7',
-    completed: true,
-    score: 91,
-    timeSpent: '40 min',
-    subject: 'anglisht',
-  },
-  {
-    id: 8,
-    title: 'Test 8',
-    completed: true,
-    score: 82,
-    timeSpent: '46 min',
-    subject: 'matematik',
-  },
-  {
-    id: 9,
-    title: 'Test 9',
-    completed: true,
-    score: 79,
-    timeSpent: '50 min',
-    subject: 'gjuhaShqipe',
-  },
-  {
-    id: 10,
-    title: 'Test 10',
-    completed: true,
-    score: 86,
-    timeSpent: '44 min',
-    subject: 'anglisht',
-  },
-  { id: 11, title: 'Test 11', completed: false, subject: 'matematik' },
-  { id: 12, title: 'Test 12', completed: false, subject: 'gjuhaShqipe' },
-  { id: 13, title: 'Test 13', completed: false, subject: 'anglisht' },
-  { id: 14, title: 'Test 14', completed: false, subject: 'matematik' },
-  { id: 15, title: 'Test 15', completed: false, subject: 'gjuhaShqipe' },
-  { id: 16, title: 'Test 16', completed: false, subject: 'anglisht' },
-];
 
 const subjectInfo = {
   matematik: { name: 'Matematika', icon: Calculator, color: 'text-blue-600' },
@@ -128,17 +51,131 @@ export function TestList({
 }: TestListProps) {
   const navigate = useNavigate();
   const [selectedTest, setSelectedTest] = useState<Test | null>(null);
+  const [tests, setTests] = useState<Test[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const onStartTestClick = (testId: number) => {
+  // Fetch exams and user answers on mount
+  useEffect(() => {
+    fetchTests();
+  }, []);
+
+  const fetchTests = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Fetch all exams
+      const exams = await examService.getExams();
+
+      // Get all exams (both active and inactive)
+      const allExams = exams;
+
+      // Fetch user answers to get list of completed exams
+      let userAnswers: any[] = [];
+      try {
+        userAnswers = await userAnswerService.getUserAnswers();
+      } catch (err: any) {
+        // If no answers exist yet or rate limited, that's okay
+        if (err?.response?.status === 429) {
+          console.log('Rate limited, skipping user answers fetch');
+        } else {
+          console.log('No user answers found');
+        }
+      }
+
+      // Get unique exam IDs from user answers
+      const completedExamIds = new Set(
+        userAnswers.map((answer) => answer.examId)
+      );
+
+      // Create a map of exam results by examId (only fetch for completed exams)
+      // Limit to first 5 to avoid rate limiting
+      const examResultsMap = new Map<string, any>();
+      const examsToCheck = allExams
+        .filter((exam) => completedExamIds.has(String(exam.id)))
+        .slice(0, 5); // Limit to 5 exams to avoid rate limiting
+
+      // Fetch results sequentially with a small delay to avoid rate limiting
+      for (const exam of examsToCheck) {
+        try {
+          const results = await userAnswerService.getExamResults(
+            String(exam.id)
+          );
+          examResultsMap.set(String(exam.id), results);
+          // Small delay between requests to avoid rate limiting
+          await new Promise((resolve) => setTimeout(resolve, 200));
+        } catch (err: any) {
+          // Exam results not available or rate limited
+          if (err?.response?.status === 429) {
+            console.log('Rate limited, stopping results fetch');
+            break; // Stop if rate limited
+          } else {
+            console.log(`Results not available for exam ${exam.id}`);
+          }
+        }
+      }
+
+      // Map exams to Test format
+      const mappedTests: Test[] = allExams.map((exam) => {
+        const results = examResultsMap.get(String(exam.id));
+        // Test is completed if isActive is false
+        const isCompleted = !exam.isActive;
+        const score = results ? Math.round(results.accuracy) : undefined;
+        const timeSpentSeconds = results?.totalTimeSpent || 0;
+        const timeSpent =
+          timeSpentSeconds > 0
+            ? `${Math.floor(timeSpentSeconds / 60)} min`
+            : undefined;
+
+        return {
+          id: exam.id,
+          title: exam.title,
+          completed: isCompleted,
+          score,
+          timeSpent,
+          subject: exam.sector?.name || undefined,
+          exam,
+        };
+      });
+
+      setTests(mappedTests);
+    } catch (err: any) {
+      console.error('Failed to fetch tests:', err);
+      setError('Failed to load tests. Please try again.');
+      toast.error('Failed to load tests');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onStartTestClick = (testId: string | number) => {
+    // Pass the testId as-is (could be string UUID or number)
     onStartTest(testId);
   };
 
-  const onViewResultsClick = (testId: number) => {
+  const onViewResultsClick = (testId: string | number) => {
+    // Pass the testId as-is (could be string UUID or number)
     onViewResults(testId);
   };
 
   const onStartNewExamClick = () => {
-    // onStartNewExam();
+    // Get all active (non-completed) tests
+    const activeTests = tests.filter(
+      (test) => !test.completed && test.exam.isActive
+    );
+
+    if (activeTests.length === 0) {
+      toast.error('Nuk ka teste të disponueshme për momentin.');
+      return;
+    }
+
+    // Select a random test
+    const randomIndex = Math.floor(Math.random() * activeTests.length);
+    const randomTest = activeTests[randomIndex];
+
+    // Start the random test
+    onStartTest(randomTest.id);
   };
 
   const getSubjectIcon = (
@@ -191,55 +228,61 @@ export function TestList({
         </CardContent>
       </Card>
 
-      {/* Subject Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        {Object.entries(subjectInfo).map(([subject, info]) => {
-          const subjectTests = mockTests.filter(
-            (test) => test.subject === subject
-          );
-          const completedTests = subjectTests.filter((test) => test.completed);
-          const averageScore =
-            completedTests.length > 0
-              ? Math.round(
-                  completedTests.reduce(
-                    (sum, test) => sum + (test.score || 0),
-                    0
-                  ) / completedTests.length
-                )
-              : 0;
+      {/* Subject Stats - Only show if we have tests */}
+      {tests.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          {Object.entries(subjectInfo).map(([subject, info]) => {
+            const subjectTests = tests.filter(
+              (test) => test.subject === subject
+            );
+            const completedTests = subjectTests.filter(
+              (test) => test.completed
+            );
+            const averageScore =
+              completedTests.length > 0
+                ? Math.round(
+                    completedTests.reduce(
+                      (sum, test) => sum + (test.score || 0),
+                      0
+                    ) / completedTests.length
+                  )
+                : 0;
 
-          const Icon = info.icon;
+            const Icon = info.icon;
 
-          return (
-            <Card key={subject}>
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3 mb-3">
-                  <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
-                    <Icon className={`w-5 h-5 ${info.color}`} />
-                  </div>
-                  <div>
-                    <h4 className="font-medium">{info.name}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {completedTests.length}/{subjectTests.length} të
-                      përfunduara
-                    </p>
-                  </div>
-                </div>
-                {completedTests.length > 0 && (
-                  <div className="text-center">
-                    <div className="text-2xl font-bold mb-1">
-                      {averageScore}%
+            if (subjectTests.length === 0) return null;
+
+            return (
+              <Card key={subject}>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+                      <Icon className={`w-5 h-5 ${info.color}`} />
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      Mesatarja
+                    <div>
+                      <h4 className="font-medium">{info.name}</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {completedTests.length}/{subjectTests.length} të
+                        përfunduara
+                      </p>
                     </div>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+                  {completedTests.length > 0 && (
+                    <div className="text-center">
+                      <div className="text-2xl font-bold mb-1">
+                        {averageScore}%
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Mesatarja
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
 
       <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
         <CardContent className="p-6">
@@ -319,40 +362,67 @@ export function TestList({
       {/* Tests Grid */}
       <div>
         <h3 className="font-semibold mb-4">Të gjitha testet</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {mockTests.map((test) => (
-            <Card
-              key={test.id}
-              className={`cursor-pointer transition-all hover:shadow-lg ${
-                test.completed
-                  ? 'bg-slate-900 text-white'
-                  : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700'
-              } ${selectedTest?.id === test.id ? 'ring-2 ring-blue-500' : ''}`}
-              onClick={() => setSelectedTest(test)}
-            >
-              <CardContent className="p-4 flex flex-col items-center space-y-3">
-                <div className="flex items-center justify-center w-8 h-8 rounded bg-slate-700 text-white">
-                  {test.completed ? (
-                    <CheckCircle2 className="w-4 h-4 text-green-400" />
-                  ) : (
-                    <FileText className="w-4 h-4" />
-                  )}
-                </div>
-                <div className="text-center">
-                  <p className="text-sm font-medium">{test.title}</p>
-                  {test.completed && test.score && (
-                    <p className="text-xs text-muted-foreground">
-                      {test.score}%
-                    </p>
-                  )}
-                </div>
-                {/* <div className="flex items-center justify-center">
-                  {getSubjectIcon(test.subject)}
-                </div> */}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {[...Array(6)].map((_, i) => (
+              <Card key={i}>
+                <CardContent className="p-4 flex flex-col items-center space-y-3">
+                  <Skeleton className="w-8 h-8 rounded" />
+                  <Skeleton className="h-4 w-20" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : error ? (
+          <Card>
+            <CardContent className="p-6 text-center">
+              <p className="text-red-600 mb-4">{error}</p>
+              <Button onClick={fetchTests} variant="outline">
+                Try Again
+              </Button>
+            </CardContent>
+          </Card>
+        ) : tests.length === 0 ? (
+          <Card>
+            <CardContent className="p-6 text-center">
+              <p className="text-muted-foreground">
+                No tests available at the moment.
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {tests.map((test) => (
+              <Card
+                key={test.id}
+                className={`cursor-pointer transition-all hover:shadow-lg ${
+                  test.completed
+                    ? 'bg-slate-900 text-white'
+                    : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700'
+                } ${selectedTest?.id === test.id ? 'ring-2 ring-blue-500' : ''}`}
+                onClick={() => setSelectedTest(test)}
+              >
+                <CardContent className="p-4 flex flex-col items-center space-y-3">
+                  <div className="flex items-center justify-center w-8 h-8 rounded bg-slate-700 text-white">
+                    {test.completed ? (
+                      <CheckCircle2 className="w-4 h-4 text-green-400" />
+                    ) : (
+                      <FileText className="w-4 h-4" />
+                    )}
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium">{test.title}</p>
+                    {test.completed && test.score !== undefined && (
+                      <p className="text-xs text-muted-foreground">
+                        {test.score}%
+                      </p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Test Details Modal */}
@@ -367,17 +437,22 @@ export function TestList({
 
                 <div>
                   <h3>{selectedTest.title}</h3>
-                  {/* <div className="flex items-center justify-center space-x-2 mt-2">
-                    {getSubjectIcon(selectedTest.subject)}
-                    <span className="text-sm text-muted-foreground">
-                      {subjectInfo[selectedTest.subject].name}
-                    </span>
-                  </div> */}
+                  {selectedTest.exam.description && (
+                    <p className="text-sm text-muted-foreground mt-2">
+                      {selectedTest.exam.description}
+                    </p>
+                  )}
                   <p className="text-sm text-muted-foreground mt-2">
                     {selectedTest.completed
                       ? `Test i përfunduar me rezultat ${selectedTest.score}%`
-                      : 'Test që përmban 100 pyetje për përgatitjen e maturës'}
+                      : `Test që përmban ${selectedTest.exam.totalQuestions} pyetje për përgatitjen e maturës`}
                   </p>
+                  {selectedTest.exam.totalQuestions && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {selectedTest.exam.totalQuestions} pyetje • Pikë minimale:{' '}
+                      {selectedTest.exam.passingScore}%
+                    </p>
+                  )}
                 </div>
 
                 {selectedTest.completed && (

@@ -40,3 +40,22 @@ export const authTokenSelector = selector({
     return authState.token;
   },
 });
+
+/**
+ * Check if the current user is an admin
+ * TODO: Replace with actual admin check logic (e.g., check user.role === 'admin' or user.email in admin list)
+ * For now, returns true for all authenticated users
+ */
+export const isAdminSelector = selector({
+  key: 'isAdminSelector',
+  get: ({ get }) => {
+    const authState = get(authAtom);
+    if (!authState.isAuthenticated || !authState.user) {
+      return false;
+    }
+    // TODO: Implement actual admin check
+    // Example: return authState.user.role === 'admin';
+    // Example: return ['admin@example.com'].includes(authState.user.email || '');
+    return true; // For now, allow all authenticated users
+  },
+});

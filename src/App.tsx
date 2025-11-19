@@ -1,4 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
@@ -70,6 +71,7 @@ const LoadingFallback = () => (
 function AppContent() {
   const [showAuth, setShowAuth] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const navigate = useNavigate();
   const { user, loading, signOut } = useFirebaseAuth(); // Get signOut from the hook
 
   // Initialize app state
@@ -92,11 +94,13 @@ function AppContent() {
   const handleLogout = async () => {
     try {
       await signOut(); // Use the signOut from the hook, not Firebase directly
+      navigate('/'); // Redirect to home page after logout
     } catch (error) {
       console.error('Error signing out:', error);
       // Even if there's an error, we should still show success
       // because the user might still be logged out
       toast.success('U dolët nga llogaria!');
+      navigate('/'); // Redirect to home page even on error
     }
   };
 

@@ -19,7 +19,8 @@ import { atom } from 'recoil';
 import { Exam, Question } from '../../services/exams';
 
 export interface ExamState {
-  exams: Exam[];
+  exams: Exam[]; // List of all exams (for lists)
+  examsCache: Map<string | number, Exam>; // Cache exams by ID
   currentExam: Exam | null;
   loading: boolean;
   error: string | null;
@@ -29,6 +30,7 @@ export const examAtom = atom<ExamState>({
   key: 'examState',
   default: {
     exams: [],
+    examsCache: new Map(),
     currentExam: null,
     loading: false,
     error: null,

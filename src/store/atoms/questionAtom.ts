@@ -2,7 +2,8 @@ import { atom } from 'recoil';
 import type { Question } from '../../services/questions';
 
 export interface QuestionsState {
-  questions: Question[];
+  questions: Question[]; // List of questions (for create flow)
+  questionsByExam: Map<string | number, Question[]>; // Cache questions by examId
   currentQuestion: Question | null;
   loading: boolean;
   error: string | null;
@@ -15,6 +16,7 @@ export const questionsAtom = atom<QuestionsState>({
   key: 'questionsState',
   default: {
     questions: [],
+    questionsByExam: new Map(),
     currentQuestion: null,
     loading: false,
     error: null,

@@ -63,3 +63,21 @@ export const questionsCountSelector = selector<number>({
   key: 'questionsCountSelector',
   get: ({ get }) => get(questionsSelector).length,
 });
+
+export const questionsByExamSelector = (examId: string | number) =>
+  selector<Question[]>({
+    key: `questionsByExamSelector_${examId}`,
+    get: ({ get }) => {
+      const state = get(questionsAtom);
+      const cached = state.questionsByExam.get(examId);
+      return cached || [];
+    },
+  });
+
+export const questionsByExamCacheSelector = selector({
+  key: 'questionsByExamCacheSelector',
+  get: ({ get }) => {
+    const state = get(questionsAtom);
+    return state.questionsByExam;
+  },
+});

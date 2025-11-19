@@ -118,14 +118,26 @@ export const activeExamsSelector = selector({
   },
 });
 
-export const examByIdSelector = (id: number) =>
+export const examByIdSelector = (id: string | number) =>
   selector({
     key: `examByIdSelector_${id}`,
     get: ({ get }) => {
-      const exams = get(examsSelector);
-      return exams.find((exam: Exam) => exam.id === id) || null;
+      const examState = get(examAtom);
+      // First check cache
+      const cached = examState.examsCache.get(id);
+      if (cached) return cached;
+      // Fallback to exams list
+      return examState.exams.find((exam: Exam) => exam.id === id) || null;
     },
   });
+
+export const examCacheSelector = selector({
+  key: 'examCacheSelector',
+  get: ({ get }) => {
+    const examState = get(examAtom);
+    return examState.examsCache;
+  },
+});
 
 export const examsBySectorSelector = (sectorId: string) =>
   selector({
