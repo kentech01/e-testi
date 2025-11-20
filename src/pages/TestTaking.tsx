@@ -748,31 +748,34 @@ export function TestTaking({
               )}
 
               <div className="space-y-4">
-                {currentQuestion.options?.map((option) => (
-                  <div
-                    key={option.id}
-                    className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/50"
-                  >
-                    <Checkbox
-                      id={`option-${option.id}`}
-                      checked={selectedOptions.has(option.id)}
-                      onCheckedChange={() => handleOptionToggle(option.id)}
-                    />
-                    <Label
-                      htmlFor={`option-${option.id}`}
-                      className="flex-1 cursor-pointer"
+                {currentQuestion.options
+                  ?.slice()
+                  .sort((a, b) => a.optionLetter.localeCompare(b.optionLetter))
+                  .map((option) => (
+                    <div
+                      key={option.id}
+                      className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/50"
                     >
-                      {option.optionLetter}. {option.text}
-                    </Label>
-                    {option.imageUrl && (
-                      <img
-                        src={option.imageUrl}
-                        alt={option.optionLetter}
-                        className="w-20 h-20 object-cover rounded"
+                      <Checkbox
+                        id={`option-${option.id}`}
+                        checked={selectedOptions.has(option.id)}
+                        onCheckedChange={() => handleOptionToggle(option.id)}
                       />
-                    )}
-                  </div>
-                ))}
+                      <Label
+                        htmlFor={`option-${option.id}`}
+                        className="flex-1 cursor-pointer"
+                      >
+                        {option.optionLetter}. {option.text}
+                      </Label>
+                      {option.imageUrl && (
+                        <img
+                          src={option.imageUrl}
+                          alt={option.optionLetter}
+                          className="w-20 h-20 object-cover rounded"
+                        />
+                      )}
+                    </div>
+                  ))}
               </div>
 
               <div className="flex justify-between pt-6">

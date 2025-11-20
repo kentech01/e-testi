@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -34,6 +34,9 @@ import {
 } from 'lucide-react';
 import { DashboardStats } from '../components/dashboard';
 import { useNavigate, Navigate } from 'react-router-dom';
+import { examService } from '../services/exams';
+import { userAnswerService } from '../services/userAnswers';
+import { toast } from 'sonner';
 
 export interface DashboardProps {
   user: {
@@ -117,10 +120,70 @@ const COLORS = ['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B'];
 
 export function Dashboard({ user }: DashboardProps) {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!user) {
     return <Navigate to="/" replace />;
   }
+
+  const handleStartRandomTest = async () => {
+    try {
+      setIsLoading(true);
+
+      // Fetch all exams
+      const exams = await examService.getExams();
+
+      // Filter for active exams
+      const activeExams = exams.filter((exam) => exam.isActive);
+
+      if (activeExams.length === 0) {
+        toast.error('Nuk ka teste të disponueshme për momentin.');
+        return;
+      }
+
+      // Fetch user answers to determine completed exams
+      let completedExamIds = new Set<string>();
+      try {
+        const userAnswers = await userAnswerService.getUserAnswers();
+        // Get unique exam IDs from user answers
+        completedExamIds = new Set(
+          userAnswers.map((answer) => String(answer.examId))
+        );
+      } catch (err: any) {
+        // If no answers exist yet or rate limited, that's okay
+        if (err?.response?.status !== 429) {
+          console.log('No user answers found or error fetching answers');
+        }
+      }
+
+      // Filter for non-completed exams
+      const availableExams = activeExams.filter(
+        (exam) => !completedExamIds.has(String(exam.id))
+      );
+
+      // If all exams are completed, allow starting any active exam
+      const examsToChooseFrom =
+        availableExams.length > 0 ? availableExams : activeExams;
+
+      if (examsToChooseFrom.length === 0) {
+        toast.error('Nuk ka teste të disponueshme për momentin.');
+        return;
+      }
+
+      // Select a random test
+      const randomIndex = Math.floor(Math.random() * examsToChooseFrom.length);
+      const randomTest = examsToChooseFrom[randomIndex];
+
+      // Navigate to the test
+      navigate(`/tests/${randomTest.id}`);
+      toast.info(`Filloi test: ${randomTest.title}`);
+    } catch (error) {
+      console.error('Failed to start random test:', error);
+      toast.error('Dështoi të fillonte testi. Ju lutem provoni përsëri.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const overallProgress = Math.round(
     subjectData.reduce((acc, subject) => acc + subject.progress, 0) /
@@ -205,15 +268,14 @@ export function Dashboard({ user }: DashboardProps) {
 
         <CardFooter className="flex items-end justify-end">
           <Button
-            onClick={() => {
-              // navigate('/exam');
-            }}
+            onClick={handleStartRandomTest}
             size="lg"
             variant="secondary"
             className="bg-white text-blue-600 hover:bg-blue-50"
+            disabled={isLoading}
           >
             <Plus className="w-5 h-5 mr-2" />
-            Fillo test
+            {isLoading ? 'Duke ngarkuar...' : 'Fillo test'}
           </Button>
         </CardFooter>
       </Card>

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
 import { Badge } from '../ui/badge';
+import { Skeleton } from '../ui/skeleton';
 import {
   CheckCircle2,
   XCircle,
@@ -22,49 +24,140 @@ import {
   YAxis,
   CartesianGrid,
 } from 'recharts';
-
-interface Question {
-  id: number;
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  subject: string;
-}
+import { userAnswerService, ExamResults } from '../services/userAnswers';
+import { examService, Exam } from '../services/exams';
+import { getSubjectLabel } from '../data/subjects';
+import { toast } from 'sonner';
 
 export interface TestResultsProps {
-  testId: number;
-  answers: number[];
-  onBack: () => void;
+  testId?: number | string;
+  answers?: number[];
+  onBack?: () => void;
 }
-
-const mockCorrectAnswers = Array.from({ length: 100 }, () =>
-  Math.floor(Math.random() * 4)
-);
-const subjectBreakdown = [
-  { subject: 'Matematika', questions: 40, correct: 32, percentage: 80 },
-  { subject: 'Gjuha Shqipe', questions: 35, correct: 28, percentage: 80 },
-  { subject: 'Anglisht', questions: 25, correct: 18, percentage: 72 },
-];
-
-const difficultyAnalysis = [
-  { level: 'E lehtë', total: 30, correct: 28, percentage: 93 },
-  { level: 'Mesatare', total: 45, correct: 32, percentage: 71 },
-  { level: 'E vështirë', total: 25, correct: 18, percentage: 72 },
-];
 
 const COLORS = ['#10B981', '#EF4444', '#F59E0B'];
 
 export function TestResults({ testId, answers, onBack }: TestResultsProps) {
-  const correctAnswers = answers.filter(
-    (answer, index) => answer === mockCorrectAnswers[index]
-  ).length;
-  const incorrectAnswers = answers.filter(
-    (answer, index) => answer !== mockCorrectAnswers[index] && answer !== -1
-  ).length;
-  const unanswered = answers.filter((answer) => answer === -1).length;
+  const { examId } = useParams<{ examId?: string }>();
+  const navigate = useNavigate();
+  const actualExamId = examId || (testId ? String(testId) : null);
+  
+  const [examResults, setExamResults] = useState<ExamResults | null>(null);
+  const [exam, setExam] = useState<Exam | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const percentage = Math.round((correctAnswers / 100) * 100);
-  const timeSpent = '1:23:45';
+  useEffect(() => {
+    if (!actualExamId) {
+      toast.error('Invalid exam ID');
+      if (onBack) {
+        onBack();
+      } else {
+        navigate('/tests');
+      }
+      return;
+    }
+
+    fetchData();
+  }, [actualExamId]);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+
+      // Fetch exam results
+      const results = await userAnswerService.getExamResults(actualExamId!);
+      setExamResults(results);
+
+      // Fetch exam details
+      try {
+        const examData = await examService.getExamById(actualExamId!);
+        setExam(examData);
+      } catch (error) {
+        console.error('Failed to fetch exam details:', error);
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch data:', error);
+      toast.error('Failed to load test results. Please try again.');
+      if (onBack) {
+        onBack();
+      } else {
+        navigate('/tests');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background p-4">
+        <div className="max-w-6xl mx-auto space-y-4">
+          <Skeleton className="h-16 w-full" />
+          <Skeleton className="h-96 w-full" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!examResults) {
+    return (
+      <div className="min-h-screen bg-background p-4">
+        <div className="max-w-6xl mx-auto">
+          <Card>
+            <CardContent className="p-6 text-center">
+              <p className="text-red-600 mb-4">Failed to load test results.</p>
+              <Button
+                onClick={() => (onBack ? onBack() : navigate('/tests'))}
+                variant="outline"
+              >
+                Go Back
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Calculate statistics
+  const correctAnswers = examResults.correctAnswers;
+  const incorrectAnswers = examResults.incorrectAnswers;
+  const unanswered = examResults.totalQuestions - correctAnswers - incorrectAnswers;
+  const percentage = examResults.accuracy;
+  
+  // Format time spent
+  const totalSeconds = examResults.totalTimeSpent;
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const timeSpent = hours > 0 
+    ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+    : `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+  // Calculate subject breakdown from real data
+  const subjectMap = new Map<string, { correct: number; total: number }>();
+  
+  examResults.answers.forEach((answer) => {
+    if (answer.question?.subject) {
+      const subject = answer.question.subject;
+      const current = subjectMap.get(subject) || { correct: 0, total: 0 };
+      current.total += 1;
+      if (answer.isCorrect) {
+        current.correct += 1;
+      }
+      subjectMap.set(subject, current);
+    }
+  });
+
+  const subjectBreakdown = Array.from(subjectMap.entries()).map(([subjectValue, stats]) => {
+    const percentage = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+    return {
+      subject: getSubjectLabel(subjectValue),
+      questions: stats.total,
+      correct: stats.correct,
+      percentage,
+    };
+  }).sort((a, b) => b.percentage - a.percentage);
 
   const pieData = [
     { name: 'E saktë', value: correctAnswers, color: '#10B981' },
@@ -81,6 +174,14 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
   };
 
   const { grade, color } = getGrade(percentage);
+  
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      navigate('/tests');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -88,11 +189,13 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
       <div className="bg-card border-b p-4">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" onClick={onBack}>
+            <Button variant="ghost" size="sm" onClick={handleBack}>
               <ArrowLeft className="w-4 h-4 mr-1" />
               Kthehu
             </Button>
-            <h1>Rezultatet e Test {testId}</h1>
+            <h1>
+              Rezultatet e Test {exam?.title || actualExamId}
+            </h1>
           </div>
         </div>
       </div>
@@ -102,10 +205,27 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
         <Card>
           <CardContent className="p-6">
             <div className="text-center space-y-4">
-              <div className={`text-6xl font-bold ${color}`}>{percentage}%</div>
-              {/* <div className={`text-2xl font-semibold ${color}`}>
-                Nota: {grade}
-              </div> */}
+              <div className={`text-6xl font-bold ${color}`}>
+                {percentage.toFixed(1)}%
+              </div>
+              {/* Pass/Fail Indicator */}
+              <div className="flex justify-center">
+                {percentage > 40 ? (
+                  <div className="inline-flex items-center space-x-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 border border-green-500 rounded-lg">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    <span className="text-lg font-semibold text-green-700 dark:text-green-300">
+                      Kaluar
+                    </span>
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center space-x-2 px-4 py-2 bg-red-100 dark:bg-red-900/30 border border-red-500 rounded-lg">
+                    <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                    <span className="text-lg font-semibold text-red-700 dark:text-red-300">
+                      Dështuar
+                    </span>
+                  </div>
+                )}
+              </div>
               <div className="flex justify-center space-x-8 text-sm text-muted-foreground">
                 <div className="flex items-center space-x-1">
                   <Clock className="w-4 h-4" />
@@ -113,7 +233,9 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
                 </div>
                 <div className="flex items-center space-x-1">
                   <Target className="w-4 h-4" />
-                  <span>{correctAnswers}/100 të sakta</span>
+                  <span>
+                    {correctAnswers}/{examResults.totalQuestions} të sakta
+                  </span>
                 </div>
               </div>
               <div className="max-w-md mx-auto">
@@ -180,24 +302,30 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
               <CardTitle>Performanca sipas lëndëve</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {subjectBreakdown.map((subject, index) => (
-                <div key={index} className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span>{subject.subject}</span>
-                    <Badge
-                      variant={
-                        subject.percentage >= 75 ? 'default' : 'secondary'
-                      }
-                    >
-                      {subject.percentage}%
-                    </Badge>
+              {subjectBreakdown.length > 0 ? (
+                subjectBreakdown.map((subject, index) => (
+                  <div key={index} className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span>{subject.subject}</span>
+                      <Badge
+                        variant={
+                          subject.percentage >= 75 ? 'default' : 'secondary'
+                        }
+                      >
+                        {subject.percentage}%
+                      </Badge>
+                    </div>
+                    <Progress value={subject.percentage} className="h-2" />
+                    <p className="text-xs text-muted-foreground">
+                      {subject.correct}/{subject.questions} të sakta
+                    </p>
                   </div>
-                  <Progress value={subject.percentage} className="h-2" />
-                  <p className="text-xs text-muted-foreground">
-                    {subject.correct}/{subject.questions} të sakta
-                  </p>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  Nuk ka të dhëna për performancën sipas lëndëve
+                </p>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -255,11 +383,22 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
 
         {/* Action Buttons */}
         <div className="flex justify-center space-x-4">
-          <Button variant="outline" onClick={onBack}>
+          <Button variant="outline" onClick={handleBack}>
             Kthehu te testet
           </Button>
-          <Button>Bëj testin përsëri</Button>
-          <Button variant="secondary">Studjo gabimet</Button>
+          {actualExamId && (
+            <>
+              <Button onClick={() => navigate(`/tests/${actualExamId}`)}>
+                Bëj testin përsëri
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => navigate(`/tests/${actualExamId}/review`)}
+              >
+                Studjo gabimet
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

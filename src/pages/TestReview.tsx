@@ -133,6 +133,24 @@ export function TestReview() {
               <div className="text-2xl font-semibold">
                 {examResults.accuracy.toFixed(1)}% saktësi
               </div>
+              {/* Pass/Fail Indicator */}
+              <div className="flex justify-center">
+                {examResults.accuracy > 40 ? (
+                  <div className="inline-flex items-center space-x-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 border border-green-500 rounded-lg">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    <span className="text-lg font-semibold text-green-700 dark:text-green-300">
+                      Kaluar
+                    </span>
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center space-x-2 px-4 py-2 bg-red-100 dark:bg-red-900/30 border border-red-500 rounded-lg">
+                    <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                    <span className="text-lg font-semibold text-red-700 dark:text-red-300">
+                      Dështuar
+                    </span>
+                  </div>
+                )}
+              </div>
               <div className="flex justify-center space-x-8 text-sm text-muted-foreground">
                 <div className="flex items-center space-x-1">
                   <CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -176,60 +194,63 @@ export function TestReview() {
                   )}
 
                   <div className="space-y-3">
-                    {question.options?.map((option) => {
-                      const isCorrect = option.isCorrect;
-                      const isSelected = userSelectedOptionIds.has(option.id);
-                      const isIncorrectAndSelected = !isCorrect && isSelected;
+                    {question.options
+                      ?.slice()
+                      .sort((a, b) => a.optionLetter.localeCompare(b.optionLetter))
+                      .map((option) => {
+                        const isCorrect = option.isCorrect;
+                        const isSelected = userSelectedOptionIds.has(option.id);
+                        const isIncorrectAndSelected = !isCorrect && isSelected;
 
-                      let borderColor = 'border-gray-300';
-                      let bgColor = 'bg-transparent';
-                      let icon = null;
+                        let borderColor = 'border-gray-300';
+                        let bgColor = 'bg-transparent';
+                        let icon = null;
 
-                      if (isCorrect) {
-                        borderColor = 'border-green-500';
-                        bgColor = 'bg-green-50 dark:bg-green-900/20';
-                        icon = (
-                          <CheckCircle2 className="w-5 h-5 text-green-600" />
-                        );
-                      } else if (isIncorrectAndSelected) {
-                        borderColor = 'border-red-500';
-                        bgColor = 'bg-red-50 dark:bg-red-900/20';
-                        icon = <XCircle className="w-5 h-5 text-red-600" />;
-                      }
+                        if (isCorrect) {
+                          borderColor = 'border-green-500';
+                          bgColor = 'bg-green-50 dark:bg-green-900/20';
+                          icon = (
+                            <CheckCircle2 className="w-5 h-5 text-green-600" />
+                          );
+                        } else if (isIncorrectAndSelected) {
+                          borderColor = 'border-red-500';
+                          bgColor = 'bg-red-50 dark:bg-red-900/20';
+                          icon = <XCircle className="w-5 h-5 text-red-600" />;
+                        }
 
-                      return (
-                        <div
-                          key={option.id}
-                          className={`flex items-center space-x-3 p-3 border-2 rounded-lg ${borderColor} ${bgColor}`}
-                        >
-                          {icon && (
-                            <div className="flex-shrink-0">{icon}</div>
-                          )}
-                          <div className="flex-1">
-                            <Label className="cursor-default">
-                              {option.optionLetter}. {option.text}
-                            </Label>
-                            {isSelected && (
-                              <span className="ml-2 text-xs text-muted-foreground">
-                                (Zgjedhja juaj)
-                              </span>
+                        return (
+                          <div
+                            key={option.id}
+                            className={`flex items-center space-x-3 p-3 border-2 rounded-lg ${borderColor} ${bgColor}`}
+                          >
+                            {icon && (
+                              <div className="flex-shrink-0">{icon}</div>
                             )}
-                            {isCorrect && (
-                              <span className="ml-2 text-xs font-semibold text-green-600">
-                                (Përgjigjja e saktë)
-                              </span>
+                            <div className="flex-1">
+                              <Label className="cursor-default">
+                                {option.optionLetter}. {option.text}
+                              </Label>
+                              {isSelected && (
+                                <span className="ml-2 text-xs text-muted-foreground">
+                                  (Zgjedhja juaj)
+                                </span>
+                              )}
+                              {isCorrect && (
+                                <span className="ml-2 text-xs font-semibold text-green-600">
+                                  (Përgjigjja e saktë)
+                                </span>
+                              )}
+                            </div>
+                            {option.imageUrl && (
+                              <img
+                                src={option.imageUrl}
+                                alt={option.optionLetter}
+                                className="w-20 h-20 object-cover rounded"
+                              />
                             )}
                           </div>
-                          {option.imageUrl && (
-                            <img
-                              src={option.imageUrl}
-                              alt={option.optionLetter}
-                              className="w-20 h-20 object-cover rounded"
-                            />
-                          )}
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
                   </div>
                 </CardContent>
               </Card>

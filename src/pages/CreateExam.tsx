@@ -15,6 +15,13 @@ import { Textarea } from '../ui/textarea';
 import { Checkbox } from '../ui/checkbox';
 import { Progress } from '../ui/progress';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import {
   ArrowLeft,
   Plus,
   X,
@@ -29,6 +36,11 @@ import { storageService } from '../lib/firebase';
 import type { Exam } from '../services/exams';
 import type { Question as ServiceQuestion } from '../services/questions';
 import useSectors from '../hooks/useSectors';
+import {
+  getGradeRangeFromSector,
+  getSubjectsForGradeRange,
+  type Subject,
+} from '../data/subjects';
 
 interface AnswerOption {
   id: string;
@@ -43,6 +55,7 @@ interface Question {
   answerOptions: AnswerOption[];
   imageFile?: File | null;
   imageUrl?: string;
+  subject?: string;
 }
 
 const TOTAL_QUESTIONS = 100;
@@ -81,6 +94,7 @@ export function CreateExam() {
     sectorId?: string;
     passingScore?: string;
     questionTitle?: string;
+    questionSubject?: string;
     questionOptions?: string;
   }>({});
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -98,6 +112,7 @@ export function CreateExam() {
       ],
       imageFile: null,
       imageUrl: undefined,
+      subject: undefined,
     }));
   });
 
@@ -106,12 +121,29 @@ export function CreateExam() {
     ensureSectorsLoaded();
   }, [ensureSectorsLoaded]);
 
+  // Track previous sector to detect changes
+  const previousSectorIdRef = useRef<string>('');
+
   // Default sector selection after sectors are available
   useEffect(() => {
     if (sectors.length > 0 && !sectorId) {
       setSectorId(sectors[0].id);
     }
   }, [sectors, sectorId]);
+
+  // Clear subject when sector changes (but not on initial load)
+  useEffect(() => {
+    if (sectorId && previousSectorIdRef.current && previousSectorIdRef.current !== sectorId) {
+      // Clear subject for all questions when sector changes
+      setQuestions((prev) =>
+        prev.map((q) => ({ ...q, subject: undefined }))
+      );
+    }
+    // Update the ref after checking
+    if (sectorId) {
+      previousSectorIdRef.current = sectorId;
+    }
+  }, [sectorId]);
 
   // Track which examId we've initialized for to prevent effect from resetting navigation
   const initializedExamIdRef = useRef<string | null>(null);
@@ -223,36 +255,38 @@ export function CreateExam() {
           const dbQuestion = fetchedQuestions.find(
             (q) => q.orderNumber === localId
           );
-          if (dbQuestion) {
-            updatedQuestions.push({
-              id: localId,
-              title: dbQuestion.text,
-              description: dbQuestion.description || '',
-              answerOptions:
-                dbQuestion.options?.map((opt, idx) => ({
-                  id: `${localId}-${idx + 1}`,
-                  text: opt.text,
-                  isCorrect: opt.isCorrect,
-                })) || [],
-              imageUrl: dbQuestion.imageUrl,
-              imageFile: null,
-            });
-          } else {
-            // Keep existing question structure
-            updatedQuestions.push({
-              id: localId,
-              title: '',
-              description: '',
-              answerOptions: [
-                { id: `${localId}-1`, text: '', isCorrect: false },
-                { id: `${localId}-2`, text: '', isCorrect: false },
-                { id: `${localId}-3`, text: '', isCorrect: false },
-                { id: `${localId}-4`, text: '', isCorrect: false },
-              ],
-              imageFile: null,
-              imageUrl: undefined,
-            });
-          }
+            if (dbQuestion) {
+              updatedQuestions.push({
+                id: localId,
+                title: dbQuestion.text,
+                description: dbQuestion.description || '',
+                answerOptions:
+                  dbQuestion.options?.map((opt, idx) => ({
+                    id: `${localId}-${idx + 1}`,
+                    text: opt.text,
+                    isCorrect: opt.isCorrect,
+                  })) || [],
+                imageUrl: dbQuestion.imageUrl,
+                imageFile: null,
+                subject: dbQuestion.subject,
+              });
+            } else {
+              // Keep existing question structure
+              updatedQuestions.push({
+                id: localId,
+                title: '',
+                description: '',
+                answerOptions: [
+                  { id: `${localId}-1`, text: '', isCorrect: false },
+                  { id: `${localId}-2`, text: '', isCorrect: false },
+                  { id: `${localId}-3`, text: '', isCorrect: false },
+                  { id: `${localId}-4`, text: '', isCorrect: false },
+                ],
+                imageFile: null,
+                imageUrl: undefined,
+                subject: undefined,
+              });
+            }
         }
 
         // Batch all state updates together - only on initial load
@@ -333,6 +367,17 @@ export function CreateExam() {
   }, [params.examId]);
 
   const currentQuestion = questions[currentQuestionIndex];
+
+  // Get available subjects based on selected sector
+  const availableSubjects = useMemo(() => {
+    if (!sectorId) return [];
+    const selectedSector = sectors.find((s) => s.id === sectorId);
+    if (!selectedSector) return [];
+    const gradeRange = getGradeRangeFromSector(
+      selectedSector.displayName || selectedSector.name
+    );
+    return getSubjectsForGradeRange(gradeRange);
+  }, [sectorId, sectors]);
 
   // Memoized local preview URL for selected (not yet uploaded) image
   const imageObjectUrl = useMemo(() => {
@@ -425,6 +470,14 @@ export function CreateExam() {
     );
   };
 
+  const handleQuestionSubjectChange = (subject: string) => {
+    setQuestions(
+      questions.map((q, index) =>
+        index === currentQuestionIndex ? { ...q, subject } : q
+      )
+    );
+  };
+
   const handleChooseImage = () => {
     fileInputRef.current?.click();
   };
@@ -469,6 +522,8 @@ export function CreateExam() {
     const newErrors: typeof errors = {};
     if (!q.title.trim())
       newErrors.questionTitle = `Question ${q.id} title is required.`;
+    if (!q.subject || !q.subject.trim())
+      newErrors.questionSubject = `Question ${q.id} subject is required.`;
     if (!q.answerOptions.some((o) => o.isCorrect))
       newErrors.questionOptions = 'At least one option must be marked correct.';
     setErrors((prev) => ({ ...prev, ...newErrors }));
@@ -480,8 +535,9 @@ export function CreateExam() {
     const q = currentQuestion;
     if (!q) return false;
     const hasTitleError = !q.title.trim();
+    const hasSubjectError = !q.subject || !q.subject.trim();
     const hasOptionsError = !q.answerOptions.some((o) => o.isCorrect);
-    return hasTitleError || hasOptionsError;
+    return hasTitleError || hasSubjectError || hasOptionsError;
   }, [currentQuestion]);
 
   // Check if exam has validation errors
@@ -509,6 +565,7 @@ export function CreateExam() {
     // Check if question fields changed
     if (q.title !== (cachedQuestion.text || '')) return true;
     if (q.description !== (cachedQuestion.description || '')) return true;
+    if (q.subject !== (cachedQuestion.subject || '')) return true;
     if (!!q.imageFile) return true; // New image file selected
     if (q.imageUrl !== cachedQuestion.imageUrl) return true;
 
@@ -624,7 +681,7 @@ export function CreateExam() {
         text: q.title,
         imageUrl,
         examId: ensuredExamId!,
-        subject: 'general',
+        subject: q.subject || 'general',
         orderNumber: q.id,
         points: 1,
         isActive: true,
@@ -705,6 +762,7 @@ export function CreateExam() {
             ...question,
             title: q.title,
             description: q.description,
+            subject: q.subject,
             answerOptions: q.answerOptions.map((opt, idx) => ({
               id: opt.id,
               text: opt.text || `Option ${idx + 1}`,
@@ -760,11 +818,15 @@ export function CreateExam() {
         isCorrect: false,
       }));
 
+      // Get subject from current question state if available
+      const currentQuestion = questionsRef.current.find((q) => q.id === localId);
+      const questionSubject = currentQuestion?.subject || 'general';
+
       const created = await questionsService.createQuestion({
         text: '',
         imageUrl: undefined,
         examId: examId,
-        subject: 'general',
+        subject: questionSubject,
         orderNumber: localId,
         points: 1,
         isActive: true,
@@ -928,6 +990,7 @@ export function CreateExam() {
                       ...question,
                       title: cachedQuestion.text || '',
                       description: cachedQuestion.description || '',
+                      subject: cachedQuestion.subject,
                       answerOptions:
                         cachedQuestion.options?.map((opt, idx) => ({
                           id: `${nextQuestionLocalId}-${idx + 1}`,
@@ -989,6 +1052,7 @@ export function CreateExam() {
                         ...question,
                         title: cachedQuestion.text || '',
                         description: cachedQuestion.description || '',
+                        subject: cachedQuestion.subject,
                         answerOptions:
                           cachedQuestion.options?.map((opt, idx) => ({
                             id: `${nextQuestionLocalId}-${idx + 1}`,
@@ -1077,6 +1141,7 @@ export function CreateExam() {
                     ...question,
                     title: cachedQuestion.text || '',
                     description: cachedQuestion.description || '',
+                    subject: cachedQuestion.subject,
                     answerOptions:
                       cachedQuestion.options?.map((opt, idx) => ({
                         id: `${prevQuestionLocalId}-${idx + 1}`,
@@ -1168,7 +1233,7 @@ export function CreateExam() {
         <CardContent className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Exam Title
+              Exam Title <span className="text-red-500">*</span>
             </label>
             <Input
               placeholder="Enter exam title..."
@@ -1183,7 +1248,7 @@ export function CreateExam() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Exam Description
+              Exam Description <span className="text-red-500">*</span>
             </label>
             <Textarea
               placeholder="Enter exam description..."
@@ -1201,7 +1266,7 @@ export function CreateExam() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Sector
+                Sector <span className="text-red-500">*</span>
               </label>
               <select
                 className="w-full border rounded-md h-10 px-3"
@@ -1289,7 +1354,7 @@ export function CreateExam() {
           <div className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Question Title
+                Question Title <span className="text-red-500">*</span>
               </label>
               <Input
                 placeholder="Enter your question here..."
@@ -1318,6 +1383,41 @@ export function CreateExam() {
                 className="w-full min-h-[100px]"
                 disabled={isSubmitting}
               />
+            </div>
+
+            {/* Subject Selection */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Subject <span className="text-red-500">*</span>
+              </label>
+              <Select
+                value={currentQuestion.subject || ''}
+                onValueChange={handleQuestionSubjectChange}
+                disabled={isSubmitting || !sectorId || availableSubjects.length === 0}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a subject..." />
+                </SelectTrigger>
+                {availableSubjects.length > 0 && (
+                  <SelectContent>
+                    {availableSubjects.map((subject) => (
+                      <SelectItem key={subject.value} value={subject.value}>
+                        {subject.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                )}
+              </Select>
+              {errors.questionSubject && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.questionSubject}
+                </p>
+              )}
+              {!sectorId && (
+                <p className="mt-1 text-sm text-amber-600">
+                  Please select a sector in the exam information section above to see available subjects.
+                </p>
+              )}
             </div>
 
             {/* Question Image */}
@@ -1361,7 +1461,7 @@ export function CreateExam() {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                  Answer Options
+                  Answer Options <span className="text-red-500">*</span>
                 </label>
                 <Button
                   variant="outline"
@@ -1384,6 +1484,9 @@ export function CreateExam() {
                         handleOptionCorrectChange(option.id, checked as boolean)
                       }
                     />
+                    <span className="font-medium text-gray-700 w-6">
+                      {optionLetterForIndex(idx)}.
+                    </span>
                     <Input
                       value={option.text}
                       placeholder={`Option ${idx + 1}`}
