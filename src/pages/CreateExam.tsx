@@ -265,12 +265,12 @@ export function CreateExam() {
               answerOptions:
                 dbQuestion.options?.map((opt, idx) => ({
                   id: `${localId}-${idx + 1}`,
-                  text: opt.text,
+                  text: normalizeOptionText(opt.text, idx),
                   isCorrect: opt.isCorrect,
                 })) || [],
               imageUrl: dbQuestion.imageUrl,
               imageFile: null,
-              subject: dbQuestion.subject,
+              subject: dbQuestion.subject?.trim(),
             });
           } else {
             // Keep existing question structure
@@ -383,21 +383,36 @@ export function CreateExam() {
 
   // Map currentQuestion.subject (which may be an old label or value)
   // to the canonical subject value used by the Select options.
-  const selectedSubjectValue = useMemo(() => {
-    const subj = currentQuestion?.subject;
-    if (!subj) return '';
+  const selectedSubjectValue: string | undefined = useMemo(() => {
+    // If there are no subjects for the current sector, keep the Select "empty"
+    // so the placeholder text is visible.
+    if (!sectorId || availableSubjects.length === 0) {
+      return undefined;
+    }
 
-    // 1) Exact value match
-    const byValue = availableSubjects.find((s) => s.value === subj);
+    const subjRaw = currentQuestion?.subject;
+    if (!subjRaw) return undefined;
+
+    const subj = subjRaw.trim();
+    if (!subj) return undefined;
+    const normalized = subj.toLowerCase();
+
+    // 1) Match by value (case-insensitive, trimmed)
+    const byValue = availableSubjects.find(
+      (s) => s.value.trim().toLowerCase() === normalized
+    );
     if (byValue) return byValue.value;
 
     // 2) Match by label (for older data stored as label text)
-    const byLabel = availableSubjects.find((s) => s.label === subj);
+    const byLabel = availableSubjects.find(
+      (s) => s.label.trim().toLowerCase() === normalized
+    );
     if (byLabel) return byLabel.value;
 
-    // 3) Fallback to raw value so it stays selected even if not in list
-    return subj;
-  }, [currentQuestion?.subject, availableSubjects]);
+    // 3) No matching subject in the available list – treat as unset so
+    // the placeholder is shown instead of a blank value.
+    return undefined;
+  }, [currentQuestion?.subject, availableSubjects, sectorId]);
 
   // Memoized local preview URL for selected (not yet uploaded) image
   const imageObjectUrl = useMemo(() => {
@@ -414,7 +429,9 @@ export function CreateExam() {
   const handleAddOption = () => {
     const newOption: AnswerOption = {
       id: `${currentQuestionIndex + 1}-${Date.now()}`,
-      text: `Option ${currentQuestion.answerOptions.length + 1}`,
+      // Keep value empty so the user doesn't need to delete "Option N" before typing.
+      // The visible label still comes from the input's placeholder.
+      text: '',
       isCorrect: false,
     };
 
@@ -522,6 +539,15 @@ export function CreateExam() {
 
   const optionLetterForIndex = (i: number): string => {
     return String.fromCharCode('A'.charCodeAt(0) + i);
+  };
+
+  const normalizeOptionText = (
+    text: string | undefined | null,
+    idx: number
+  ) => {
+    const t = (text ?? '').trim();
+    const defaultLabel = `Option ${idx + 1}`;
+    return t === defaultLabel ? '' : t;
   };
 
   const validateExam = useCallback((): boolean => {
@@ -1012,11 +1038,11 @@ export function CreateExam() {
                       ...question,
                       title: cachedQuestion.text || '',
                       description: cachedQuestion.description || '',
-                      subject: cachedQuestion.subject,
+                      subject: cachedQuestion.subject?.trim(),
                       answerOptions:
                         cachedQuestion.options?.map((opt, idx) => ({
                           id: `${nextQuestionLocalId}-${idx + 1}`,
-                          text: opt.text || '',
+                          text: normalizeOptionText(opt.text, idx),
                           isCorrect: opt.isCorrect || false,
                         })) || question.answerOptions,
                       imageUrl: cachedQuestion.imageUrl,
@@ -1074,11 +1100,11 @@ export function CreateExam() {
                         ...question,
                         title: cachedQuestion.text || '',
                         description: cachedQuestion.description || '',
-                        subject: cachedQuestion.subject,
+                        subject: cachedQuestion.subject?.trim(),
                         answerOptions:
                           cachedQuestion.options?.map((opt, idx) => ({
                             id: `${nextQuestionLocalId}-${idx + 1}`,
-                            text: opt.text || '',
+                            text: normalizeOptionText(opt.text, idx),
                             isCorrect: opt.isCorrect || false,
                           })) || question.answerOptions,
                         imageUrl: cachedQuestion.imageUrl,
@@ -1163,11 +1189,11 @@ export function CreateExam() {
                     ...question,
                     title: cachedQuestion.text || '',
                     description: cachedQuestion.description || '',
-                    subject: cachedQuestion.subject,
+                    subject: cachedQuestion.subject?.trim(),
                     answerOptions:
                       cachedQuestion.options?.map((opt, idx) => ({
                         id: `${prevQuestionLocalId}-${idx + 1}`,
-                        text: opt.text || '',
+                        text: normalizeOptionText(opt.text, idx),
                         isCorrect: opt.isCorrect || false,
                       })) || question.answerOptions,
                     imageUrl: cachedQuestion.imageUrl,
@@ -1450,6 +1476,13 @@ export function CreateExam() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Question Image (Optional)
               </label>
+              <p className="mb-2 text-xs text-gray-500">
+                Recommended: clear images up to{' '}
+                <span className="font-semibold">2&nbsp;MB</span> in size and no
+                larger than about{' '}
+                <span className="font-semibold">600×600&nbsp;px</span> to keep
+                loading fast and previews readable on all devices.
+              </p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -1472,12 +1505,16 @@ export function CreateExam() {
                 </p>
               )}
               {(currentQuestion.imageUrl || imageObjectUrl) && (
-                <div className="mt-3">
-                  <img
-                    src={currentQuestion.imageUrl || (imageObjectUrl as string)}
-                    alt="Question"
-                    className="max-h-64 rounded border"
-                  />
+                <div className="mt-3 w-full">
+                  <div className="relative mx-auto max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl border rounded overflow-hidden">
+                    <img
+                      src={
+                        currentQuestion.imageUrl || (imageObjectUrl as string)
+                      }
+                      alt="Question"
+                      className="w-full h-auto max-h-[600px] object-contain"
+                    />
+                  </div>
                 </div>
               )}
             </div>

@@ -7,7 +7,11 @@ import { Skeleton } from '../ui/skeleton';
 import { CheckCircle2, XCircle, ArrowLeft } from 'lucide-react';
 import { examService, Exam } from '../services/exams';
 import { questionsService, Question } from '../services/questions';
-import { userAnswerService, UserAnswer, ExamResults } from '../services/userAnswers';
+import {
+  userAnswerService,
+  UserAnswer,
+  ExamResults,
+} from '../services/userAnswers';
 import { toast } from 'sonner';
 
 export function TestReview() {
@@ -76,9 +80,7 @@ export function TestReview() {
         <div className="max-w-6xl mx-auto">
           <Card>
             <CardContent className="p-6 text-center">
-              <p className="text-red-600 mb-4">
-                Failed to load test review.
-              </p>
+              <p className="text-red-600 mb-4">Failed to load test review.</p>
               <Button onClick={() => navigate('/tests')} variant="outline">
                 Go Back
               </Button>
@@ -186,17 +188,23 @@ export function TestReview() {
                 <CardContent className="space-y-4">
                   <div className="text-lg">{question.text}</div>
                   {question.imageUrl && (
-                    <img
-                      src={question.imageUrl}
-                      alt="Question"
-                      className="max-w-full rounded-lg"
-                    />
+                    <div className="w-full">
+                      <div className="relative mx-auto max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl border rounded-lg overflow-hidden ">
+                        <img
+                          src={question.imageUrl}
+                          alt="Question"
+                          className="w-full h-auto max-h-[600px] object-contain"
+                        />
+                      </div>
+                    </div>
                   )}
 
                   <div className="space-y-3">
                     {question.options
                       ?.slice()
-                      .sort((a, b) => a.optionLetter.localeCompare(b.optionLetter))
+                      .sort((a, b) =>
+                        a.optionLetter.localeCompare(b.optionLetter)
+                      )
                       .map((option) => {
                         const isCorrect = option.isCorrect;
                         const isSelected = userSelectedOptionIds.has(option.id);
@@ -268,4 +276,3 @@ export function TestReview() {
     </div>
   );
 }
-

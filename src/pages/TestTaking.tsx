@@ -597,13 +597,13 @@ export function TestTaking({
       // Clear timer from localStorage
       localStorage.removeItem(`exam_timer_${examId}`);
 
-       // Mark exam as completed in the backend (best-effort)
-       try {
-         await examService.completeExam(examId);
-       } catch (err) {
-         console.error('Failed to mark exam as completed:', err);
-         // Don't block user if this fails
-       }
+      // Mark exam as completed in the backend (best-effort)
+      try {
+        await examService.completeExam(examId);
+      } catch (err) {
+        console.error('Failed to mark exam as completed:', err);
+        // Don't block user if this fails
+      }
 
       // Navigate to review page
       navigate(`/tests/${examId}/review`);
@@ -748,11 +748,15 @@ export function TestTaking({
                 )}
               </div>
               {currentQuestion.imageUrl && (
-                <img
-                  src={currentQuestion.imageUrl}
-                  alt="Question"
-                  className="max-w-full rounded-lg"
-                />
+                <div className="w-full">
+                  <div className="relative mx-auto max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl border rounded-lg overflow-hidden ">
+                    <img
+                      src={currentQuestion.imageUrl}
+                      alt="Question"
+                      className="w-full h-auto max-h-[600px] object-contain"
+                    />
+                  </div>
+                </div>
               )}
 
               <div className="space-y-4">
