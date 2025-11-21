@@ -40,6 +40,9 @@ export interface Exam {
   isActive: boolean;
   totalQuestions: number;
   passingScore: number;
+  // Backend flags for completion and pass status
+  isCompleted?: boolean;
+  hasPassed?: boolean;
   questions?: Question[];
   createdAt?: string;
   updatedAt?: string;
@@ -150,6 +153,21 @@ export class ExamService {
   // Delete exam
   async deleteExam(id: string | number): Promise<void> {
     await this.api.delete(`exams/${id}`);
+  }
+
+  // Mark exam as completed
+  async completeExam(id: string | number): Promise<Exam> {
+    const response = await this.api.post<Exam>(`exams/${String(id)}/complete`);
+    return response.data;
+  }
+
+  // Reset exam so the user can retake it
+  async resetExam(id: string | number): Promise<Exam> {
+    const response = await this.api.post<{ message: string; exam: Exam }>(
+      `exams/${String(id)}/reset`
+    );
+    // Backend wraps the updated exam in { message, exam }
+    return response.data.exam;
   }
 }
 

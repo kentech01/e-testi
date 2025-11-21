@@ -597,6 +597,14 @@ export function TestTaking({
       // Clear timer from localStorage
       localStorage.removeItem(`exam_timer_${examId}`);
 
+       // Mark exam as completed in the backend (best-effort)
+       try {
+         await examService.completeExam(examId);
+       } catch (err) {
+         console.error('Failed to mark exam as completed:', err);
+         // Don't block user if this fails
+       }
+
       // Navigate to review page
       navigate(`/tests/${examId}/review`);
       toast.success('Testi u përfundua me sukses!');

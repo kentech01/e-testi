@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import {
   CheckCircle2,
+  XCircle,
   FileText,
   Clock,
   Play,
@@ -22,6 +23,7 @@ interface Test {
   id: string | number;
   title: string;
   completed: boolean;
+  hasPassed?: boolean;
   score?: number;
   timeSpent?: string;
   subject?: string;
@@ -54,6 +56,7 @@ export function TestList({
   const [tests, setTests] = useState<Test[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [resettingId, setResettingId] = useState<string | number | null>(null);
 
   // Fetch exams and user answers on mount
   useEffect(() => {
@@ -119,8 +122,15 @@ export function TestList({
       // Map exams to Test format
       const mappedTests: Test[] = allExams.map((exam) => {
         const results = examResultsMap.get(String(exam.id));
-        // Test is completed if isActive is false
-        const isCompleted = !exam.isActive;
+        // Prefer backend flags if available, otherwise fall back to isActive / results
+        const isCompleted =
+          typeof exam.isCompleted === 'boolean'
+            ? exam.isCompleted
+            : !!results || !exam.isActive;
+        const hasPassed =
+          typeof exam.hasPassed === 'boolean'
+            ? exam.hasPassed
+            : results?.hasPassed;
         const score = results ? Math.round(results.accuracy) : undefined;
         const timeSpentSeconds = results?.totalTimeSpent || 0;
         const timeSpent =
@@ -132,6 +142,7 @@ export function TestList({
           id: exam.id,
           title: exam.title,
           completed: isCompleted,
+          hasPassed,
           score,
           timeSpent,
           subject: exam.sector?.name || undefined,
@@ -176,6 +187,22 @@ export function TestList({
 
     // Start the random test
     onStartTest(randomTest.id);
+  };
+
+  const handleResetAndStartSelectedTest = async (test: Test) => {
+    if (!test || resettingId === test.id) return;
+    try {
+      setResettingId(test.id);
+      await examService.resetExam(test.id);
+      toast.success('Testi u rivendos. Mund ta bëni përsëri.');
+      setSelectedTest(null);
+      onStartTestClick(test.id);
+    } catch (err) {
+      console.error('Failed to reset exam:', err);
+      toast.error('Dështoi rivendosja e testit. Ju lutem provoni përsëri.');
+    } finally {
+      setResettingId(null);
+    }
   };
 
   const getSubjectIcon = (
@@ -392,35 +419,69 @@ export function TestList({
           </Card>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {tests.map((test) => (
-              <Card
-                key={test.id}
-                className={`cursor-pointer transition-all hover:shadow-lg ${
-                  test.completed
-                    ? 'bg-slate-900 text-white'
-                    : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700'
-                } ${selectedTest?.id === test.id ? 'ring-2 ring-blue-500' : ''}`}
-                onClick={() => setSelectedTest(test)}
-              >
-                <CardContent className="p-4 flex flex-col items-center space-y-3">
-                  <div className="flex items-center justify-center w-8 h-8 rounded bg-slate-700 text-white">
-                    {test.completed ? (
-                      <CheckCircle2 className="w-4 h-4 text-green-400" />
-                    ) : (
-                      <FileText className="w-4 h-4" />
-                    )}
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm font-medium">{test.title}</p>
-                    {test.completed && test.score !== undefined && (
-                      <p className="text-xs text-muted-foreground">
-                        {test.score}%
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {tests.map((test) => {
+              const isPassed = test.completed && test.hasPassed === true;
+              const isFailed = test.completed && test.hasPassed === false;
+
+              return (
+                <Card
+                  key={test.id}
+                  className={`cursor-pointer transition-all hover:shadow-lg ${
+                    test.completed
+                      ? isPassed
+                        ? 'bg-emerald-950 text-emerald-50'
+                        : isFailed
+                          ? 'bg-red-950 text-red-50'
+                          : 'bg-slate-900 text-white'
+                      : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700'
+                  } ${
+                    selectedTest?.id === test.id ? 'ring-2 ring-blue-500' : ''
+                  }`}
+                  onClick={() => setSelectedTest(test)}
+                >
+                  <CardContent className="p-4 flex flex-col items-center space-y-3">
+                    <div className="flex items-center justify-center w-8 h-8 rounded bg-slate-800 text-white">
+                      {test.completed ? (
+                        isPassed ? (
+                          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                        ) : (
+                          <XCircle className="w-4 h-4 text-red-400" />
+                        )
+                      ) : (
+                        <FileText className="w-4 h-4" />
+                      )}
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-medium">{test.title}</p>
+                      {test.completed && (
+                        <>
+                          {test.score !== undefined && (
+                            <p className="text-xs text-muted-foreground">
+                              {test.score}%
+                            </p>
+                          )}
+                          <p
+                            className={`text-[11px] mt-1 ${
+                              isPassed
+                                ? 'text-emerald-300'
+                                : isFailed
+                                  ? 'text-red-300'
+                                  : ''
+                            }`}
+                          >
+                            {test.hasPassed === true
+                              ? 'Kaluar'
+                              : test.hasPassed === false
+                                ? 'Nuk e kaluat'
+                                : 'Përfunduar'}
+                          </p>
+                        </>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         )}
       </div>
@@ -444,7 +505,13 @@ export function TestList({
                   )}
                   <p className="text-sm text-muted-foreground mt-2">
                     {selectedTest.completed
-                      ? `Test i përfunduar me rezultat ${selectedTest.score}%`
+                      ? `Test i përfunduar me rezultat ${selectedTest.score}%${
+                          selectedTest.hasPassed === true
+                            ? ' • Kaluar'
+                            : selectedTest.hasPassed === false
+                              ? ' • Nuk e kaluat'
+                              : ''
+                        }`
                       : `Test që përmban ${selectedTest.exam.totalQuestions} pyetje për përgatitjen e maturës`}
                   </p>
                   {selectedTest.exam.totalQuestions && (
@@ -465,34 +532,47 @@ export function TestList({
                   </div>
                 )}
 
-                <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => setSelectedTest(null)}
-                    className="flex-1"
-                  >
-                    Mbyll
-                  </Button>
-                  {selectedTest.completed ? (
+                <div className="flex flex-col space-y-2">
+                  <div className="flex space-x-2">
                     <Button
-                      onClick={() => {
-                        onViewResultsClick(selectedTest.id);
-                        setSelectedTest(null);
-                      }}
+                      variant="outline"
+                      onClick={() => setSelectedTest(null)}
                       className="flex-1"
                     >
-                      Shiko rezultatet
+                      Mbyll
                     </Button>
-                  ) : (
+                    {selectedTest.completed ? (
+                      <Button
+                        onClick={() => {
+                          onViewResultsClick(selectedTest.id);
+                          setSelectedTest(null);
+                        }}
+                        className="flex-1"
+                      >
+                        Shiko rezultatet
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          onStartTestClick(selectedTest.id);
+                          setSelectedTest(null);
+                        }}
+                        className="flex-1 bg-green-500 hover:bg-green-600"
+                      >
+                        <Play className="w-4 h-4 mr-1" />
+                        Let's go!
+                      </Button>
+                    )}
+                  </div>
+                  {selectedTest.completed && (
                     <Button
-                      onClick={() => {
-                        onStartTestClick(selectedTest.id);
-                        setSelectedTest(null);
-                      }}
-                      className="flex-1 bg-green-500 hover:bg-green-600"
+                      onClick={() => handleResetAndStartSelectedTest(selectedTest)}
+                      className="w-full bg-green-500 hover:bg-green-600"
+                      disabled={resettingId === selectedTest.id}
                     >
-                      <Play className="w-4 h-4 mr-1" />
-                      Let's go!
+                      {resettingId === selectedTest.id
+                        ? 'Duke rivendosur...'
+                        : 'Bëj testin përsëri'}
                     </Button>
                   )}
                 </div>

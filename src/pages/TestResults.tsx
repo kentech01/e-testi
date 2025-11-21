@@ -45,6 +45,7 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
   const [examResults, setExamResults] = useState<ExamResults | null>(null);
   const [exam, setExam] = useState<Exam | null>(null);
   const [loading, setLoading] = useState(true);
+  const [resetting, setResetting] = useState(false);
 
   useEffect(() => {
     if (!actualExamId) {
@@ -122,7 +123,8 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
   // Calculate statistics
   const correctAnswers = examResults.correctAnswers;
   const incorrectAnswers = examResults.incorrectAnswers;
-  const unanswered = examResults.totalQuestions - correctAnswers - incorrectAnswers;
+  const unanswered =
+    examResults.totalQuestions - correctAnswers - incorrectAnswers;
   const percentage = examResults.accuracy;
   
   // Format time spent
@@ -183,6 +185,22 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
     }
   };
 
+  const handleResetExamAndRetake = async () => {
+    if (!actualExamId || resetting) return;
+    setResetting(true);
+    try {
+      await examService.resetExam(actualExamId);
+      toast.success('Testi u rivendos. Mund ta bëni përsëri.');
+      // Full page reload to guarantee a fresh exam session
+      window.location.href = `/tests/${actualExamId}`;
+    } catch (error) {
+      console.error('Failed to reset exam:', error);
+      toast.error('Dështoi rivendosja e testit. Ju lutem provoni përsëri.');
+    } finally {
+      setResetting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -208,9 +226,9 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
               <div className={`text-6xl font-bold ${color}`}>
                 {percentage.toFixed(1)}%
               </div>
-              {/* Pass/Fail Indicator */}
+              {/* Pass/Fail Indicator (from backend hasPassed flag) */}
               <div className="flex justify-center">
-                {percentage > 40 ? (
+                {examResults.hasPassed ? (
                   <div className="inline-flex items-center space-x-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 border border-green-500 rounded-lg">
                     <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
                     <span className="text-lg font-semibold text-green-700 dark:text-green-300">
@@ -388,8 +406,8 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
           </Button>
           {actualExamId && (
             <>
-              <Button onClick={() => navigate(`/tests/${actualExamId}`)}>
-                Bëj testin përsëri
+              <Button onClick={handleResetExamAndRetake} disabled={resetting}>
+                {resetting ? 'Duke rivendosur...' : 'Bëj testin përsëri'}
               </Button>
               <Button
                 variant="secondary"

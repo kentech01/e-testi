@@ -133,11 +133,13 @@ export function CreateExam() {
 
   // Clear subject when sector changes (but not on initial load)
   useEffect(() => {
-    if (sectorId && previousSectorIdRef.current && previousSectorIdRef.current !== sectorId) {
+    if (
+      sectorId &&
+      previousSectorIdRef.current &&
+      previousSectorIdRef.current !== sectorId
+    ) {
       // Clear subject for all questions when sector changes
-      setQuestions((prev) =>
-        prev.map((q) => ({ ...q, subject: undefined }))
-      );
+      setQuestions((prev) => prev.map((q) => ({ ...q, subject: undefined })));
     }
     // Update the ref after checking
     if (sectorId) {
@@ -255,38 +257,38 @@ export function CreateExam() {
           const dbQuestion = fetchedQuestions.find(
             (q) => q.orderNumber === localId
           );
-            if (dbQuestion) {
-              updatedQuestions.push({
-                id: localId,
-                title: dbQuestion.text,
-                description: dbQuestion.description || '',
-                answerOptions:
-                  dbQuestion.options?.map((opt, idx) => ({
-                    id: `${localId}-${idx + 1}`,
-                    text: opt.text,
-                    isCorrect: opt.isCorrect,
-                  })) || [],
-                imageUrl: dbQuestion.imageUrl,
-                imageFile: null,
-                subject: dbQuestion.subject,
-              });
-            } else {
-              // Keep existing question structure
-              updatedQuestions.push({
-                id: localId,
-                title: '',
-                description: '',
-                answerOptions: [
-                  { id: `${localId}-1`, text: '', isCorrect: false },
-                  { id: `${localId}-2`, text: '', isCorrect: false },
-                  { id: `${localId}-3`, text: '', isCorrect: false },
-                  { id: `${localId}-4`, text: '', isCorrect: false },
-                ],
-                imageFile: null,
-                imageUrl: undefined,
-                subject: undefined,
-              });
-            }
+          if (dbQuestion) {
+            updatedQuestions.push({
+              id: localId,
+              title: dbQuestion.text,
+              description: dbQuestion.description || '',
+              answerOptions:
+                dbQuestion.options?.map((opt, idx) => ({
+                  id: `${localId}-${idx + 1}`,
+                  text: opt.text,
+                  isCorrect: opt.isCorrect,
+                })) || [],
+              imageUrl: dbQuestion.imageUrl,
+              imageFile: null,
+              subject: dbQuestion.subject,
+            });
+          } else {
+            // Keep existing question structure
+            updatedQuestions.push({
+              id: localId,
+              title: '',
+              description: '',
+              answerOptions: [
+                { id: `${localId}-1`, text: '', isCorrect: false },
+                { id: `${localId}-2`, text: '', isCorrect: false },
+                { id: `${localId}-3`, text: '', isCorrect: false },
+                { id: `${localId}-4`, text: '', isCorrect: false },
+              ],
+              imageFile: null,
+              imageUrl: undefined,
+              subject: undefined,
+            });
+          }
         }
 
         // Batch all state updates together - only on initial load
@@ -378,6 +380,24 @@ export function CreateExam() {
     );
     return getSubjectsForGradeRange(gradeRange);
   }, [sectorId, sectors]);
+
+  // Map currentQuestion.subject (which may be an old label or value)
+  // to the canonical subject value used by the Select options.
+  const selectedSubjectValue = useMemo(() => {
+    const subj = currentQuestion?.subject;
+    if (!subj) return '';
+
+    // 1) Exact value match
+    const byValue = availableSubjects.find((s) => s.value === subj);
+    if (byValue) return byValue.value;
+
+    // 2) Match by label (for older data stored as label text)
+    const byLabel = availableSubjects.find((s) => s.label === subj);
+    if (byLabel) return byLabel.value;
+
+    // 3) Fallback to raw value so it stays selected even if not in list
+    return subj;
+  }, [currentQuestion?.subject, availableSubjects]);
 
   // Memoized local preview URL for selected (not yet uploaded) image
   const imageObjectUrl = useMemo(() => {
@@ -819,7 +839,9 @@ export function CreateExam() {
       }));
 
       // Get subject from current question state if available
-      const currentQuestion = questionsRef.current.find((q) => q.id === localId);
+      const currentQuestion = questionsRef.current.find(
+        (q) => q.id === localId
+      );
       const questionSubject = currentQuestion?.subject || 'general';
 
       const created = await questionsService.createQuestion({
@@ -1391,9 +1413,11 @@ export function CreateExam() {
                 Subject <span className="text-red-500">*</span>
               </label>
               <Select
-                value={currentQuestion.subject || ''}
+                value={selectedSubjectValue}
                 onValueChange={handleQuestionSubjectChange}
-                disabled={isSubmitting || !sectorId || availableSubjects.length === 0}
+                disabled={
+                  isSubmitting || !sectorId || availableSubjects.length === 0
+                }
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a subject..." />
@@ -1415,7 +1439,8 @@ export function CreateExam() {
               )}
               {!sectorId && (
                 <p className="mt-1 text-sm text-amber-600">
-                  Please select a sector in the exam information section above to see available subjects.
+                  Please select a sector in the exam information section above
+                  to see available subjects.
                 </p>
               )}
             </div>
