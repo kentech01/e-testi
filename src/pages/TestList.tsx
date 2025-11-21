@@ -326,7 +326,6 @@ export function TestList({
                   • Çdo test përmban 100 pyetje me zgjedhje të shumëfishta
                 </li>
                 <li>• Koha e disponueshme është 120 minuta</li>
-                <li>• 10 pyetje shfaqen në çdo faqe</li>
                 <li>• Mund të navigoni lirshëm midis faqeve</li>
                 <li>• Përgjigjet ruhen automatikisht</li>
               </ul>
@@ -350,10 +349,7 @@ export function TestList({
               <span>Numri i opsioneve:</span>
               <span className="font-medium">4 (A, B, C, D)</span>
             </div>
-            <div className="flex justify-between">
-              <span>Pyetje për faqe:</span>
-              <span className="font-medium">10</span>
-            </div>
+
             <div className="flex justify-between">
               <span>Ruajtja automatike:</span>
               <span className="font-medium text-green-600">✓ Aktive</span>
@@ -566,7 +562,9 @@ export function TestList({
                   </div>
                   {selectedTest.completed && (
                     <Button
-                      onClick={() => handleResetAndStartSelectedTest(selectedTest)}
+                      onClick={() =>
+                        handleResetAndStartSelectedTest(selectedTest)
+                      }
                       className="w-full bg-green-500 hover:bg-green-600"
                       disabled={resettingId === selectedTest.id}
                     >

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -8,7 +8,6 @@ import {
 } from '../ui/card';
 import { Progress } from '../ui/progress';
 import { Badge } from '../ui/badge';
-import { Avatar, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';
 import {
   BarChart,
@@ -17,22 +16,11 @@ import {
   YAxis,
   CartesianGrid,
   ResponsiveContainer,
-  LineChart,
-  Line,
   PieChart,
   Pie,
   Cell,
 } from 'recharts';
-import {
-  GraduationCap,
-  BookOpen,
-  Target,
-  Star,
-  Users,
-  TrendingUp,
-  Plus,
-} from 'lucide-react';
-import { DashboardStats } from '../components/dashboard';
+import { GraduationCap, BookOpen, Users, Plus } from 'lucide-react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { examService } from '../services/exams';
 import { userAnswerService } from '../services/userAnswers';
@@ -71,14 +59,6 @@ const subjectData = [
   },
 ];
 
-const performanceData = [
-  { test: 'Test 1', matematik: 85, gjuhaShqipe: 90, anglisht: 78 },
-  { test: 'Test 2', matematik: 78, gjuhaShqipe: 85, anglisht: 82 },
-  { test: 'Test 3', matematik: 92, gjuhaShqipe: 88, anglisht: 76 },
-  { test: 'Test 4', matematik: 75, gjuhaShqipe: 92, anglisht: 85 },
-  { test: 'Test 5', matematik: 88, gjuhaShqipe: 87, anglisht: 89 },
-];
-
 const weeklyActivity = [
   { day: 'Hën', minutes: 45 },
   { day: 'Mar', minutes: 62 },
@@ -89,42 +69,69 @@ const weeklyActivity = [
   { day: 'Die', minutes: 18 },
 ];
 
-const achievements = [
-  {
-    title: 'Fillues i mire',
-    description: 'Përfundoi testin e parë',
-    icon: '🎯',
-    unlocked: true,
-  },
-  {
-    title: 'Seri fitore',
-    description: '5 teste radhaz mbi 80%',
-    icon: '🔥',
-    unlocked: true,
-  },
-  {
-    title: 'Matematikan',
-    description: 'Rezultat perfekt në matematik',
-    icon: '🧮',
-    unlocked: false,
-  },
-  {
-    title: 'Poliglot',
-    description: 'Rezultat i shkëlqyer në gjuhë',
-    icon: '📚',
-    unlocked: false,
-  },
-];
-
 const COLORS = ['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B'];
 
 export function Dashboard({ user }: DashboardProps) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [testsTotal, setTestsTotal] = useState(0);
+  const [testsPassed, setTestsPassed] = useState(0);
+  const [isStatsLoading, setIsStatsLoading] = useState(false);
 
   if (!user) {
     return <Navigate to="/" replace />;
   }
+
+  // Load basic test stats (how many tests taken / passed)
+  useEffect(() => {
+    const loadTestStats = async () => {
+      try {
+        setIsStatsLoading(true);
+        const answers = await userAnswerService.getUserAnswers();
+
+        if (!answers || answers.length === 0) {
+          setTestsTotal(0);
+          setTestsPassed(0);
+          return;
+        }
+
+        // Group answers by exam and compute accuracy for each exam
+        const examsMap = new Map<string, { total: number; correct: number }>();
+
+        answers.forEach((answer) => {
+          const current = examsMap.get(answer.examId) || {
+            total: 0,
+            correct: 0,
+          };
+          current.total += 1;
+          if (answer.isCorrect) {
+            current.correct += 1;
+          }
+          examsMap.set(answer.examId, current);
+        });
+
+        const totalExams = examsMap.size;
+        let passedExams = 0;
+        const PASS_THRESHOLD = 0.5; // 50% accuracy to consider an exam as passed
+
+        examsMap.forEach(({ total, correct }) => {
+          const accuracy = total > 0 ? correct / total : 0;
+          if (accuracy >= PASS_THRESHOLD) {
+            passedExams += 1;
+          }
+        });
+
+        setTestsTotal(totalExams);
+        setTestsPassed(passedExams);
+      } catch (error) {
+        console.error('Failed to load test stats:', error);
+      } finally {
+        setIsStatsLoading(false);
+      }
+    };
+
+    loadTestStats();
+  }, []);
 
   const handleStartRandomTest = async () => {
     try {
@@ -185,36 +192,18 @@ export function Dashboard({ user }: DashboardProps) {
     }
   };
 
-  const overallProgress = Math.round(
-    subjectData.reduce((acc, subject) => acc + subject.progress, 0) /
-      subjectData.length
-  );
-  const totalTestsCompleted = subjectData.reduce(
-    (acc, subject) => acc + subject.testsCompleted,
-    0
-  );
   const totalMinutesThisWeek = weeklyActivity.reduce(
     (acc, day) => acc + day.minutes,
     0
   );
-  const averageScore = Math.round(
-    subjectData.reduce((acc, subject) => acc + subject.lastScore, 0) /
-      subjectData.length
-  );
 
-  const pieData = subjectData.map((subject, index) => ({
-    name: subject.name,
-    value: subject.testsCompleted,
-    color: COLORS[index],
-  }));
+  const passedTestsData = [
+    { name: 'Të kaluara', value: testsPassed },
+    { name: 'Të pakaluara', value: Math.max(testsTotal - testsPassed, 0) },
+  ];
 
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase();
-  };
+  const passRate =
+    testsTotal > 0 ? Math.round((testsPassed / testsTotal) * 100) : 0;
 
   return (
     <div className="p-4 space-y-6 max-w-7xl mx-auto">
@@ -248,21 +237,6 @@ export function Dashboard({ user }: DashboardProps) {
                 </div>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-3xl font-bold">{overallProgress}%</div>
-              <div className="text-blue-100 text-sm">
-                Progres i përgjithshëm
-              </div>
-            </div>
-          </div>
-          <div className="mt-6">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-blue-100">
-                Objektivi juaj për këtë muaj
-              </span>
-              <span className="text-sm">{overallProgress}/85%</span>
-            </div>
-            <Progress value={overallProgress} className="h-3 bg-white/20" />
           </div>
         </CardContent>
 
@@ -290,7 +264,7 @@ export function Dashboard({ user }: DashboardProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Subject Performance */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-3">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <BookOpen className="w-5 h-5" />
@@ -328,94 +302,7 @@ export function Dashboard({ user }: DashboardProps) {
             ))}
           </CardContent>
         </Card>
-
-        {/* Test Distribution */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Shpërndarja e testeve</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-48">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={60}
-                    dataKey="value"
-                    label={({ name, value }) => `${name}: ${value}`}
-                    labelLine={false}
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="mt-4 space-y-2">
-              {pieData.map((entry, index) => (
-                <div
-                  key={entry.name}
-                  className="flex items-center justify-between text-sm"
-                >
-                  <div className="flex items-center space-x-2">
-                    <div
-                      className={`w-3 h-3 rounded-full`}
-                      style={{ backgroundColor: entry.color }}
-                    ></div>
-                    <span>{entry.name}</span>
-                  </div>
-                  <span>{entry.value} teste</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
       </div>
-
-      {/* Performance Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <TrendingUp className="w-5 h-5" />
-            <span>Grafiku i performancës</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={performanceData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="test" />
-                <YAxis domain={[60, 100]} />
-                <Line
-                  type="monotone"
-                  dataKey="matematik"
-                  stroke={COLORS[0]}
-                  strokeWidth={3}
-                  name="Matematika"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="gjuhaShqipe"
-                  stroke={COLORS[1]}
-                  strokeWidth={3}
-                  name="Gjuha Shqipe"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="anglisht"
-                  stroke={COLORS[2]}
-                  strokeWidth={3}
-                  name="Anglisht"
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Weekly Activity */}
@@ -449,41 +336,59 @@ export function Dashboard({ user }: DashboardProps) {
           </CardContent>
         </Card>
 
-        {/* Achievements */}
+        {/* Passed tests chart */}
         <Card>
           <CardHeader>
-            <CardTitle>Arritjet</CardTitle>
+            <CardTitle>Teste të kaluara</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              {achievements.map((achievement, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center space-x-3 p-3 rounded-lg border ${
-                    achievement.unlocked
-                      ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800'
-                      : 'bg-muted/30 border-muted'
-                  }`}
-                >
-                  <div
-                    className={`text-2xl ${achievement.unlocked ? '' : 'grayscale opacity-50'}`}
-                  >
-                    {achievement.icon}
-                  </div>
-                  <div className="flex-1">
-                    <div className="font-medium">{achievement.title}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {achievement.description}
-                    </div>
-                  </div>
-                  {achievement.unlocked && (
-                    <Badge variant="default" className="bg-green-500">
-                      ✓
-                    </Badge>
-                  )}
+            {isStatsLoading ? (
+              <div className="h-48 flex items-center justify-center text-sm text-muted-foreground">
+                Duke ngarkuar statistikat...
+              </div>
+            ) : testsTotal === 0 ? (
+              <div className="h-48 flex items-center justify-center text-sm text-muted-foreground text-center">
+                Nuk ka të dhëna ende. Fillo një test për të parë progresin tënd.
+              </div>
+            ) : (
+              <>
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={passedTestsData}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={40}
+                        outerRadius={70}
+                        paddingAngle={4}
+                      >
+                        {passedTestsData.map((_, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={
+                              index === 0
+                                ? '#10B981' // green for passed
+                                : '#EF4444' // red for not passed
+                            }
+                          />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
-              ))}
-            </div>
+                <div className="mt-4 text-center space-y-1">
+                  <div className="text-lg font-semibold">
+                    {testsPassed}/{testsTotal} teste të kaluara
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Norma e kalimit: {passRate}%
+                  </div>
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>

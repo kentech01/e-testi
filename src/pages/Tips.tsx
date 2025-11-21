@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { TipCard, TipDetail, SubjectTips, StudyResources } from '../components/tips';
+import {
+  TipCard,
+  TipDetail,
+  SubjectTips,
+  StudyResources,
+} from '../components/tips';
 import { Lightbulb, Clock, BookOpen, Brain, Target, Users } from 'lucide-react';
 
 const studyTips = [
@@ -20,7 +25,7 @@ const studyTips = [
       • Planifikoni kohë për teste praktike
     `,
     difficulty: 'E lehtë',
-    timeToRead: '3 min'
+    timeToRead: '3 min',
   },
   {
     id: 2,
@@ -39,7 +44,7 @@ const studyTips = [
       • Mos ndryshoni përgjigjjen nëse nuk jeni të sigurt
     `,
     difficulty: 'Mesatare',
-    timeToRead: '4 min'
+    timeToRead: '4 min',
   },
   {
     id: 3,
@@ -58,7 +63,7 @@ const studyTips = [
       • Shmangni kafenë e tepërt para testeve
     `,
     difficulty: 'E lehtë',
-    timeToRead: '5 min'
+    timeToRead: '5 min',
   },
   {
     id: 4,
@@ -77,7 +82,7 @@ const studyTips = [
       • Përdorni karta studimi (flashcards)
     `,
     difficulty: 'Mesatare',
-    timeToRead: '4 min'
+    timeToRead: '4 min',
   },
   {
     id: 5,
@@ -97,33 +102,83 @@ const studyTips = [
       • Besoni në përgatitjen tuaj
     `,
     difficulty: 'E lehtë',
-    timeToRead: '3 min'
-  }
+    timeToRead: '3 min',
+  },
 ];
 
 const subjectTips = {
   matematik: [
-    'Përdorni formulat e shpejta për llogaritje',
-    'Vizualizoni problemet gjeometrike',
-    'Praktikoni zgjidhjen e ekuacioneve',
-    'Mësoni tabelat e shumëzimit përmendësh'
+    'Përdorni formulat e shpejta për llogaritje.',
+    'Vizualizoni problemet gjeometrike për t’i kuptuar më lehtë.',
+    'Praktikoni zgjidhjen e ekuacioneve çdo ditë.',
+    'Rishikoni gabimet nga testet e mëparshme për të mos i përsëritur.',
   ],
   gjuhaShqipe: [
-    'Lexoni shumë tekste të ndryshme',
-    'Praktikoni shkrimin e eseve',
-    'Mësoni rregullat gramatikore',
-    'Përmirësoni fjalorin tuaj'
+    'Lexoni tekste letrare dhe joletrare për të pasuruar fjalorin.',
+    'Praktikoni shkrimin e eseve duke ndjekur strukturën hyrje–zhvillim–përfundim.',
+    'Rishikoni rregullisht rregullat gramatikore kryesore.',
+    'Nënvizoni fjalët dhe shprehjet e reja dhe përdorini në fjali.',
   ],
   anglisht: [
-    'Dëgjoni anglisht çdo ditë',
-    'Lexoni artikuj në anglisht',
-    'Praktikoni foljen me njerëz të tjerë',
-    'Mësoni fjalët e reja çdo javë'
-  ]
+    'Dëgjoni anglisht çdo ditë (podcast, video, filma me titra).',
+    'Lexoni artikuj të shkurtër dhe përpiquni t’i përmbledhni me fjalët tuaja.',
+    'Praktikoni të folurit me miq ose online, pa u shqetësuar për gabimet.',
+    'Mësoni 5–10 fjalë të reja çdo ditë dhe përsëritini në fund të javës.',
+  ],
+  fizike: [
+    'Mos mësoni formulat përmendësh pa i kuptuar konceptet bazë.',
+    'Vizualizoni eksperimentet dhe situatat fizike me skica të thjeshta.',
+    'Zgjidhni sa më shumë ushtrime me nivele të ndryshme vështirësie.',
+    'Mbani një fletore me formulat kryesore dhe shembuj tipikë.',
+  ],
+  kimi: [
+    'Mësoni tabelën periodike duke u fokusuar te grupet kryesore.',
+    'Përqendrohuni te llojet e reaksioneve kimike dhe shembujt e tyre.',
+    'Praktikoni ushtrime me llogaritje të molëve dhe tretësirave.',
+    'Lidhni konceptet teorike me eksperimente konkrete nga laboratori.',
+  ],
+  biologji: [
+    'Krijoni skema dhe diagrame për sistemet e trupit të njeriut.',
+    'Përdorni ngjyra të ndryshme për të veçuar termat e rëndësishëm.',
+    'Përsëritni rregullisht konceptet bazë si qeliza, ADN, sistemet.',
+    'Pyetni veten “pse” dhe “si” për secilin proces biologjik.',
+  ],
+  histori: [
+    'Krijoni një kronologji me datat dhe ngjarjet më të rëndësishme.',
+    'Lidhni ngjarjet historike me shkaqet dhe pasojat e tyre.',
+    'Përdorni harta për të kuptuar më mirë konfliktet dhe ndryshimet territoriale.',
+    'Praktikoni pyetje ese për temat kryesore të programit.',
+  ],
+  gjeografi: [
+    'Përsëritni hartat fizike dhe politike rregullisht.',
+    'Kuptoni dallimin mes klimave të ndryshme duke i krahasuar.',
+    'Lidhni konceptet gjeografike me shembuj konkretë nga realiteti.',
+    'Përdorni tabela krahasuese për shtete, rajone dhe karakteristikat e tyre.',
+  ],
+  ekonomi: [
+    'Mësoni termat kryesorë ekonomikë me përkufizime të shkurtra.',
+    'Lidhni konceptet teorike me shembuj nga jeta e përditshme.',
+    'Përsëritni grafiqet dhe kuptimin e tyre (oferta–kërkesa, etj.).',
+    'Përgatitni përmbledhje të shkurtëra për secilën temë.',
+  ],
+  informatike: [
+    'Praktikoni zgjidhjen e ushtrimeve në kompjuter, jo vetëm në letër.',
+    'Rishikoni konceptet bazë të algoritmeve dhe strukturave të të dhënave.',
+    'Mësoni sintaksën bazë të gjuhës që përdorni përmes shembujve praktikë.',
+    'Bëni projekte të vogla për të forcuar dijet teorike.',
+  ],
+  lendeProfesionale: [
+    'Lidhni temat profesionale me situata reale nga fusha juaj.',
+    'Mbani shënime të strukturuara gjatë orës dhe përsëritini më pas.',
+    'Kërkoni shembuj praktikë ose ushtrime shtesë nga mësuesi.',
+    'Përgatitni një fletë përmbledhëse për konceptet kyçe para provimit.',
+  ],
 };
 
 export function Tips() {
-  const [selectedTip, setSelectedTip] = useState<typeof studyTips[0] | null>(null);
+  const [selectedTip, setSelectedTip] = useState<(typeof studyTips)[0] | null>(
+    null
+  );
   const [activeTab, setActiveTab] = useState('general');
 
   return (
@@ -135,12 +190,17 @@ export function Tips() {
         <div>
           <h1 className="text-3xl font-bold">Këshilla për studim</h1>
           <p className="text-muted-foreground mt-2">
-            Teknika dhe strategji të provuara për të përmirësuar performancën tuaj
+            Teknika dhe strategji të provuara për të përmirësuar performancën
+            tuaj
           </p>
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="general">Këshilla të përgjithshme</TabsTrigger>
           <TabsTrigger value="subjects">Këshilla për lëndët</TabsTrigger>
@@ -158,16 +218,13 @@ export function Tips() {
               ))}
             </div>
           ) : (
-            <TipDetail
-              tip={selectedTip}
-              onBack={() => setSelectedTip(null)}
-            />
+            <TipDetail tip={selectedTip} onBack={() => setSelectedTip(null)} />
           )}
         </TabsContent>
 
         <TabsContent value="subjects" className="space-y-6">
           <SubjectTips subjectTips={subjectTips} />
-          <StudyResources />
+          {/* <StudyResources /> */}
         </TabsContent>
       </Tabs>
     </div>

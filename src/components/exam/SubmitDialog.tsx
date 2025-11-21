@@ -27,7 +27,7 @@ export function SubmitDialog({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <Card className="max-w-md w-full">
         <CardContent className="p-6">
           <div className="text-center space-y-4">

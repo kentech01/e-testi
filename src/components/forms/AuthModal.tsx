@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useFirebaseAuth } from '../../hooks/useFirebaseAuth';
+import useSectors from '../../hooks/useSectors';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -136,6 +137,21 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   // Use Firebase auth hook
   const { signIn, signUp, signInWithGoogle, loading, token } =
     useFirebaseAuth();
+
+  // Load sectors (grades) from backend
+  const {
+    sectors,
+    loading: sectorsLoading,
+    error: sectorsError,
+    ensureSectorsLoaded,
+  } = useSectors();
+
+  // Ensure sectors are fetched when the modal opens (once per session)
+  useEffect(() => {
+    if (isOpen) {
+      ensureSectorsLoaded();
+    }
+  }, [isOpen, ensureSectorsLoaded]);
 
   // Clear auth error when modal opens or step changes
   useEffect(() => {
@@ -625,50 +641,60 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <Card
-                className={`cursor-pointer transition-all hover:shadow-md ${
-                  formData.grade === '9'
-                    ? 'ring-2 ring-primary bg-primary/5'
-                    : ''
-                }`}
-                onClick={() => handleInputChange('grade', '9')}
-              >
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
-                    <GraduationCap className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <h4>Klasa 9</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Përgatitje për vitin e ardhshëm
-                  </p>
-                  <Badge variant="secondary" className="mt-2">
-                    Bazë
-                  </Badge>
-                </CardContent>
-              </Card>
+            {sectorsError && (
+              <p className="text-sm text-red-500 text-center">
+                Nuk mundëm të ngarkojmë klasat. Provo përsëri më vonë.
+              </p>
+            )}
 
-              <Card
-                className={`cursor-pointer transition-all hover:shadow-md ${
-                  formData.grade === '12'
-                    ? 'ring-2 ring-primary bg-primary/5'
-                    : ''
-                }`}
-                onClick={() => handleInputChange('grade', '12')}
-              >
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
-                    <GraduationCap className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <h4>Klasa 12</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Përgatitje për maturë
-                  </p>
-                  <Badge variant="secondary" className="mt-2">
-                    Avancuar
-                  </Badge>
-                </CardContent>
-              </Card>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {sectorsLoading && sectors.length === 0 && (
+                <div className="col-span-2 text-center text-sm text-muted-foreground">
+                  Duke ngarkuar klasat...
+                </div>
+              )}
+
+              {sectors
+                .filter((s) => s.isActive)
+                .map((sector, index) => {
+                  const isSelected = formData.grade === sector.id;
+                  const title = sector.displayName || sector.name;
+                  const has12 = /12/.test(title);
+                  const badgeText = has12 ? 'Avancuar' : 'Bazë';
+                  const iconBg =
+                    index % 2 === 0 ? 'bg-blue-100' : 'bg-purple-100';
+                  const iconColor =
+                    index % 2 === 0 ? 'text-blue-600' : 'text-purple-600';
+
+                  return (
+                    <Card
+                      key={sector.id}
+                      className={`cursor-pointer transition-all hover:shadow-md ${
+                        isSelected ? 'ring-2 ring-primary bg-primary/5' : ''
+                      }`}
+                      onClick={() => handleInputChange('grade', sector.id)}
+                    >
+                      <CardContent className="p-6 text-center">
+                        <div
+                          className={`w-12 h-12 ${iconBg} rounded-lg mx-auto mb-3 flex items-center justify-center`}
+                        >
+                          <GraduationCap
+                            className={`w-6 h-6 ${iconColor}`}
+                          />
+                        </div>
+                        <h4>{title}</h4>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {has12
+                            ? 'Përgatitje për maturë'
+                            : 'Përgatitje për vitin e ardhshëm'}
+                        </p>
+                        <Badge variant="secondary" className="mt-2">
+                          {badgeText}
+                        </Badge>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
             </div>
 
             <div className="flex space-x-2">

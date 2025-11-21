@@ -57,6 +57,12 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    // Some Firebase packages can cause issues with Vite's dep optimizer
+    // (missing pre-bundled chunks like chunk-*.js). Exclude them so they
+    // are loaded directly instead of being pre-bundled.
+    exclude: ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage'],
+  },
   build: {
     target: 'esnext',
     outDir: 'dist',

@@ -69,16 +69,19 @@ export function TestTaking({
   const [selectedOptions, setSelectedOptions] = useState<Set<string>>(
     new Set()
   ); // Multiple selected options for current question
-  const [timeLeft, setTimeLeft] = useState(7200); // 2 hours in seconds - will be initialized from localStorage
+  const [timeLeft, setTimeLeft] = useState(9000); // 2 hours 30 minutes in seconds - will be initialized from localStorage
   const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(
     new Set()
   );
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submittingAnswer, setSubmittingAnswer] = useState(false); // Track answer submission
+  const [autoSubmitActive, setAutoSubmitActive] = useState(false); // Auto-submit countdown after time ends
+  const [autoSubmitCountdown, setAutoSubmitCountdown] = useState(10); // 10 second countdown
   const questionTimeSpent = useRef<Map<string, number>>(new Map()); // Track time spent per question
   const questionStartTime = useRef<number>(Date.now());
   const timerInitialized = useRef<boolean>(false);
+  const autoSubmitStarted = useRef<boolean>(false);
 
   // Get current question object
   const currentQuestion = questions.find((q) => q.id === currentQuestionId);
@@ -141,10 +144,10 @@ export function TestTaking({
         `exam_timer_${examId}`,
         JSON.stringify({
           startTime: Date.now(),
-          initialTime: 7200, // 2 hours
+          initialTime: 9000, // 2 hours 30 minutes
         })
       );
-      setTimeLeft(7200);
+      setTimeLeft(9000);
     }
     timerInitialized.current = true;
   }, [exam, loading, examId]);
@@ -170,8 +173,11 @@ export function TestTaking({
           }
         }
 
-        if (newTime === 0) {
-          handleFinalSubmit();
+        if (newTime === 0 && !autoSubmitStarted.current) {
+          // Time is up: start auto-submit countdown (10 seconds)
+          autoSubmitStarted.current = true;
+          setAutoSubmitCountdown(10);
+          setAutoSubmitActive(true);
         }
 
         return newTime;
@@ -180,6 +186,26 @@ export function TestTaking({
 
     return () => clearInterval(timer);
   }, [exam, loading, examId]);
+
+  // Auto-submit countdown effect: when time is up, give user 10 seconds before final submit
+  useEffect(() => {
+    if (!autoSubmitActive) return;
+
+    const interval = setInterval(() => {
+      setAutoSubmitCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setAutoSubmitActive(false);
+          // Trigger final submit once countdown finishes
+          handleFinalSubmit();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [autoSubmitActive]);
 
   const fetchExamData = async () => {
     try {
@@ -693,7 +719,7 @@ export function TestTaking({
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2 text-sm">
               <Clock className="w-4 h-4" />
-              <span className={timeLeft < 600 ? 'text-red-500' : ''}>
+              <span className={timeLeft <= 1800 ? 'text-red-500' : ''}>
                 {formatTime(timeLeft)}
               </span>
             </div>
@@ -873,7 +899,7 @@ export function TestTaking({
 
       {/* Submit Confirmation Modal */}
       {showSubmitConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <Card className="max-w-md w-full">
             <CardContent className="p-6">
               <div className="text-center space-y-4">
@@ -905,6 +931,30 @@ export function TestTaking({
                     {submitting ? 'Duke dërguar...' : 'Perfundo testin'}
                   </Button>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Auto-submit countdown modal when time is up */}
+      {autoSubmitActive && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <Card className="max-w-md w-full">
+            <CardContent className="p-6">
+              <div className="text-center space-y-4">
+                <h3>Koha e testit ka përfunduar</h3>
+                <p className="text-sm text-muted-foreground">
+                  Ky test do të përfundohet automatikisht pas{' '}
+                  <span className="font-semibold">
+                    {autoSubmitCountdown} sekondash
+                  </span>
+                  .
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Ju lutem mos mbyllni këtë dritare derisa dërgimi të
+                  përfundojë.
+                </p>
               </div>
             </CardContent>
           </Card>
