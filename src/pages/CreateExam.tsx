@@ -36,11 +36,7 @@ import { storageService } from '../lib/firebase';
 import type { Exam } from '../services/exams';
 import type { Question as ServiceQuestion } from '../services/questions';
 import useSectors from '../hooks/useSectors';
-import {
-  getGradeRangeFromSector,
-  getSubjectsForGradeRange,
-  type Subject,
-} from '../data/subjects';
+import useSubjects from '../hooks/useSubjects';
 
 interface AnswerOption {
   id: string;
@@ -82,6 +78,21 @@ export function CreateExam() {
     loading: loadingSectors,
     ensureSectorsLoaded,
   } = useSectors();
+  const {
+    subjects: fetchedSubjects,
+    loading: loadingSubjects,
+    error: subjectsError,
+  } = useSubjects(sectorId || null);
+
+  // Debug: Log subjects when they change
+  useEffect(() => {
+    if (fetchedSubjects && fetchedSubjects.length > 0) {
+      console.log('Fetched subjects:', fetchedSubjects);
+    }
+    if (subjectsError) {
+      console.error('Subjects error:', subjectsError);
+    }
+  }, [fetchedSubjects, subjectsError]);
   const [createdQuestionIds, setCreatedQuestionIds] = useState<Set<number>>(
     new Set()
   );
@@ -258,6 +269,24 @@ export function CreateExam() {
             (q) => q.orderNumber === localId
           );
           if (dbQuestion) {
+            // Extract subjectId from subject object or use subjectId field directly
+            let subjectId = '';
+            if ((dbQuestion as any).subjectId) {
+              // Use subjectId if available
+              subjectId = String((dbQuestion as any).subjectId);
+            } else if (dbQuestion.subject) {
+              // If subject is an object, extract the id
+              if (
+                typeof dbQuestion.subject === 'object' &&
+                dbQuestion.subject !== null
+              ) {
+                subjectId = (dbQuestion.subject as any).id || '';
+              } else if (typeof dbQuestion.subject === 'string') {
+                // If it's a string, use it directly (for backward compatibility)
+                subjectId = dbQuestion.subject.trim();
+              }
+            }
+
             updatedQuestions.push({
               id: localId,
               title: dbQuestion.text,
@@ -270,7 +299,7 @@ export function CreateExam() {
                 })) || [],
               imageUrl: dbQuestion.imageUrl,
               imageFile: null,
-              subject: dbQuestion.subject?.trim(),
+              subject: subjectId,
             });
           } else {
             // Keep existing question structure
@@ -370,16 +399,19 @@ export function CreateExam() {
 
   const currentQuestion = questions[currentQuestionIndex];
 
-  // Get available subjects based on selected sector
+  // Get available subjects from API based on selected sector
   const availableSubjects = useMemo(() => {
-    if (!sectorId) return [];
-    const selectedSector = sectors.find((s) => s.id === sectorId);
-    if (!selectedSector) return [];
-    const gradeRange = getGradeRangeFromSector(
-      selectedSector.displayName || selectedSector.name
-    );
-    return getSubjectsForGradeRange(gradeRange);
-  }, [sectorId, sectors]);
+    if (!sectorId || !fetchedSubjects || fetchedSubjects.length === 0)
+      return [];
+    // Transform API subjects to match SubjectOption format (label/value)
+    // Use subject.id as the value since that's the subjectId we need to send
+    return fetchedSubjects
+      .filter((subject) => subject.id && (subject.label || subject.name))
+      .map((subject) => ({
+        label: subject.label || subject.name || '',
+        value: subject.id, // Use id as the value (this will be sent as subjectId)
+      }));
+  }, [sectorId, fetchedSubjects]);
 
   // Map currentQuestion.subject (which may be an old label or value)
   // to the canonical subject value used by the Select options.
@@ -393,21 +425,20 @@ export function CreateExam() {
     const subjRaw = currentQuestion?.subject;
     if (!subjRaw) return undefined;
 
-    const subj = subjRaw.trim();
+    // Ensure subject is a string (should be the subjectId UUID)
+    const subj = typeof subjRaw === 'string' ? subjRaw.trim() : String(subjRaw);
     if (!subj) return undefined;
-    const normalized = subj.toLowerCase();
 
-    // 1) Match by value (case-insensitive, trimmed)
-    const byValue = availableSubjects.find(
-      (s) => s.value.trim().toLowerCase() === normalized
-    );
+    // Match by value (subjectId UUID) - exact match since UUIDs are case-sensitive
+    const byValue = availableSubjects.find((s) => s.value === subj);
     if (byValue) return byValue.value;
 
-    // 2) Match by label (for older data stored as label text)
-    const byLabel = availableSubjects.find(
-      (s) => s.label.trim().toLowerCase() === normalized
+    // Fallback: Try case-insensitive match (for backward compatibility with old data)
+    const normalized = subj.toLowerCase();
+    const byValueCaseInsensitive = availableSubjects.find(
+      (s) => s.value.toLowerCase() === normalized
     );
-    if (byLabel) return byLabel.value;
+    if (byValueCaseInsensitive) return byValueCaseInsensitive.value;
 
     // 3) No matching subject in the available list – treat as unset so
     // the placeholder is shown instead of a blank value.
@@ -568,7 +599,7 @@ export function CreateExam() {
     const newErrors: typeof errors = {};
     if (!q.title.trim())
       newErrors.questionTitle = `Question ${q.id} title is required.`;
-    if (!q.subject || !q.subject.trim())
+    if (!q.subject || (typeof q.subject === 'string' && !q.subject.trim()))
       newErrors.questionSubject = `Question ${q.id} subject is required.`;
     if (!q.answerOptions.some((o) => o.isCorrect))
       newErrors.questionOptions = 'At least one option must be marked correct.';
@@ -581,7 +612,8 @@ export function CreateExam() {
     const q = currentQuestion;
     if (!q) return false;
     const hasTitleError = !q.title.trim();
-    const hasSubjectError = !q.subject || !q.subject.trim();
+    const hasSubjectError =
+      !q.subject || (typeof q.subject === 'string' && !q.subject.trim());
     const hasOptionsError = !q.answerOptions.some((o) => o.isCorrect);
     return hasTitleError || hasSubjectError || hasOptionsError;
   }, [currentQuestion]);
@@ -611,7 +643,23 @@ export function CreateExam() {
     // Check if question fields changed
     if (q.title !== (cachedQuestion.text || '')) return true;
     if (q.description !== (cachedQuestion.description || '')) return true;
-    if (q.subject !== (cachedQuestion.subject || '')) return true;
+    // Compare subjectId - extract from cached question if it's an object
+    const cachedSubjectId = (() => {
+      if ((cachedQuestion as any).subjectId) {
+        return String((cachedQuestion as any).subjectId);
+      } else if (cachedQuestion.subject) {
+        if (
+          typeof cachedQuestion.subject === 'object' &&
+          cachedQuestion.subject !== null
+        ) {
+          return (cachedQuestion.subject as any).id || '';
+        } else if (typeof cachedQuestion.subject === 'string') {
+          return cachedQuestion.subject.trim();
+        }
+      }
+      return '';
+    })();
+    if (q.subject !== cachedSubjectId) return true;
     if (!!q.imageFile) return true; // New image file selected
     if (q.imageUrl !== cachedQuestion.imageUrl) return true;
 
@@ -727,7 +775,7 @@ export function CreateExam() {
         text: q.title,
         imageUrl,
         examId: ensuredExamId!,
-        subject: q.subject || 'general',
+        subjectId: q.subject || undefined, // Send subjectId only if selected (which is the id from selected subject)
         orderNumber: q.id,
         points: 1,
         isActive: true,
@@ -868,13 +916,13 @@ export function CreateExam() {
       const currentQuestion = questionsRef.current.find(
         (q) => q.id === localId
       );
-      const questionSubject = currentQuestion?.subject || 'general';
+      const questionSubject = currentQuestion?.subject;
 
       const created = await questionsService.createQuestion({
         text: '',
         imageUrl: undefined,
         examId: examId,
-        subject: questionSubject,
+        subjectId: questionSubject || undefined, // Send subjectId only if selected (which is the id from selected subject)
         orderNumber: localId,
         points: 1,
         isActive: true,
@@ -991,8 +1039,39 @@ export function CreateExam() {
 
       // If nothing changed, just navigate without saving
       if (!questionChanged && !examChanged) {
+        // Check if next question exists in our state (might have been loaded from DB)
+        const nextQuestion = questionsRef.current[nextIndex];
+        const nextQuestionHasData =
+          nextQuestion &&
+          (nextQuestion.title ||
+            nextQuestion.description ||
+            nextQuestion.answerOptions.some((opt) => opt.text) ||
+            nextQuestion.imageUrl);
+
         // If next question does not exist yet, check if we can create it
         let nextDbId = questionIdMapRef.current.get(nextQuestionLocalId);
+
+        // If we don't have a dbId but the question has data, it means it was loaded from DB
+        // but the map wasn't updated. Try to find it in the cache.
+        if (!nextDbId && nextQuestionHasData && examId) {
+          const currentCache = examCacheRef.current;
+          const cachedQuestions = currentCache.questions.get(examId);
+          if (cachedQuestions) {
+            const cachedQuestion = cachedQuestions.find(
+              (q) => q.orderNumber === nextQuestionLocalId
+            );
+            if (cachedQuestion && cachedQuestion.id) {
+              nextDbId = cachedQuestion.id;
+              // Update the map so we don't have to look it up again
+              setQuestionIdMap((prev) => {
+                const newMap = new Map(prev);
+                newMap.set(nextQuestionLocalId, nextDbId!);
+                return newMap;
+              });
+            }
+          }
+        }
+
         if (!nextDbId) {
           // Check if all 100 questions are already created
           if (currentCreatedIds.size >= TOTAL_QUESTIONS) {
@@ -1030,6 +1109,21 @@ export function CreateExam() {
               (q) => q.orderNumber === nextQuestionLocalId
             );
             if (cachedQuestion) {
+              // Extract subjectId from cached question
+              let subjectId = '';
+              if ((cachedQuestion as any).subjectId) {
+                subjectId = String((cachedQuestion as any).subjectId);
+              } else if (cachedQuestion.subject) {
+                if (
+                  typeof cachedQuestion.subject === 'object' &&
+                  cachedQuestion.subject !== null
+                ) {
+                  subjectId = (cachedQuestion.subject as any).id || '';
+                } else if (typeof cachedQuestion.subject === 'string') {
+                  subjectId = cachedQuestion.subject.trim();
+                }
+              }
+
               // Update local state with cached question data
               setQuestions((prev) =>
                 prev.map((question, index) => {
@@ -1038,7 +1132,7 @@ export function CreateExam() {
                       ...question,
                       title: cachedQuestion.text || '',
                       description: cachedQuestion.description || '',
-                      subject: cachedQuestion.subject?.trim(),
+                      subject: subjectId,
                       answerOptions:
                         cachedQuestion.options?.map((opt, idx) => ({
                           id: `${nextQuestionLocalId}-${idx + 1}`,
@@ -1067,8 +1161,39 @@ export function CreateExam() {
         const result = await persistCurrentQuestion();
         if (result.success) {
           setErrors({});
+          // Check if next question exists in our state (might have been loaded from DB)
+          const nextQuestion = questionsRef.current[nextIndex];
+          const nextQuestionHasData =
+            nextQuestion &&
+            (nextQuestion.title ||
+              nextQuestion.description ||
+              nextQuestion.answerOptions.some((opt) => opt.text) ||
+              nextQuestion.imageUrl);
+
           // If next question does not exist yet, check if we can create it
           let nextDbId = questionIdMapRef.current.get(nextQuestionLocalId);
+
+          // If we don't have a dbId but the question has data, it means it was loaded from DB
+          // but the map wasn't updated. Try to find it in the cache.
+          if (!nextDbId && nextQuestionHasData && examId) {
+            const currentCache = examCacheRef.current;
+            const cachedQuestions = currentCache.questions.get(examId);
+            if (cachedQuestions) {
+              const cachedQuestion = cachedQuestions.find(
+                (q) => q.orderNumber === nextQuestionLocalId
+              );
+              if (cachedQuestion && cachedQuestion.id) {
+                nextDbId = cachedQuestion.id;
+                // Update the map so we don't have to look it up again
+                setQuestionIdMap((prev) => {
+                  const newMap = new Map(prev);
+                  newMap.set(nextQuestionLocalId, nextDbId!);
+                  return newMap;
+                });
+              }
+            }
+          }
+
           if (!nextDbId) {
             // Check if all 100 questions are already created
             const currentCreatedIds = createdQuestionIdsRef.current;
@@ -1100,7 +1225,23 @@ export function CreateExam() {
                         ...question,
                         title: cachedQuestion.text || '',
                         description: cachedQuestion.description || '',
-                        subject: cachedQuestion.subject?.trim(),
+                        subject: (() => {
+                          if ((cachedQuestion as any).subjectId) {
+                            return String((cachedQuestion as any).subjectId);
+                          } else if (cachedQuestion.subject) {
+                            if (
+                              typeof cachedQuestion.subject === 'object' &&
+                              cachedQuestion.subject !== null
+                            ) {
+                              return (cachedQuestion.subject as any).id || '';
+                            } else if (
+                              typeof cachedQuestion.subject === 'string'
+                            ) {
+                              return cachedQuestion.subject.trim();
+                            }
+                          }
+                          return '';
+                        })(),
                         answerOptions:
                           cachedQuestion.options?.map((opt, idx) => ({
                             id: `${nextQuestionLocalId}-${idx + 1}`,
@@ -1189,7 +1330,10 @@ export function CreateExam() {
                     ...question,
                     title: cachedQuestion.text || '',
                     description: cachedQuestion.description || '',
-                    subject: cachedQuestion.subject?.trim(),
+                    subject:
+                      typeof cachedQuestion.subject === 'string'
+                        ? cachedQuestion.subject.trim()
+                        : cachedQuestion.subject || '',
                     answerOptions:
                       cachedQuestion.options?.map((opt, idx) => ({
                         id: `${prevQuestionLocalId}-${idx + 1}`,
@@ -1442,22 +1586,46 @@ export function CreateExam() {
                 value={selectedSubjectValue}
                 onValueChange={handleQuestionSubjectChange}
                 disabled={
-                  isSubmitting || !sectorId || availableSubjects.length === 0
+                  isSubmitting ||
+                  !sectorId ||
+                  loadingSubjects ||
+                  availableSubjects.length === 0
                 }
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a subject..." />
+                  <SelectValue
+                    placeholder={
+                      loadingSubjects
+                        ? 'Loading subjects...'
+                        : 'Select a subject...'
+                    }
+                  />
                 </SelectTrigger>
-                {availableSubjects.length > 0 && (
-                  <SelectContent>
-                    {availableSubjects.map((subject) => (
+                <SelectContent>
+                  {loadingSubjects ? (
+                    <div className="p-2 text-sm text-muted-foreground">
+                      Loading subjects...
+                    </div>
+                  ) : availableSubjects.length > 0 ? (
+                    availableSubjects.map((subject) => (
                       <SelectItem key={subject.value} value={subject.value}>
                         {subject.label}
                       </SelectItem>
-                    ))}
-                  </SelectContent>
-                )}
+                    ))
+                  ) : (
+                    <div className="p-2 text-sm text-muted-foreground">
+                      {sectorId
+                        ? 'No subjects available'
+                        : 'Please select a sector first'}
+                    </div>
+                  )}
+                </SelectContent>
               </Select>
+              {subjectsError && (
+                <p className="mt-1 text-sm text-red-600">
+                  Error loading subjects: {subjectsError}
+                </p>
+              )}
               {errors.questionSubject && (
                 <p className="mt-1 text-sm text-red-600">
                   {errors.questionSubject}

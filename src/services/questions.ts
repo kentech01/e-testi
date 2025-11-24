@@ -42,7 +42,7 @@ export interface CreateQuestionRequest {
   text: string;
   imageUrl?: string;
   examId: string;
-  subject: string;
+  subjectId?: string; // Subject ID from the subjects API (optional for placeholder questions)
   examPart?: string;
   parentId?: string;
   displayText?: string;
