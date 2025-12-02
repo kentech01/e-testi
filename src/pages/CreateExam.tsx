@@ -75,6 +75,14 @@ export function CreateExam() {
   const [examId, setExamId] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const modules = {
+    toolbar: [
+      ["bold", "italic", "underline"], // keep only bold and italic
+      [{ header: [1, 2, 3, false] }], // headers
+      [{ list: "ordered" }, { list: "bullet" }], // lists
+      ["clean"], // remove formatting button
+    ],
+  };
   const {
     sectors,
     loading: loadingSectors,
@@ -1572,7 +1580,7 @@ export function CreateExam() {
               </label>
               
               <ReactQuill theme="snow" value={currentQuestion.description} onChange={(content)=>
-               handleQuestionDescriptionChange(content)} />
+               handleQuestionDescriptionChange(content)} modules={modules} />
 
             </div>
 

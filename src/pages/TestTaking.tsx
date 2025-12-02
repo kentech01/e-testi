@@ -187,6 +187,7 @@ export function TestTaking({
 
     return () => clearInterval(timer);
   }, [exam, loading, examId]);
+   
 
   // Auto-submit countdown effect: when time is up, give user 10 seconds before final submit
   useEffect(() => {
