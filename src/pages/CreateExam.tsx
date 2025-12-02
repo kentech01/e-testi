@@ -5,8 +5,8 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { examCacheAtom } from '../store/atoms/createExamAtom';
@@ -1444,6 +1444,8 @@ export function CreateExam() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Exam Description <span className="text-red-500">*</span>
             </label>
+            
+            
             <Textarea
               placeholder="Enter exam description..."
               value={examDescription}
@@ -1568,21 +1570,10 @@ export function CreateExam() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Description (Optional)
               </label>
-              <CKEditor
-                editor={ClassicEditor as any}
-                config={{
-                  removePlugins: [
-                    'ImageUpload',
-                    'MediaEmbed',
-                    'EasyImage',
-                    'ImageToolbar',
-                  ],
-                }}
-                data={currentQuestion.description}
-                onChange={(e, editor) => handleQuestionDescriptionChange(editor.getData())}
-                disabled={isSubmitting}
-              />
               
+              <ReactQuill theme="snow" value={currentQuestion.description} onChange={(content)=>
+               handleQuestionDescriptionChange(content)} />
+
             </div>
 
             {/* Subject Selection */}

@@ -769,9 +769,9 @@ export function TestTaking({
               <div>
                 <div className="text-lg">{currentQuestion.text}</div>
                 {currentQuestion?.description && (
-                  <p className="text-sm text-muted-foreground mt-2">
+                  <div className='[&>ul]:list-disc [&>ol]:list-decimal'>
                     {parse(currentQuestion.description)}
-                  </p>
+                  </div>
                 )}
               </div>
               {currentQuestion.imageUrl && (
