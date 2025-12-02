@@ -5,6 +5,8 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { examCacheAtom } from '../store/atoms/createExamAtom';
@@ -1566,15 +1568,21 @@ export function CreateExam() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Description (Optional)
               </label>
-              <Textarea
-                placeholder="Add additional context or instructions for this question..."
-                value={currentQuestion.description}
-                onChange={(e) =>
-                  handleQuestionDescriptionChange(e.target.value)
-                }
-                className="w-full min-h-[100px]"
+              <CKEditor
+                editor={ClassicEditor as any}
+                config={{
+                  removePlugins: [
+                    'ImageUpload',
+                    'MediaEmbed',
+                    'EasyImage',
+                    'ImageToolbar',
+                  ],
+                }}
+                data={currentQuestion.description}
+                onChange={(e, editor) => handleQuestionDescriptionChange(editor.getData())}
                 disabled={isSubmitting}
               />
+              
             </div>
 
             {/* Subject Selection */}

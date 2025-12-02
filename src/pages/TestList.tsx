@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import parse from "html-react-parser";
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
@@ -495,9 +496,9 @@ export function TestList({
                 <div>
                   <h3>{selectedTest.title}</h3>
                   {selectedTest.exam.description && (
-                    <p className="text-sm text-muted-foreground mt-2">
-                      {selectedTest.exam.description}
-                    </p>
+                    <div className="text-sm text-muted-foreground mt-2">
+                      {parse(selectedTest.exam.description)}
+                    </div>
                   )}
                   <p className="text-sm text-muted-foreground mt-2">
                     {selectedTest.completed

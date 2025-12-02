@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import parse from "html-react-parser";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -769,7 +770,7 @@ export function TestTaking({
                 <div className="text-lg">{currentQuestion.text}</div>
                 {currentQuestion?.description && (
                   <p className="text-sm text-muted-foreground mt-2">
-                    {currentQuestion.description}
+                    {parse(currentQuestion.description)}
                   </p>
                 )}
               </div>

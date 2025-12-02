@@ -249,3 +249,6 @@ html {
 .chart-purple {
   color: #8b5cf6;
 }
+.ck-editor__editable{
+  min-height: 200px;
+}
