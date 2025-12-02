@@ -249,3 +249,6 @@ html {
 .chart-purple {
   color: #8b5cf6;
 }
+.ql-editor {
+  min-height: 200px;
+}

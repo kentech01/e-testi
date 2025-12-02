@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import parse from "html-react-parser";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -186,6 +187,7 @@ export function TestTaking({
 
     return () => clearInterval(timer);
   }, [exam, loading, examId]);
+   
 
   // Auto-submit countdown effect: when time is up, give user 10 seconds before final submit
   useEffect(() => {
@@ -768,9 +770,9 @@ export function TestTaking({
               <div>
                 <div className="text-lg">{currentQuestion.text}</div>
                 {currentQuestion?.description && (
-                  <p className="text-sm text-muted-foreground mt-2">
-                    {currentQuestion.description}
-                  </p>
+                  <div className='[&>ul]:list-disc [&>ol]:list-decimal'>
+                    {parse(currentQuestion.description)}
+                  </div>
                 )}
               </div>
               {currentQuestion.imageUrl && (

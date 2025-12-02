@@ -5,6 +5,8 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { examCacheAtom } from '../store/atoms/createExamAtom';
@@ -73,6 +75,14 @@ export function CreateExam() {
   const [examId, setExamId] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const modules = {
+    toolbar: [
+      ["bold", "italic", "underline"], // keep only bold and italic
+      [{ header: [1, 2, 3, false] }], // headers
+      [{ list: "ordered" }, { list: "bullet" }], // lists
+      ["clean"], // remove formatting button
+    ],
+  };
   const {
     sectors,
     loading: loadingSectors,
@@ -1442,6 +1452,8 @@ export function CreateExam() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Exam Description <span className="text-red-500">*</span>
             </label>
+            
+            
             <Textarea
               placeholder="Enter exam description..."
               value={examDescription}
@@ -1566,15 +1578,10 @@ export function CreateExam() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Description (Optional)
               </label>
-              <Textarea
-                placeholder="Add additional context or instructions for this question..."
-                value={currentQuestion.description}
-                onChange={(e) =>
-                  handleQuestionDescriptionChange(e.target.value)
-                }
-                className="w-full min-h-[100px]"
-                disabled={isSubmitting}
-              />
+              
+              <ReactQuill theme="snow" value={currentQuestion.description} onChange={(content)=>
+               handleQuestionDescriptionChange(content)} modules={modules} />
+
             </div>
 
             {/* Subject Selection */}
