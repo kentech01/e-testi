@@ -794,7 +794,7 @@ export function TestTaking({
                   .map((option) => (
                     <div
                       key={option.id}
-                      className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/50"
+                      className="flex items-center space-x-3 px-3 border rounded-lg hover:bg-muted/50"
                     >
                       <Checkbox
                         id={`option-${option.id}`}
@@ -803,7 +803,7 @@ export function TestTaking({
                       />
                       <Label
                         htmlFor={`option-${option.id}`}
-                        className="flex-1 cursor-pointer"
+                        className="flex-1 cursor-pointer py-3"
                       >
                         {option.optionLetter}. {option.text}
                       </Label>
