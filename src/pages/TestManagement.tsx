@@ -64,8 +64,9 @@ export function TestManagement() {
 
   const handleEditExam = async (examId: string) => {    
     const fetchedExam = await examService.getExamById(examId);
-    const questionUrl = fetchedExam.questions![0].id;
-  navigate(`/test-management/edit/${examId}/${questionUrl}`);
+    const firstQuestion = fetchedExam.questions!.find(obj => obj.orderNumber === 1);
+    
+  navigate(`/test-management/edit/${examId}/${firstQuestion!.id}`);
     
   };
 
