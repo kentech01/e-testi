@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { examCacheAtom } from '../store/atoms/createExamAtom';
 import { Button } from '../ui/button';
@@ -61,6 +61,8 @@ const TOTAL_QUESTIONS = 100;
 export function CreateExam() {
   const navigate = useNavigate();
   const params = useParams<{ examId?: string; questionId?: string }>();
+  const location = useLocation();
+const isEdit = location.pathname.includes("/edit");
 
   // Recoil cache state
   const [examCache, setExamCache] = useRecoilState(examCacheAtom);
@@ -153,20 +155,7 @@ export function CreateExam() {
   }, [sectors, sectorId]);
 
   // Clear subject when sector changes (but not on initial load)
-  useEffect(() => {
-    if (
-      sectorId &&
-      previousSectorIdRef.current &&
-      previousSectorIdRef.current !== sectorId
-    ) {
-      // Clear subject for all questions when sector changes
-      setQuestions((prev) => prev.map((q) => ({ ...q, subject: undefined })));
-    }
-    // Update the ref after checking
-    if (sectorId) {
-      previousSectorIdRef.current = sectorId;
-    }
-  }, [sectorId]);
+
 
   // Track which examId we've initialized for to prevent effect from resetting navigation
   const initializedExamIdRef = useRef<string | null>(null);
@@ -182,7 +171,6 @@ export function CreateExam() {
     questionsRef.current = questions;
   }, [questions]);
 
-  console.log('questions', questions);
 
   // Refs to access Set/Map without causing re-renders in callbacks
   const createdQuestionIdsRef = useRef(createdQuestionIds);
@@ -218,7 +206,6 @@ export function CreateExam() {
       return;
     }
 
-    console.log('examCache', examCache);
 
     const fetchExamData = async () => {
       // Mark as processing immediately to prevent concurrent runs
@@ -249,6 +236,8 @@ export function CreateExam() {
           fetchedExam = await examService.getExamById(examIdToFetch);
           fetchedQuestions =
             await questionsService.getQuestionsByExam(examIdToFetch);
+            
+            
 
           // Cache the fetched data
           setExamCache((prev) => ({
@@ -329,13 +318,15 @@ export function CreateExam() {
             });
           }
         }
-
+        
         // Batch all state updates together - only on initial load
         setExamTitle(fetchedExam.title);
         setExamDescription(fetchedExam.description || '');
         setSectorId(fetchedExam.sectorId);
         setPassingScoreText(String(fetchedExam.passingScore));
         setQuestions(updatedQuestions);
+        
+        
         setCreatedQuestionIds(newCreatedIds);
         setQuestionIdMap(newIdMap);
 
@@ -381,6 +372,7 @@ export function CreateExam() {
               (q) => q.orderNumber === maxOrderNumber
             );
             const targetIndex = maxOrderNumber - 1;
+            
             const safeIndex = Math.min(targetIndex, TOTAL_QUESTIONS - 1);
             setCurrentQuestionIndex(safeIndex);
             if (lastQuestion?.id) {
@@ -408,6 +400,9 @@ export function CreateExam() {
   }, [params.examId]);
 
   const currentQuestion = questions[currentQuestionIndex];
+  
+  
+  
 
   // Get available subjects from API based on selected sector
   const availableSubjects = useMemo(() => {
@@ -433,11 +428,14 @@ export function CreateExam() {
     }
 
     const subjRaw = currentQuestion?.subject;
+    
     if (!subjRaw) return undefined;
+
 
     // Ensure subject is a string (should be the subjectId UUID)
     const subj = typeof subjRaw === 'string' ? subjRaw.trim() : String(subjRaw);
     if (!subj) return undefined;
+
 
     // Match by value (subjectId UUID) - exact match since UUIDs are case-sensitive
     const byValue = availableSubjects.find((s) => s.value === subj);
@@ -454,7 +452,7 @@ export function CreateExam() {
     // the placeholder is shown instead of a blank value.
     return undefined;
   }, [currentQuestion?.subject, availableSubjects, sectorId]);
-
+  
   // Memoized local preview URL for selected (not yet uploaded) image
   const imageObjectUrl = useMemo(() => {
     return currentQuestion?.imageFile
@@ -1290,7 +1288,22 @@ export function CreateExam() {
     hasQuestionChanged,
     hasExamChanged,
   ]);
+  const changeSectorIdDropdown=(value: string)=>{
 
+    setSectorId(value);
+    if (
+      sectorId &&
+      previousSectorIdRef.current &&
+      previousSectorIdRef.current !== sectorId
+    ) {
+      // Clear subject for all questions when sector changes
+      setQuestions((prev) => prev.map((q) => ({ ...q, subject: undefined })));
+    }
+    // Update the ref after checking
+    if (sectorId) {
+      previousSectorIdRef.current = sectorId;
+    }
+  }
   const handlePrevious = useCallback(() => {
     if (currentQuestionIndex > 0) {
       const prevIndex = currentQuestionIndex - 1;
@@ -1419,10 +1432,9 @@ export function CreateExam() {
           Back to Exams
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900">Create New Exam</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{isEdit? "Edit The Exam" : "Create New Exam"}</h1>
           <p className="text-gray-600 mt-1">
-            Create an exam with 100 questions. Complete all questions to save
-            the exam.
+            {isEdit? "Edit and update the exam questions. Make sure all changes are completed before saving":"Create an exam with 100 questions. Complete all questions to save the exam."}
           </p>
         </div>
       </div>
@@ -1475,7 +1487,7 @@ export function CreateExam() {
               <select
                 className="w-full border rounded-md h-10 px-3"
                 value={sectorId}
-                onChange={(e) => setSectorId(e.target.value)}
+                onChange={(e) => changeSectorIdDropdown(e.target.value)}
                 disabled={loadingSectors}
               >
                 <option value="">Select a sector...</option>

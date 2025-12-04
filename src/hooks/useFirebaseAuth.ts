@@ -42,25 +42,15 @@ const ensureUserInDatabase = async (
   try {
     // Try to get user profile - if it exists, user is already in DB
     const profile = await userService.getUserProfile();
-    console.log('User already exists in database:', profile);
     return profile;
   } catch (error: any) {
-    console.log('getUserProfile error:', {
-      status: error?.response?.status,
-      message: error?.response?.data?.error || error?.message,
-      data: error?.response?.data,
-    });
+    
 
     // If user doesn't exist (404), create them
     // 401 might mean auth issue, but we'll try to create anyway
     if (error?.response?.status === 404 || error?.response?.status === 401) {
       try {
-        console.log('User not found in database, creating...', {
-          displayName: firebaseUser.displayName,
-          providedName,
-          email: firebaseUser.email,
-          photoURL: firebaseUser.photoURL,
-        });
+        
 
         // Use provided name if available, otherwise use displayName, otherwise use email prefix
         const nameToUse = providedName || firebaseUser.displayName || '';
@@ -71,12 +61,7 @@ const ensureUserInDatabase = async (
           firstName || firebaseUser.email?.split('@')[0] || 'User';
         const finalLastName = lastName || '';
 
-        console.log('Creating user with data:', {
-          firstName: finalFirstName,
-          lastName: finalLastName,
-          avatarUrl: firebaseUser.photoURL || undefined,
-          email: firebaseUser.email,
-        });
+        
 
         const createdUser = await userService.createUser({
           firstName: finalFirstName,
@@ -84,7 +69,6 @@ const ensureUserInDatabase = async (
           avatarUrl: firebaseUser.photoURL || undefined,
         });
 
-        console.log('User created successfully in database:', createdUser);
         return createdUser;
       } catch (createError: any) {
         console.error('Failed to create user in database:', {
@@ -128,10 +112,7 @@ export const useFirebaseAuth = () => {
     isInitialized.current = true;
 
     const unsubscribe = authService.onAuthStateChanged((firebaseUser) => {
-      console.log(
-        'Auth state changed:',
-        firebaseUser ? 'User logged in' : 'User logged out'
-      );
+      
 
       if (firebaseUser) {
         const userData = authService.convertFirebaseUser(firebaseUser);
@@ -141,7 +122,6 @@ export const useFirebaseAuth = () => {
             // mirror token to localStorage for HttpClient
             try {
               localStorage.setItem('authToken', token);
-              console.log('Token saved to localStorage');
             } catch (e) {
               console.error('Failed to save token to localStorage:', e);
             }
@@ -268,7 +248,6 @@ export const useFirebaseAuth = () => {
 
       try {
         localStorage.setItem('authToken', token);
-        console.log('Token saved to localStorage');
       } catch (e) {
         console.error('Failed to save token to localStorage:', e);
       }
@@ -313,7 +292,6 @@ export const useFirebaseAuth = () => {
 
       try {
         localStorage.setItem('authToken', token);
-        console.log('Token saved to localStorage');
       } catch (e) {
         console.error('Failed to save token to localStorage:', e);
       }
@@ -350,7 +328,6 @@ export const useFirebaseAuth = () => {
 
   const signOut = async () => {
     try {
-      console.log('Starting sign out process...');
 
       // Clear the state immediately for better UX
       setAuthState((prev) => ({
@@ -368,7 +345,6 @@ export const useFirebaseAuth = () => {
       // Try Firebase signOut in the background
       try {
         await authService.signOut();
-        console.log('Firebase signOut completed successfully');
       } catch (firebaseError) {
         console.log(
           'Firebase signOut failed, but user is already logged out locally:',
