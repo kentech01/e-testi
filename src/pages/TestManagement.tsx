@@ -43,6 +43,8 @@ export function TestManagement() {
       setLoading(true);
       const fetchedExams = await examService.getExams();
       setExams(fetchedExams);
+      console.log(fetchedExams, "te fetch");
+      
     } catch (error) {
       console.error('Failed to fetch exams:', error);
       toast.error('Failed to load exams');
@@ -60,8 +62,11 @@ export function TestManagement() {
     // TODO: Implement view functionality
   };
 
-  const handleEditExam = (examId: number) => {
-    navigate(`/test-management/edit/${examId}`);
+  const handleEditExam = async (examId: string) => {    
+    const fetchedExam = await examService.getExamById(examId);
+    const questionUrl = fetchedExam.questions![0].id;
+  navigate(`/test-management/edit/${examId}/${questionUrl}`);
+    
   };
 
   const handleDeleteClick = (examId: number) => {

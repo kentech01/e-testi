@@ -768,7 +768,7 @@ export function TestTaking({
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <div className="text-lg">{currentQuestion.text}</div>
+                <div className="text-lg mb-8">{currentQuestion.text}</div>
                 {currentQuestion?.description && (
                   <div className='[&>ul]:list-disc [&>ol]:list-decimal'>
                     {parse(currentQuestion.description)}
