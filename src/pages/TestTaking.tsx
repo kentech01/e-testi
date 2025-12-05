@@ -333,14 +333,10 @@ export function TestTaking({
     const existingAnswers = userAnswers.filter(
       (answer) => answer.questionId === questionId
     );
-    console.log(`Loading answers for question ${questionId}:`, existingAnswers);
     const selectedOptionIds = new Set(
       existingAnswers.map((answer) => answer.selectedOptionId)
     );
-    console.log(
-      `Selected option IDs for question ${questionId}:`,
-      Array.from(selectedOptionIds)
-    );
+    
     setSelectedOptions(selectedOptionIds);
   };
 
@@ -405,9 +401,7 @@ export function TestTaking({
       const submitPromises = Array.from(selectedOptions).map(
         async (optionId) => {
           try {
-            console.log(
-              `Submitting answer for option ${optionId} on question ${currentQuestionId}`
-            );
+            
             const answer = await userAnswerService.submitAnswer({
               examId: String(examId),
               questionId: currentQuestionId,
@@ -415,18 +409,13 @@ export function TestTaking({
               points: currentQuestion.points || 1,
               timeSpentSeconds: timeSpent,
             });
-            console.log(
-              `Successfully submitted answer for option ${optionId}:`,
-              answer
-            );
+            
             return answer;
           } catch (error: any) {
             console.error(`Error submitting option ${optionId}:`, error);
             // If answer already exists, try to update it
             if (error?.response?.status === 400) {
-              console.log(
-                `Answer for option ${optionId} already exists, attempting to update`
-              );
+              
               // Answer already exists, find it and update
               const existingAnswer = userAnswers.find(
                 (a) =>
@@ -434,7 +423,6 @@ export function TestTaking({
                   a.selectedOptionId === optionId
               );
               if (existingAnswer) {
-                console.log(`Found existing answer, updating:`, existingAnswer);
                 return await userAnswerService.updateAnswer(existingAnswer.id, {
                   selectedOptionId: optionId,
                   points: currentQuestion.points || 1,
@@ -474,10 +462,7 @@ export function TestTaking({
       );
 
       const submittedAnswers = await Promise.all(submitPromises);
-      console.log(`All submitted answers:`, submittedAnswers);
-      console.log(
-        `Expected ${selectedOptions.size} answers, got ${submittedAnswers.length}`
-      );
+      
 
       // Update local userAnswers state
       setUserAnswers((prev) => {
@@ -768,7 +753,7 @@ export function TestTaking({
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <div className="text-lg">{currentQuestion.text}</div>
+                <div className="text-lg mb-8">{currentQuestion.text}</div>
                 {currentQuestion?.description && (
                   <div className='[&>ul]:list-disc [&>ol]:list-decimal'>
                     {parse(currentQuestion.description)}
@@ -794,7 +779,7 @@ export function TestTaking({
                   .map((option) => (
                     <div
                       key={option.id}
-                      className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/50"
+                      className="flex items-center space-x-3 px-3 border rounded-lg hover:bg-muted/50"
                     >
                       <Checkbox
                         id={`option-${option.id}`}
@@ -803,7 +788,7 @@ export function TestTaking({
                       />
                       <Label
                         htmlFor={`option-${option.id}`}
-                        className="flex-1 cursor-pointer"
+                        className="flex-1 cursor-pointer py-3"
                       >
                         {option.optionLetter}. {option.text}
                       </Label>

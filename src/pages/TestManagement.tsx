@@ -31,7 +31,7 @@ export function TestManagement() {
   const [exams, setExams] = useState<Exam[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [examToDelete, setExamToDelete] = useState<number | null>(null);
+  const [examToDelete, setExamToDelete] = useState<number | null | string>(null);
 
   // Fetch exams on mount
   useEffect(() => {
@@ -43,6 +43,7 @@ export function TestManagement() {
       setLoading(true);
       const fetchedExams = await examService.getExams();
       setExams(fetchedExams);
+      
     } catch (error) {
       console.error('Failed to fetch exams:', error);
       toast.error('Failed to load exams');
@@ -60,11 +61,15 @@ export function TestManagement() {
     // TODO: Implement view functionality
   };
 
-  const handleEditExam = (examId: number) => {
-    navigate(`/test-management/edit/${examId}`);
+  const handleEditExam = async (examId: string | number) => {    
+    const fetchedExam = await examService.getExamById(examId);
+    const firstQuestion = fetchedExam.questions!.find(obj => obj.orderNumber === 1);
+    
+  navigate(`/test-management/edit/${examId}/${firstQuestion!.id}`);
+    
   };
 
-  const handleDeleteClick = (examId: number) => {
+  const handleDeleteClick = (examId: number | string) => {
     setExamToDelete(examId);
     setDeleteDialogOpen(true);
   };

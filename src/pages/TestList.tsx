@@ -112,7 +112,6 @@ export function TestList({
         } catch (err: any) {
           // Exam results not available or rate limited
           if (err?.response?.status === 429) {
-            console.log('Rate limited, stopping results fetch');
             break; // Stop if rate limited
           } else {
             console.log(`Results not available for exam ${exam.id}`);

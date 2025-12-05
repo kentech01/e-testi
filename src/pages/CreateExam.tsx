@@ -5,9 +5,9 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import { useNavigate, useParams } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { examCacheAtom } from '../store/atoms/createExamAtom';
 import { Button } from '../ui/button';
@@ -61,6 +61,8 @@ const TOTAL_QUESTIONS = 100;
 export function CreateExam() {
   const navigate = useNavigate();
   const params = useParams<{ examId?: string; questionId?: string }>();
+  const location = useLocation();
+  const isEdit = location.pathname.includes('/edit');
 
   // Recoil cache state
   const [examCache, setExamCache] = useRecoilState(examCacheAtom);
@@ -77,10 +79,10 @@ export function CreateExam() {
   const [isLoading, setIsLoading] = useState(false);
   const modules = {
     toolbar: [
-      ["bold", "italic", "underline"], // keep only bold and italic
+      ['bold', 'italic', 'underline'], // keep only bold and italic
       [{ header: [1, 2, 3, false] }], // headers
-      [{ list: "ordered" }, { list: "bullet" }], // lists
-      ["clean"], // remove formatting button
+      [{ list: 'ordered' }, { list: 'bullet' }], // lists
+      ['clean'], // remove formatting button
     ],
   };
   const {
@@ -153,20 +155,6 @@ export function CreateExam() {
   }, [sectors, sectorId]);
 
   // Clear subject when sector changes (but not on initial load)
-  useEffect(() => {
-    if (
-      sectorId &&
-      previousSectorIdRef.current &&
-      previousSectorIdRef.current !== sectorId
-    ) {
-      // Clear subject for all questions when sector changes
-      setQuestions((prev) => prev.map((q) => ({ ...q, subject: undefined })));
-    }
-    // Update the ref after checking
-    if (sectorId) {
-      previousSectorIdRef.current = sectorId;
-    }
-  }, [sectorId]);
 
   // Track which examId we've initialized for to prevent effect from resetting navigation
   const initializedExamIdRef = useRef<string | null>(null);
@@ -181,8 +169,6 @@ export function CreateExam() {
   useEffect(() => {
     questionsRef.current = questions;
   }, [questions]);
-
-  console.log('questions', questions);
 
   // Refs to access Set/Map without causing re-renders in callbacks
   const createdQuestionIdsRef = useRef(createdQuestionIds);
@@ -217,8 +203,6 @@ export function CreateExam() {
     if (isProcessingRef.current) {
       return;
     }
-
-    console.log('examCache', examCache);
 
     const fetchExamData = async () => {
       // Mark as processing immediately to prevent concurrent runs
@@ -336,6 +320,7 @@ export function CreateExam() {
         setSectorId(fetchedExam.sectorId);
         setPassingScoreText(String(fetchedExam.passingScore));
         setQuestions(updatedQuestions);
+
         setCreatedQuestionIds(newCreatedIds);
         setQuestionIdMap(newIdMap);
 
@@ -381,6 +366,7 @@ export function CreateExam() {
               (q) => q.orderNumber === maxOrderNumber
             );
             const targetIndex = maxOrderNumber - 1;
+
             const safeIndex = Math.min(targetIndex, TOTAL_QUESTIONS - 1);
             setCurrentQuestionIndex(safeIndex);
             if (lastQuestion?.id) {
@@ -433,6 +419,7 @@ export function CreateExam() {
     }
 
     const subjRaw = currentQuestion?.subject;
+
     if (!subjRaw) return undefined;
 
     // Ensure subject is a string (should be the subjectId UUID)
@@ -1366,6 +1353,21 @@ export function CreateExam() {
     hasQuestionChanged,
     hasExamChanged,
   ]);
+  const changeSectorIdDropdown = (value: string) => {
+    setSectorId(value);
+    if (
+      sectorId &&
+      previousSectorIdRef.current &&
+      previousSectorIdRef.current !== sectorId
+    ) {
+      // Clear subject for all questions when sector changes
+      setQuestions((prev) => prev.map((q) => ({ ...q, subject: undefined })));
+    }
+    // Update the ref after checking
+    if (sectorId) {
+      previousSectorIdRef.current = sectorId;
+    }
+  };
 
   const handlePrevious = useCallback(async () => {
     if (currentQuestionIndex > 0) {
@@ -1510,7 +1512,8 @@ export function CreateExam() {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className='max-w-6xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start'>
+      <div className="lg:col-span-3">
       {/* Header */}
       <div className="flex items-center mb-6">
         <Button
@@ -1522,10 +1525,13 @@ export function CreateExam() {
           Back to Exams
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900">Create New Exam</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {isEdit ? 'Edit The Exam' : 'Create New Exam'}
+          </h1>
           <p className="text-gray-600 mt-1">
-            Create an exam with 100 questions. Complete all questions to save
-            the exam.
+            {isEdit
+              ? 'Edit and update the exam questions. Make sure all changes are completed before saving'
+              : 'Create an exam with 100 questions. Complete all questions to save the exam.'}
           </p>
         </div>
       </div>
@@ -1555,8 +1561,7 @@ export function CreateExam() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Exam Description <span className="text-red-500">*</span>
             </label>
-            
-            
+
             <Textarea
               placeholder="Enter exam description..."
               value={examDescription}
@@ -1578,7 +1583,7 @@ export function CreateExam() {
               <select
                 className="w-full border rounded-md h-10 px-3"
                 value={sectorId}
-                onChange={(e) => setSectorId(e.target.value)}
+                onChange={(e) => changeSectorIdDropdown(e.target.value)}
                 disabled={loadingSectors}
               >
                 <option value="">Select a sector...</option>
@@ -1681,10 +1686,13 @@ export function CreateExam() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Description (Optional)
               </label>
-              
-              <ReactQuill theme="snow" value={currentQuestion.description} onChange={(content)=>
-               handleQuestionDescriptionChange(content)} modules={modules} />
 
+              <ReactQuill
+                theme="snow"
+                value={currentQuestion.description}
+                onChange={(content) => handleQuestionDescriptionChange(content)}
+                modules={modules}
+              />
             </div>
 
             {/* Subject Selection */}
@@ -1898,6 +1906,65 @@ export function CreateExam() {
           </div>
         </CardContent>
       </Card>
+      
+    </div>
+    {isEdit&&<Card>
+    <CardHeader>
+      <CardTitle>Navigimi i pyetjeve</CardTitle>
+      <div className="text-sm text-muted-foreground">
+        Progresi: {progress.toFixed(1)}%
+      </div>
+      <Progress value={progress} className="h-2" />
+    </CardHeader>
+    <CardContent>
+      <div className="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto">
+        {questions.map((question, index) => {
+          const isCurrent = currentQuestion.id === question.id;
+          console.log(questions, "pytjet");
+          
+          return (
+            <button
+              key={question.id}
+              onClick={() => {
+                console.log(question.id, );
+                updateUrl(question.id - 1)
+                // navigate(
+                //   `/test-management/edit/${params.examId!}/${question.id}`
+                // );
+              }}
+              className={`
+                    w-8 h-8 text-xs rounded border transition-colors
+                    ${question.title === "" && !isCurrent ? 'blur-[1px]' : ''}
+                    ${
+                      isCurrent
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-muted hover:bg-muted/80 border-muted'
+                    }
+                  `}
+                disabled={question.title === "" && !isCurrent}
+            >
+              {index + 1}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 space-y-2 text-xs">
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 bg-primary rounded"></div>
+          <span>Aktuale</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 bg-yellow-100 border border-yellow-300 rounded dark:bg-yellow-900 dark:border-yellow-700"></div>
+          <span>E përgjigjur</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 bg-muted border border-muted rounded"></div>
+          <span>Pa përgjigje</span>
+        </div>
+      </div>
+    </CardContent>
+  </Card> }
     </div>
   );
 }
