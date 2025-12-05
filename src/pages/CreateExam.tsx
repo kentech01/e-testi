@@ -5,8 +5,8 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { examCacheAtom } from '../store/atoms/createExamAtom';
@@ -62,7 +62,7 @@ export function CreateExam() {
   const navigate = useNavigate();
   const params = useParams<{ examId?: string; questionId?: string }>();
   const location = useLocation();
-const isEdit = location.pathname.includes("/edit");
+  const isEdit = location.pathname.includes('/edit');
 
   // Recoil cache state
   const [examCache, setExamCache] = useRecoilState(examCacheAtom);
@@ -79,10 +79,10 @@ const isEdit = location.pathname.includes("/edit");
   const [isLoading, setIsLoading] = useState(false);
   const modules = {
     toolbar: [
-      ["bold", "italic", "underline"], // keep only bold and italic
+      ['bold', 'italic', 'underline'], // keep only bold and italic
       [{ header: [1, 2, 3, false] }], // headers
-      [{ list: "ordered" }, { list: "bullet" }], // lists
-      ["clean"], // remove formatting button
+      [{ list: 'ordered' }, { list: 'bullet' }], // lists
+      ['clean'], // remove formatting button
     ],
   };
   const {
@@ -156,7 +156,6 @@ const isEdit = location.pathname.includes("/edit");
 
   // Clear subject when sector changes (but not on initial load)
 
-
   // Track which examId we've initialized for to prevent effect from resetting navigation
   const initializedExamIdRef = useRef<string | null>(null);
   // Track last questionId we set index from to avoid unnecessary resets
@@ -170,7 +169,6 @@ const isEdit = location.pathname.includes("/edit");
   useEffect(() => {
     questionsRef.current = questions;
   }, [questions]);
-
 
   // Refs to access Set/Map without causing re-renders in callbacks
   const createdQuestionIdsRef = useRef(createdQuestionIds);
@@ -206,7 +204,6 @@ const isEdit = location.pathname.includes("/edit");
       return;
     }
 
-
     const fetchExamData = async () => {
       // Mark as processing immediately to prevent concurrent runs
       isProcessingRef.current = true;
@@ -236,8 +233,6 @@ const isEdit = location.pathname.includes("/edit");
           fetchedExam = await examService.getExamById(examIdToFetch);
           fetchedQuestions =
             await questionsService.getQuestionsByExam(examIdToFetch);
-            
-            
 
           // Cache the fetched data
           setExamCache((prev) => ({
@@ -318,15 +313,14 @@ const isEdit = location.pathname.includes("/edit");
             });
           }
         }
-        
+
         // Batch all state updates together - only on initial load
         setExamTitle(fetchedExam.title);
         setExamDescription(fetchedExam.description || '');
         setSectorId(fetchedExam.sectorId);
         setPassingScoreText(String(fetchedExam.passingScore));
         setQuestions(updatedQuestions);
-        
-        
+
         setCreatedQuestionIds(newCreatedIds);
         setQuestionIdMap(newIdMap);
 
@@ -372,7 +366,7 @@ const isEdit = location.pathname.includes("/edit");
               (q) => q.orderNumber === maxOrderNumber
             );
             const targetIndex = maxOrderNumber - 1;
-            
+
             const safeIndex = Math.min(targetIndex, TOTAL_QUESTIONS - 1);
             setCurrentQuestionIndex(safeIndex);
             if (lastQuestion?.id) {
@@ -400,9 +394,6 @@ const isEdit = location.pathname.includes("/edit");
   }, [params.examId]);
 
   const currentQuestion = questions[currentQuestionIndex];
-  
-  
-  
 
   // Get available subjects from API based on selected sector
   const availableSubjects = useMemo(() => {
@@ -428,14 +419,12 @@ const isEdit = location.pathname.includes("/edit");
     }
 
     const subjRaw = currentQuestion?.subject;
-    
-    if (!subjRaw) return undefined;
 
+    if (!subjRaw) return undefined;
 
     // Ensure subject is a string (should be the subjectId UUID)
     const subj = typeof subjRaw === 'string' ? subjRaw.trim() : String(subjRaw);
     if (!subj) return undefined;
-
 
     // Match by value (subjectId UUID) - exact match since UUIDs are case-sensitive
     const byValue = availableSubjects.find((s) => s.value === subj);
@@ -452,7 +441,7 @@ const isEdit = location.pathname.includes("/edit");
     // the placeholder is shown instead of a blank value.
     return undefined;
   }, [currentQuestion?.subject, availableSubjects, sectorId]);
-  
+
   // Memoized local preview URL for selected (not yet uploaded) image
   const imageObjectUrl = useMemo(() => {
     return currentQuestion?.imageFile
@@ -1288,8 +1277,7 @@ const isEdit = location.pathname.includes("/edit");
     hasQuestionChanged,
     hasExamChanged,
   ]);
-  const changeSectorIdDropdown=(value: string)=>{
-
+  const changeSectorIdDropdown = (value: string) => {
     setSectorId(value);
     if (
       sectorId &&
@@ -1303,7 +1291,7 @@ const isEdit = location.pathname.includes("/edit");
     if (sectorId) {
       previousSectorIdRef.current = sectorId;
     }
-  }
+  };
   const handlePrevious = useCallback(() => {
     if (currentQuestionIndex > 0) {
       const prevIndex = currentQuestionIndex - 1;
@@ -1420,7 +1408,8 @@ const isEdit = location.pathname.includes("/edit");
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className='max-w-6xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start'>
+      <div className="lg:col-span-3">
       {/* Header */}
       <div className="flex items-center mb-6">
         <Button
@@ -1432,9 +1421,13 @@ const isEdit = location.pathname.includes("/edit");
           Back to Exams
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900">{isEdit? "Edit The Exam" : "Create New Exam"}</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {isEdit ? 'Edit The Exam' : 'Create New Exam'}
+          </h1>
           <p className="text-gray-600 mt-1">
-            {isEdit? "Edit and update the exam questions. Make sure all changes are completed before saving":"Create an exam with 100 questions. Complete all questions to save the exam."}
+            {isEdit
+              ? 'Edit and update the exam questions. Make sure all changes are completed before saving'
+              : 'Create an exam with 100 questions. Complete all questions to save the exam.'}
           </p>
         </div>
       </div>
@@ -1464,8 +1457,7 @@ const isEdit = location.pathname.includes("/edit");
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Exam Description <span className="text-red-500">*</span>
             </label>
-            
-            
+
             <Textarea
               placeholder="Enter exam description..."
               value={examDescription}
@@ -1590,10 +1582,13 @@ const isEdit = location.pathname.includes("/edit");
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Description (Optional)
               </label>
-              
-              <ReactQuill theme="snow" value={currentQuestion.description} onChange={(content)=>
-               handleQuestionDescriptionChange(content)} modules={modules} />
 
+              <ReactQuill
+                theme="snow"
+                value={currentQuestion.description}
+                onChange={(content) => handleQuestionDescriptionChange(content)}
+                modules={modules}
+              />
             </div>
 
             {/* Subject Selection */}
@@ -1807,6 +1802,65 @@ const isEdit = location.pathname.includes("/edit");
           </div>
         </CardContent>
       </Card>
+      
+    </div>
+    {isEdit&&<Card>
+    <CardHeader>
+      <CardTitle>Navigimi i pyetjeve</CardTitle>
+      <div className="text-sm text-muted-foreground">
+        Progresi: {progress.toFixed(1)}%
+      </div>
+      <Progress value={progress} className="h-2" />
+    </CardHeader>
+    <CardContent>
+      <div className="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto">
+        {questions.map((question, index) => {
+          const isCurrent = currentQuestion.id === question.id;
+          console.log(questions, "pytjet");
+          
+          return (
+            <button
+              key={question.id}
+              onClick={() => {
+                console.log(question.id, );
+                updateUrl(question.id - 1)
+                // navigate(
+                //   `/test-management/edit/${params.examId!}/${question.id}`
+                // );
+              }}
+              className={`
+                    w-8 h-8 text-xs rounded border transition-colors
+                    ${question.title === "" && !isCurrent ? 'blur-[1px]' : ''}
+                    ${
+                      isCurrent
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-muted hover:bg-muted/80 border-muted'
+                    }
+                  `}
+                disabled={question.title === "" && !isCurrent}
+            >
+              {index + 1}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 space-y-2 text-xs">
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 bg-primary rounded"></div>
+          <span>Aktuale</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 bg-yellow-100 border border-yellow-300 rounded dark:bg-yellow-900 dark:border-yellow-700"></div>
+          <span>E përgjigjur</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 bg-muted border border-muted rounded"></div>
+          <span>Pa përgjigje</span>
+        </div>
+      </div>
+    </CardContent>
+  </Card> }
     </div>
   );
 }
