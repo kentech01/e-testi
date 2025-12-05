@@ -427,7 +427,7 @@ const AppRouter: React.FC<AppRouterProps> = ({
             />
 
             <Route
-              path="/test-management/edit/:examId/:questionId?"
+              path="/test-management/edit/testi/:examId/pyetja/:questionId?"
               element={
                 <AdminRoute>
                   <CreateExamWrapper />

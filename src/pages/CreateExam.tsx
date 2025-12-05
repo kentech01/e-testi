@@ -349,7 +349,7 @@ export function CreateExam() {
               setCurrentQuestionIndex(safeIndex);
               if (lastQuestion?.id) {
                 lastQuestionIdRef.current = lastQuestion.id;
-                const url = `/test-management/edit/${params.examId}/${lastQuestion.id}`;
+                const url = `/test-management/edit/testi/${params.examId}/pyetja/${lastQuestion.id}`;
                 isNavigatingRef.current = true;
                 navigate(url, { replace: true });
                 setTimeout(() => {
@@ -371,7 +371,7 @@ export function CreateExam() {
             setCurrentQuestionIndex(safeIndex);
             if (lastQuestion?.id) {
               lastQuestionIdRef.current = lastQuestion.id;
-              const url = `/test-management/edit/${params.examId}/${lastQuestion.id}`;
+              const url = `/test-management/edit/testi/${params.examId}/pyetja/${lastQuestion.id}`;
               isNavigatingRef.current = true;
               navigate(url, { replace: true });
               setTimeout(() => {
@@ -1028,7 +1028,7 @@ export function CreateExam() {
 
       // Check if URL actually needs to change
       const currentUrl = questionDbId
-        ? `/test-management/edit/${examId}/${questionDbId}`
+        ? `/test-management/edit/testi/${examId}/pyetja/${questionDbId}`
         : `/test-management/edit/${examId}`;
       const expectedUrl = window.location.pathname;
 

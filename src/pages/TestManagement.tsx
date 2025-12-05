@@ -65,7 +65,7 @@ export function TestManagement() {
     const fetchedExam = await examService.getExamById(examId);
     const firstQuestion = fetchedExam.questions!.find(obj => obj.orderNumber === 1);
     
-  navigate(`/test-management/edit/${examId}/${firstQuestion!.id}`);
+  navigate(`/test-management/edit/testi/${examId}/pyetja/${firstQuestion!.id}`);
     
   };
 
