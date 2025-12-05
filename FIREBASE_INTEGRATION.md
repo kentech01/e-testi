@@ -1,4 +1,4 @@
-# Firebase Authentication Integration
+# Firebase Authentication Integration:
 
 This document describes the Firebase Authentication integration in the E-testi application.
 
