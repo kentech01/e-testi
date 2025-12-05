@@ -622,8 +622,10 @@ export function CreateExam() {
     const q = currentQuestion;
     if (!q) return false;
     const hasTitleError = !q.title.trim();
-    const hasSubjectError =
-      !q.subject || (typeof q.subject === 'string' && !q.subject.trim());
+    // More explicit check for missing subject
+    const hasSubjectError = !q.subject || 
+      q.subject === '' || 
+      (typeof q.subject === 'string' && q.subject.trim() === '');
     const hasOptionsError = !q.answerOptions.some((o) => o.isCorrect);
     return hasTitleError || hasSubjectError || hasOptionsError;
   }, [currentQuestion]);
@@ -634,7 +636,27 @@ export function CreateExam() {
   }, [examTitle, examDescription, sectorId]);
 
   // Check if there are any errors that would prevent navigation
-  const hasErrors = hasExamErrors || hasQuestionErrors;
+  // Block navigation if:
+  // 1. Exam data is invalid (always block)
+  // 2. Question has been modified AND has errors (block to prevent saving invalid data)
+  // Allow navigation if question hasn't been modified yet (even if incomplete)
+  const hasQuestionBeenModified = useMemo(() => {
+    const q = currentQuestion;
+    if (!q) return false;
+
+    // Check if question has any meaningful data entered (not just empty strings)
+    const hasTitle = q.title.trim() !== '';
+    const hasDescription = q.description.trim() !== '';
+    const hasOptions = q.answerOptions.some((opt) => opt.text.trim() !== '');
+    const hasImage = q.imageFile !== null || q.imageUrl !== undefined;
+    const hasSubject = q.subject && q.subject.trim() !== '';
+
+    // Question is considered modified if it has any data
+    return hasTitle || hasDescription || hasOptions || hasImage || hasSubject;
+  }, [currentQuestion]);
+
+  const hasErrors =
+    hasExamErrors || (hasQuestionBeenModified && hasQuestionErrors);
 
   // Check if current question has changed compared to cached version
   const hasQuestionChanged = useCallback((): boolean => {
@@ -704,6 +726,75 @@ export function CreateExam() {
     return false; // No changes detected
   }, [examId, examTitle, examDescription, sectorId]);
 
+  // Persist exam data (title, description, sector) independently
+  const persistExamData = useCallback(async (): Promise<string | null> => {
+    setApiError(null);
+
+    // Validate exam data
+    const examOk = validateExam();
+    if (!examOk) return null;
+
+    const parsedPassing = Number(passingScoreText);
+    let ensuredExamId = examId;
+
+    try {
+      if (!ensuredExamId) {
+        // Create exam only if it doesn't exist (first time)
+        const created = await examService.createExam({
+          title: examTitle,
+          description: examDescription,
+          sectorId: sectorId,
+          isActive: true,
+          totalQuestions: TOTAL_QUESTIONS,
+          passingScore: parsedPassing,
+        } as any);
+        ensuredExamId = String((created as any).id);
+        setExamId(ensuredExamId);
+
+        // Update cache with new exam
+        const examIdKey: string = ensuredExamId;
+        setExamCache((prev) => ({
+          ...prev,
+          exams: new Map([...prev.exams, [examIdKey, created as Exam]]),
+        }));
+
+        return ensuredExamId;
+      } else {
+        // Update exam fields if they changed
+        const examChanged = hasExamChanged();
+        if (examChanged) {
+          const updatedExam = await examService.updateExam(ensuredExamId, {
+            title: examTitle,
+            description: examDescription,
+            sectorId: sectorId,
+          });
+
+          // Update cache with updated exam
+          const examIdKey: string = ensuredExamId;
+          setExamCache((prev) => ({
+            ...prev,
+            exams: new Map([...prev.exams, [examIdKey, updatedExam as Exam]]),
+          }));
+        }
+        return ensuredExamId;
+      }
+    } catch (e: any) {
+      setApiError(
+        e?.response?.data?.message || e?.message || 'Failed to save exam data.'
+      );
+      return null;
+    }
+  }, [
+    examId,
+    examTitle,
+    examDescription,
+    sectorId,
+    passingScoreText,
+    validateExam,
+    hasExamChanged,
+    setExamCache,
+  ]);
+
   const persistCurrentQuestion = useCallback(async (): Promise<{
     success: boolean;
     dbQuestionId?: string;
@@ -711,12 +802,16 @@ export function CreateExam() {
     const q = questionsRef.current[currentQuestionIndex];
 
     setApiError(null);
-    // Validate
-    const examOk = validateExam();
-    const questionOk = validateQuestion(q);
-    if (!examOk || !questionOk) return { success: false };
 
-    const parsedPassing = Number(passingScoreText);
+    // First, ensure exam exists and is up to date
+    const ensuredExamId = await persistExamData();
+    if (!ensuredExamId) {
+      return { success: false };
+    }
+
+    // Validate question
+    const questionOk = validateQuestion(q);
+    if (!questionOk) return { success: false };
 
     // Check if question exists
     const currentCreatedIds = createdQuestionIdsRef.current;
@@ -731,38 +826,7 @@ export function CreateExam() {
       return { success: false };
     }
 
-    // Create exam if this is the first persist; also update title/description/sector if editing
-    let ensuredExamId = examId;
     try {
-      if (!ensuredExamId) {
-        const created = await examService.createExam({
-          title: examTitle,
-          description: examDescription,
-          sectorId: sectorId,
-          isActive: true,
-          totalQuestions: TOTAL_QUESTIONS,
-          passingScore: parsedPassing,
-        } as any);
-        ensuredExamId = String((created as any).id);
-        setExamId(ensuredExamId);
-      } else {
-        // Always update exam fields
-        const updatedExam = await examService.updateExam(ensuredExamId, {
-          title: examTitle,
-          description: examDescription,
-          sectorId: sectorId,
-        });
-
-        // Update cache with updated exam
-        if (ensuredExamId) {
-          const examIdKey = ensuredExamId;
-          setExamCache((prev) => ({
-            ...prev,
-            exams: new Map([...prev.exams, [examIdKey, updatedExam as Exam]]),
-          }));
-        }
-      }
-
       // Upload image if selected, otherwise use existing imageUrl
       let imageUrl: string | undefined = q.imageUrl || undefined;
       if (q.imageFile) {
@@ -885,17 +949,7 @@ export function CreateExam() {
       );
       return { success: false };
     }
-  }, [
-    currentQuestionIndex,
-    examId,
-    examTitle,
-    examDescription,
-    sectorId,
-    passingScoreText,
-    validateExam,
-    validateQuestion,
-    navigate,
-  ]);
+  }, [currentQuestionIndex, persistExamData, validateQuestion, navigate]);
 
   const ensureQuestionExists = useCallback(
     async (localId: number): Promise<string | undefined> => {
@@ -1047,6 +1101,26 @@ export function CreateExam() {
       const questionChanged = hasQuestionChanged();
       const examChanged = hasExamChanged();
 
+      // If exam data changed, persist it first (even if question didn't change)
+      if (examChanged) {
+        setIsSubmitting(true);
+        try {
+          const examIdResult = await persistExamData();
+          if (!examIdResult) {
+            // Exam validation failed, don't navigate
+            return;
+          }
+        } catch (error) {
+          console.error('Error saving exam data:', error);
+          setApiError(
+            'An error occurred while saving exam data. Please try again.'
+          );
+          return;
+        } finally {
+          setIsSubmitting(false);
+        }
+      }
+
       // If nothing changed, just navigate without saving
       if (!questionChanged && !examChanged) {
         // Check if next question exists in our state (might have been loaded from DB)
@@ -1168,6 +1242,7 @@ export function CreateExam() {
       // If there are changes, save first
       setIsSubmitting(true);
       try {
+        // Note: persistCurrentQuestion already calls persistExamData, so we don't need to call it again here
         const result = await persistCurrentQuestion();
         if (result.success) {
           setErrors({});
@@ -1284,6 +1359,7 @@ export function CreateExam() {
   }, [
     currentQuestionIndex,
     persistCurrentQuestion,
+    persistExamData,
     updateUrl,
     ensureQuestionExists,
     examId,
@@ -1291,10 +1367,31 @@ export function CreateExam() {
     hasExamChanged,
   ]);
 
-  const handlePrevious = useCallback(() => {
+  const handlePrevious = useCallback(async () => {
     if (currentQuestionIndex > 0) {
       const prevIndex = currentQuestionIndex - 1;
       const prevQuestionLocalId = prevIndex + 1; // index is 0-based, localId is 1-based
+
+      // Check if exam data changed, persist it first
+      const examChanged = hasExamChanged();
+      if (examChanged) {
+        setIsSubmitting(true);
+        try {
+          const examIdResult = await persistExamData();
+          if (!examIdResult) {
+            // Exam validation failed, don't navigate
+            return;
+          }
+        } catch (error) {
+          console.error('Error saving exam data:', error);
+          setApiError(
+            'An error occurred while saving exam data. Please try again.'
+          );
+          return;
+        } finally {
+          setIsSubmitting(false);
+        }
+      }
 
       // Check if all 100 questions are already created
       const currentCreatedIds = createdQuestionIdsRef.current;
@@ -1364,7 +1461,13 @@ export function CreateExam() {
       setCurrentQuestionIndex(prevIndex);
       updateUrl(prevIndex);
     }
-  }, [currentQuestionIndex, updateUrl, examId]);
+  }, [
+    currentQuestionIndex,
+    updateUrl,
+    examId,
+    hasExamChanged,
+    persistExamData,
+  ]);
 
   const handleSave = async () => {
     setIsSubmitting(true);
