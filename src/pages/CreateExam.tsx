@@ -526,8 +526,13 @@ export function CreateExam() {
       )
     );
   };
-
+  let isFirstLoad = useRef(true);
+  
   const handleQuestionDescriptionChange = (description: string) => {
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false; // ✅ ignore init call
+      return;
+    }
     setQuestions(
       questions.map((q, index) =>
         index === currentQuestionIndex ? { ...q, description } : q
@@ -1408,459 +1413,464 @@ export function CreateExam() {
   }
 
   return (
-    <div className='max-w-6xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start'>
+    <div className="max-w-6xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
       <div className="lg:col-span-3">
-      {/* Header */}
-      <div className="flex items-center mb-6">
-        <Button
-          variant="ghost"
-          onClick={handleBack}
-          className="mr-4 text-gray-600 hover:text-gray-900"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Exams
-        </Button>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900">
-            {isEdit ? 'Edit The Exam' : 'Create New Exam'}
-          </h1>
-          <p className="text-gray-600 mt-1">
-            {isEdit
-              ? 'Edit and update the exam questions. Make sure all changes are completed before saving'
-              : 'Create an exam with 100 questions. Complete all questions to save the exam.'}
-          </p>
+        {/* Header */}
+        <div className="flex items-center mb-6">
+          <Button
+            variant="ghost"
+            onClick={handleBack}
+            className="mr-4 text-gray-600 hover:text-gray-900"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Exams
+          </Button>
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold text-gray-900">
+              {isEdit ? 'Edit The Exam' : 'Create New Exam'}
+            </h1>
+            <p className="text-gray-600 mt-1">
+              {isEdit
+                ? 'Edit and update the exam questions. Make sure all changes are completed before saving'
+                : 'Create an exam with 100 questions. Complete all questions to save the exam.'}
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* Exam Details */}
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Exam Information</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Exam Title <span className="text-red-500">*</span>
-            </label>
-            <Input
-              placeholder="Enter exam title..."
-              value={examTitle}
-              onChange={(e) => setExamTitle(e.target.value)}
-              className="w-full"
-              disabled={false}
-            />
-            {errors.examTitle && (
-              <p className="mt-1 text-sm text-red-600">{errors.examTitle}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Exam Description <span className="text-red-500">*</span>
-            </label>
-
-            <Textarea
-              placeholder="Enter exam description..."
-              value={examDescription}
-              onChange={(e) => setExamDescription(e.target.value)}
-              className="w-full"
-              disabled={false}
-            />
-            {errors.examDescription && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.examDescription}
-              </p>
-            )}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Exam Details */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Exam Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Sector <span className="text-red-500">*</span>
+                Exam Title <span className="text-red-500">*</span>
               </label>
-              <select
-                className="w-full border rounded-md h-10 px-3"
-                value={sectorId}
-                onChange={(e) => changeSectorIdDropdown(e.target.value)}
-                disabled={loadingSectors}
-              >
-                <option value="">Select a sector...</option>
-                {sectors.map((sector) => (
-                  <option key={sector.id} value={sector.id}>
-                    {sector.displayName}
-                  </option>
-                ))}
-              </select>
-              {errors.sectorId && (
-                <p className="mt-1 text-sm text-red-600">{errors.sectorId}</p>
+              <Input
+                placeholder="Enter exam title..."
+                value={examTitle}
+                onChange={(e) => setExamTitle(e.target.value)}
+                className="w-full"
+                disabled={false}
+              />
+              {errors.examTitle && (
+                <p className="mt-1 text-sm text-red-600">{errors.examTitle}</p>
               )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Passing Score
+                Exam Description <span className="text-red-500">*</span>
               </label>
-              <Input
-                type="text"
-                inputMode="numeric"
-                value={passingScoreText}
-                placeholder="40"
-                onChange={(e) => setPassingScoreText(e.target.value)}
-                disabled={true}
+
+              <Textarea
+                placeholder="Enter exam description..."
+                value={examDescription}
+                onChange={(e) => setExamDescription(e.target.value)}
+                className="w-full"
+                disabled={false}
               />
-              {errors.passingScore && (
+              {errors.examDescription && (
                 <p className="mt-1 text-sm text-red-600">
-                  {errors.passingScore}
+                  {errors.examDescription}
                 </p>
               )}
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Total Questions
-              </label>
-              <Input type="number" value={TOTAL_QUESTIONS} disabled />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Progress */}
-      <Card className="mb-6">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-lg font-semibold">Progress</h3>
-              <p className="text-sm text-gray-600">
-                Question {currentQuestionIndex + 1} of {TOTAL_QUESTIONS} •{' '}
-                {completedQuestions} completed
-              </p>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-blue-600">
-                {Math.round(progress)}%
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Sector <span className="text-red-500">*</span>
+                </label>
+                <select
+                  className="w-full border rounded-md h-10 px-3"
+                  value={sectorId}
+                  onChange={(e) => changeSectorIdDropdown(e.target.value)}
+                  disabled={loadingSectors}
+                >
+                  <option value="">Select a sector...</option>
+                  {sectors.map((sector) => (
+                    <option key={sector.id} value={sector.id}>
+                      {sector.displayName}
+                    </option>
+                  ))}
+                </select>
+                {errors.sectorId && (
+                  <p className="mt-1 text-sm text-red-600">{errors.sectorId}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Passing Score
+                </label>
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  value={passingScoreText}
+                  placeholder="40"
+                  onChange={(e) => setPassingScoreText(e.target.value)}
+                  disabled={true}
+                />
+                {errors.passingScore && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.passingScore}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Total Questions
+                </label>
+                <Input type="number" value={TOTAL_QUESTIONS} disabled />
               </div>
             </div>
-          </div>
-          <Progress value={progress} className="w-full" />
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      {/* Question Form */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Question {currentQuestionIndex + 1}</CardTitle>
-        </CardHeader>
-        <CardContent className="p-6 relative">
-          {isSubmitting && (
-            <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-10">
-              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-            </div>
-          )}
-          {apiError && (
-            <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-              {apiError}
-            </div>
-          )}
-          {/* Question Details */}
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Question Title <span className="text-red-500">*</span>
-              </label>
-              <Input
-                placeholder="Enter your question here..."
-                value={currentQuestion.title}
-                onChange={(e) => handleQuestionTitleChange(e.target.value)}
-                className="w-full"
-                disabled={isSubmitting}
-              />
-              {errors.questionTitle && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.questionTitle}
+        {/* Progress */}
+        <Card className="mb-6">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-lg font-semibold">Progress</h3>
+                <p className="text-sm text-gray-600">
+                  Question {currentQuestionIndex + 1} of {TOTAL_QUESTIONS} •{' '}
+                  {completedQuestions} completed
                 </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Description (Optional)
-              </label>
-
-              <ReactQuill
-                theme="snow"
-                value={currentQuestion.description}
-                onChange={(content) => handleQuestionDescriptionChange(content)}
-                modules={modules}
-              />
-            </div>
-
-            {/* Subject Selection */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Subject <span className="text-red-500">*</span>
-              </label>
-              <Select
-                value={selectedSubjectValue}
-                onValueChange={handleQuestionSubjectChange}
-                disabled={
-                  isSubmitting ||
-                  !sectorId ||
-                  loadingSubjects ||
-                  availableSubjects.length === 0
-                }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue
-                    placeholder={
-                      loadingSubjects
-                        ? 'Loading subjects...'
-                        : 'Select a subject...'
-                    }
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  {loadingSubjects ? (
-                    <div className="p-2 text-sm text-muted-foreground">
-                      Loading subjects...
-                    </div>
-                  ) : availableSubjects.length > 0 ? (
-                    availableSubjects.map((subject) => (
-                      <SelectItem key={subject.value} value={subject.value}>
-                        {subject.label}
-                      </SelectItem>
-                    ))
-                  ) : (
-                    <div className="p-2 text-sm text-muted-foreground">
-                      {sectorId
-                        ? 'No subjects available'
-                        : 'Please select a sector first'}
-                    </div>
-                  )}
-                </SelectContent>
-              </Select>
-              {subjectsError && (
-                <p className="mt-1 text-sm text-red-600">
-                  Error loading subjects: {subjectsError}
-                </p>
-              )}
-              {errors.questionSubject && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.questionSubject}
-                </p>
-              )}
-              {!sectorId && (
-                <p className="mt-1 text-sm text-amber-600">
-                  Please select a sector in the exam information section above
-                  to see available subjects.
-                </p>
-              )}
-            </div>
-
-            {/* Question Image */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Question Image (Optional)
-              </label>
-              <p className="mb-2 text-xs text-gray-500">
-                Recommended: clear images up to{' '}
-                <span className="font-semibold">2&nbsp;MB</span> in size and no
-                larger than about{' '}
-                <span className="font-semibold">600×600&nbsp;px</span> to keep
-                loading fast and previews readable on all devices.
-              </p>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageSelected}
-              />
-              <Button
-                variant="outline"
-                className="w-full h-20 border-dashed"
-                onClick={handleChooseImage}
-                disabled={isSubmitting}
-              >
-                <Upload className="w-5 h-5 mr-2" />
-                {currentQuestion.imageFile ? 'Change Image' : 'Choose Image'}
-              </Button>
-              {currentQuestion.imageFile && (
-                <p className="mt-2 text-sm text-gray-600">
-                  Selected: {currentQuestion.imageFile.name}
-                </p>
-              )}
-              {(currentQuestion.imageUrl || imageObjectUrl) && (
-                <div className="mt-3 w-full">
-                  <div className="relative mx-auto max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl border rounded overflow-hidden">
-                    <img
-                      src={
-                        currentQuestion.imageUrl || (imageObjectUrl as string)
-                      }
-                      alt="Question"
-                      className="w-full h-auto max-h-[600px] object-contain"
-                    />
-                  </div>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-blue-600">
+                  {Math.round(progress)}%
                 </div>
-              )}
+              </div>
             </div>
+            <Progress value={progress} className="w-full" />
+          </CardContent>
+        </Card>
 
-            {/* Answer Options */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Answer Options <span className="text-red-500">*</span>
+        {/* Question Form */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Question {currentQuestionIndex + 1}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-6 relative">
+            {isSubmitting && (
+              <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-10">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+              </div>
+            )}
+            {apiError && (
+              <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                {apiError}
+              </div>
+            )}
+            {/* Question Details */}
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Question Title <span className="text-red-500">*</span>
                 </label>
+                <Input
+                  placeholder="Enter your question here..."
+                  value={currentQuestion.title}
+                  onChange={(e) => handleQuestionTitleChange(e.target.value)}
+                  className="w-full"
+                  disabled={isSubmitting}
+                />
+                {errors.questionTitle && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.questionTitle}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description (Optional)
+                </label>
+
+                <ReactQuill
+                  theme="snow"
+                  value={currentQuestion.description}
+                onChange={(content) => handleQuestionDescriptionChange(content)}
+                  modules={modules}
+                />
+              </div>
+
+              {/* Subject Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Subject <span className="text-red-500">*</span>
+                </label>
+                <Select
+                  value={selectedSubjectValue}
+                  onValueChange={handleQuestionSubjectChange}
+                  disabled={
+                    isSubmitting ||
+                    !sectorId ||
+                    loadingSubjects ||
+                    availableSubjects.length === 0
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue
+                      placeholder={
+                        loadingSubjects
+                          ? 'Loading subjects...'
+                          : 'Select a subject...'
+                      }
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {loadingSubjects ? (
+                      <div className="p-2 text-sm text-muted-foreground">
+                        Loading subjects...
+                      </div>
+                    ) : availableSubjects.length > 0 ? (
+                      availableSubjects.map((subject) => (
+                        <SelectItem key={subject.value} value={subject.value}>
+                          {subject.label}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <div className="p-2 text-sm text-muted-foreground">
+                        {sectorId
+                          ? 'No subjects available'
+                          : 'Please select a sector first'}
+                      </div>
+                    )}
+                  </SelectContent>
+                </Select>
+                {subjectsError && (
+                  <p className="mt-1 text-sm text-red-600">
+                    Error loading subjects: {subjectsError}
+                  </p>
+                )}
+                {errors.questionSubject && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.questionSubject}
+                  </p>
+                )}
+                {!sectorId && (
+                  <p className="mt-1 text-sm text-amber-600">
+                    Please select a sector in the exam information section above
+                    to see available subjects.
+                  </p>
+                )}
+              </div>
+
+              {/* Question Image */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Question Image (Optional)
+                </label>
+                <p className="mb-2 text-xs text-gray-500">
+                  Recommended: clear images up to{' '}
+                  <span className="font-semibold">2&nbsp;MB</span> in size and
+                  no larger than about{' '}
+                  <span className="font-semibold">600×600&nbsp;px</span> to keep
+                  loading fast and previews readable on all devices.
+                </p>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageSelected}
+                />
                 <Button
                   variant="outline"
-                  size="sm"
-                  onClick={handleAddOption}
-                  className="text-gray-600"
+                  className="w-full h-20 border-dashed"
+                  onClick={handleChooseImage}
                   disabled={isSubmitting}
                 >
-                  <Plus className="w-4 h-4 mr-1" />
-                  Add Option
+                  <Upload className="w-5 h-5 mr-2" />
+                  {currentQuestion.imageFile ? 'Change Image' : 'Choose Image'}
                 </Button>
-              </div>
-
-              <div className="space-y-3">
-                {currentQuestion.answerOptions.map((option, idx) => (
-                  <div key={option.id} className="flex items-center space-x-3">
-                    <Checkbox
-                      checked={option.isCorrect}
-                      onCheckedChange={(checked: boolean | 'indeterminate') =>
-                        handleOptionCorrectChange(option.id, checked as boolean)
-                      }
-                    />
-                    <span className="font-medium text-gray-700 w-6">
-                      {optionLetterForIndex(idx)}.
-                    </span>
-                    <Input
-                      value={option.text}
-                      placeholder={`Option ${idx + 1}`}
-                      onChange={(e) =>
-                        handleOptionTextChange(option.id, e.target.value)
-                      }
-                      className="flex-1"
-                      disabled={isSubmitting}
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleRemoveOption(option.id)}
-                      className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
-                      disabled={
-                        currentQuestion.answerOptions.length <= 1 ||
-                        isSubmitting
-                      }
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+                {currentQuestion.imageFile && (
+                  <p className="mt-2 text-sm text-gray-600">
+                    Selected: {currentQuestion.imageFile.name}
+                  </p>
+                )}
+                {(currentQuestion.imageUrl || imageObjectUrl) && (
+                  <div className="mt-3 w-full">
+                    <div className="relative mx-auto max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl border rounded overflow-hidden">
+                      <img
+                        src={
+                          currentQuestion.imageUrl || (imageObjectUrl as string)
+                        }
+                        alt="Question"
+                        className="w-full h-auto max-h-[600px] object-contain"
+                      />
+                    </div>
                   </div>
-                ))}
+                )}
               </div>
-              {errors.questionOptions && (
-                <p className="mt-2 text-sm text-red-600">
-                  {errors.questionOptions}
+
+              {/* Answer Options */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Answer Options <span className="text-red-500">*</span>
+                  </label>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleAddOption}
+                    className="text-gray-600"
+                    disabled={isSubmitting}
+                  >
+                    <Plus className="w-4 h-4 mr-1" />
+                    Add Option
+                  </Button>
+                </div>
+
+                <div className="space-y-3">
+                  {currentQuestion.answerOptions.map((option, idx) => (
+                    <div
+                      key={option.id}
+                      className="flex items-center space-x-3"
+                    >
+                      <Checkbox
+                        checked={option.isCorrect}
+                        onCheckedChange={(checked: boolean | 'indeterminate') =>
+                          handleOptionCorrectChange(
+                            option.id,
+                            checked as boolean
+                          )
+                        }
+                      />
+                      <span className="font-medium text-gray-700 w-6">
+                        {optionLetterForIndex(idx)}.
+                      </span>
+                      <Input
+                        value={option.text}
+                        placeholder={`Option ${idx + 1}`}
+                        onChange={(e) =>
+                          handleOptionTextChange(option.id, e.target.value)
+                        }
+                        className="flex-1"
+                        disabled={isSubmitting}
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleRemoveOption(option.id)}
+                        className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        disabled={
+                          currentQuestion.answerOptions.length <= 1 ||
+                          isSubmitting
+                        }
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+                {errors.questionOptions && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {errors.questionOptions}
+                  </p>
+                )}
+
+                <p className="text-sm text-gray-500 mt-3">
+                  Check the correct answer(s) for this question. At least one
+                  answer must be marked as correct.
                 </p>
-              )}
-
-              <p className="text-sm text-gray-500 mt-3">
-                Check the correct answer(s) for this question. At least one
-                answer must be marked as correct.
-              </p>
+              </div>
             </div>
-          </div>
 
-          {/* Navigation */}
-          <div className="flex items-center justify-between mt-8">
-            <Button
-              variant="outline"
-              onClick={handlePrevious}
-              disabled={currentQuestionIndex === 0 || isSubmitting}
-            >
-              <ChevronLeft className="w-4 h-4 mr-2" />
-              Previous
-            </Button>
+            {/* Navigation */}
+            <div className="flex items-center justify-between mt-8">
+              <Button
+                variant="outline"
+                onClick={handlePrevious}
+                disabled={currentQuestionIndex === 0 || isSubmitting}
+              >
+                <ChevronLeft className="w-4 h-4 mr-2" />
+                Previous
+              </Button>
 
-            <div className="flex space-x-2">
-              {currentQuestionIndex < TOTAL_QUESTIONS - 1 ? (
-                <Button
-                  onClick={handleNext}
-                  disabled={isSubmitting || hasErrors}
-                >
-                  Next
-                  <ChevronRight className="w-4 h-4 ml-2" />
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleSave}
-                  className="bg-green-600 hover:bg-green-700"
-                  disabled={isSubmitting || hasErrors}
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Exam
-                </Button>
-              )}
+              <div className="flex space-x-2">
+                {currentQuestionIndex < TOTAL_QUESTIONS - 1 ? (
+                  <Button
+                    onClick={handleNext}
+                    disabled={isSubmitting || hasErrors}
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleSave}
+                    className="bg-green-600 hover:bg-green-700"
+                    disabled={isSubmitting || hasErrors}
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Exam
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-      
-    </div>
-    {isEdit&&<Card>
-    <CardHeader>
-      <CardTitle>Navigimi i pyetjeve</CardTitle>
-      <div className="text-sm text-muted-foreground">
-        Progresi: {progress.toFixed(1)}%
+          </CardContent>
+        </Card>
       </div>
-      <Progress value={progress} className="h-2" />
-    </CardHeader>
-    <CardContent>
-      <div className="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto">
-        {questions.map((question, index) => {
-          const isCurrent = currentQuestion.id === question.id;
-          console.log(questions, "pytjet");
-          
-          return (
-            <button
-              key={question.id}
-              onClick={() => {
-                console.log(question.id, );
-                updateUrl(question.id - 1)
-                // navigate(
-                //   `/test-management/edit/${params.examId!}/${question.id}`
-                // );
-              }}
-              className={`
+      {isEdit && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Navigimi i pyetjeve</CardTitle>
+            <div className="text-sm text-muted-foreground">
+              Progresi: {progress.toFixed(1)}%
+            </div>
+            <Progress value={progress} className="h-2" />
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto">
+              {questions.map((question, index) => {
+                const isCurrent = currentQuestion.id === question.id;
+                return (
+                  <button
+                    key={question.id}
+                    onClick={() => {
+                      console.log(question.id);
+                      updateUrl(question.id - 1);
+                      // navigate(
+                      //   `/test-management/edit/${params.examId!}/${question.id}`
+                      // );
+                    }}
+                    className={`
                     w-8 h-8 text-xs rounded border transition-colors
-                    ${question.title === "" && !isCurrent ? 'blur-[1px]' : ''}
+                    ${question.title === '' && !isCurrent ? 'blur-[1px]' : ''}
                     ${
                       isCurrent
                         ? 'bg-primary text-primary-foreground border-primary'
                         : 'bg-muted hover:bg-muted/80 border-muted'
                     }
                   `}
-                disabled={question.title === "" && !isCurrent}
-            >
-              {index + 1}
-            </button>
-          );
-        })}
-      </div>
+                    disabled={question.title === '' && !isCurrent}
+                  >
+                    {index + 1}
+                  </button>
+                );
+              })}
+            </div>
 
-      <div className="mt-4 space-y-2 text-xs">
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-primary rounded"></div>
-          <span>Aktuale</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-yellow-100 border border-yellow-300 rounded dark:bg-yellow-900 dark:border-yellow-700"></div>
-          <span>E përgjigjur</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-muted border border-muted rounded"></div>
-          <span>Pa përgjigje</span>
-        </div>
-      </div>
-    </CardContent>
-  </Card> }
+            <div className="mt-4 space-y-2 text-xs">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-primary rounded"></div>
+                <span>Aktuale</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-yellow-100 border border-yellow-300 rounded dark:bg-yellow-900 dark:border-yellow-700"></div>
+                <span>E përgjigjur</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-muted border border-muted rounded"></div>
+                <span>Pa përgjigje</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
