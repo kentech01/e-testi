@@ -292,7 +292,7 @@ export function TestTaking({
       }
     } catch (error: any) {
       console.error('Failed to fetch exam data:', error);
-      toast.error('Failed to load exam. Please try again.');
+      toast.error('Dështoi ngarkimi i testeve. Ju lutem provoni përsëri');
       onExit();
     } finally {
       setLoading(false);

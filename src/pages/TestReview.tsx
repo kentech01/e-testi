@@ -24,7 +24,7 @@ export function TestReview() {
 
   useEffect(() => {
     if (!examId) {
-      toast.error('Invalid exam ID');
+      toast.error('ID e testit nuk është valide');
       navigate('/tests');
       return;
     }
@@ -52,7 +52,7 @@ export function TestReview() {
       setExamResults(results);
     } catch (error: any) {
       console.error('Failed to fetch data:', error);
-      toast.error('Failed to load test review. Please try again.');
+      toast.error('Nuk u arrit të ngarkohej rishikimi i testit. Provoni përsëri.');
       navigate('/tests');
     } finally {
       setLoading(false);

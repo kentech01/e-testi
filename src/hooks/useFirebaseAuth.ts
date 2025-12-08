@@ -268,7 +268,7 @@ export const useFirebaseAuth = () => {
         loading: false,
       }));
 
-      toast.success('U hytë me sukses në llogari!');
+      toast.success('Ju hytë me sukses në llogari!');
       return userCredential;
     } catch (error: any) {
       const errorMessage = getFirebaseErrorMessage(error.code);
@@ -312,7 +312,7 @@ export const useFirebaseAuth = () => {
         loading: false,
       }));
 
-      toast.success('U hytë me sukses me Google!');
+      toast.success('Ju hytë me sukses!');
       return userCredential;
     } catch (error: any) {
       const errorMessage = getFirebaseErrorMessage(error.code);
@@ -352,10 +352,10 @@ export const useFirebaseAuth = () => {
         );
       }
 
-      toast.success('U dolët me sukses nga llogaria!');
+      toast.success('Ju dolët me sukses nga llogaria!');
     } catch (error: any) {
       console.error('Sign out error:', error);
-      toast.success('U dolët nga llogaria!');
+      toast.error('Dalja nga llogaria shkoi keq!');
     }
   };
 

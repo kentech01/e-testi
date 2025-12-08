@@ -62,6 +62,7 @@ const Tips = React.lazy(() =>
 import type { TestTakingProps } from '../pages/TestTaking';
 import type { ExamInterfaceProps } from '../pages/ExamInterface';
 import type { TestResultsProps } from '../pages/TestResults';
+import examService from '@/services/exams';
 
 // Loading component
 const LoadingFallback = () => (
@@ -101,7 +102,7 @@ const TestTakingWrapper = ({
 
   // Validate examId - can be string UUID or number
   if (!examId || examId === 'NaN') {
-    toast.error('Invalid exam ID');
+    toast.error('ID e testit nuk është valide');
     navigate('/tests');
     return null;
   }
@@ -168,19 +169,22 @@ const AppRouter: React.FC<AppRouterProps> = ({
   const [testAnswers, setTestAnswers] = useState<number[]>([]);
 
   // Handlers
-  const handleStartTest = (testId: string | number) => {
+  const handleStartTest = async(testId: string | number) => {
     // Validate testId
     if (
       !testId ||
       testId === 'NaN' ||
       (typeof testId === 'number' && isNaN(testId))
     ) {
-      toast.error('Invalid test ID');
+      toast.error('ID e testit nuk është valide');
       return;
     }
+    const examData = await examService.getExamById(testId);
+    console.log(examData, "prej routeri");
+    
     setCurrentTestId(typeof testId === 'number' ? testId : null);
     navigate(`/tests/${testId}`);
-    toast.info(`Filloi Test ${testId}`);
+    toast.info(`Filloi: ${examData.title}`);
   };
 
   const handleStartNewExam = () => {
@@ -231,7 +235,7 @@ const AppRouter: React.FC<AppRouterProps> = ({
       testId === 'NaN' ||
       (typeof testId === 'number' && isNaN(testId))
     ) {
-      toast.error('Invalid test ID');
+      toast.error('ID e testit nuk është valide');
       return;
     }
     setCurrentTestId(typeof testId === 'number' ? testId : null);

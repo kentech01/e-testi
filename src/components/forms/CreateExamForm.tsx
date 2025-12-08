@@ -216,12 +216,12 @@ export function CreateExamForm({ onBack, onSave }: CreateExamFormProps) {
 
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Exam Information</CardTitle>
+          <CardTitle>Informatat e Testit</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="md:col-span-3">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Exam Title
+              Titulli i Testit
             </label>
             <Input
               value={examTitle}
@@ -235,7 +235,7 @@ export function CreateExamForm({ onBack, onSave }: CreateExamFormProps) {
           </div>
           <div className="md:col-span-3">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Exam Description
+              Përshkrimi i Testit
             </label>
             <Textarea
               value={examDescription}
@@ -251,7 +251,7 @@ export function CreateExamForm({ onBack, onSave }: CreateExamFormProps) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Sector
+              Klasa
             </label>
             <select
               className="w-full border rounded-md h-10 px-3"
@@ -271,7 +271,7 @@ export function CreateExamForm({ onBack, onSave }: CreateExamFormProps) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Passing Score
+              Pikët Kaluese
             </label>
             <Input
               type="text"
@@ -287,7 +287,7 @@ export function CreateExamForm({ onBack, onSave }: CreateExamFormProps) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Total Questions
+              Totali i Pyetjeve
             </label>
             <Input type="number" value={1} disabled />
           </div>
