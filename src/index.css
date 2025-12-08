@@ -252,3 +252,6 @@ html {
 .ql-editor {
   min-height: 200px;
 }
+button{
+  cursor: pointer !important;
+}

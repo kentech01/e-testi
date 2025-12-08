@@ -49,7 +49,7 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
 
   useEffect(() => {
     if (!actualExamId) {
-      toast.error('Invalid exam ID');
+      toast.error('ID e testit nuk është valide');
       if (onBack) {
         onBack();
       } else {
@@ -78,7 +78,7 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
       }
     } catch (error: any) {
       console.error('Failed to fetch data:', error);
-      toast.error('Failed to load test results. Please try again.');
+      toast.error('Dështoi ngarkimi i rezultateve. Ju lutem provoni përsëri');
       if (onBack) {
         onBack();
       } else {

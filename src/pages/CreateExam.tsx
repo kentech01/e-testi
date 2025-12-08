@@ -1531,12 +1531,12 @@ export function CreateExam() {
           </Button>
           <div className="flex-1">
             <h1 className="text-3xl font-bold text-gray-900">
-              {isEdit ? 'Edit The Exam' : 'Create New Exam'}
+              {isEdit ? 'Përditëso testin' : 'Krijo një test të ri'}
             </h1>
             <p className="text-gray-600 mt-1">
               {isEdit
-                ? 'Edit and update the exam questions. Make sure all changes are completed before saving'
-                : 'Create an exam with 100 questions. Complete all questions to save the exam.'}
+                ? 'Përditëso pyetjet e testit. Sigurohuni qe te gjitha ndryshimet jane te kompletuara para se ta ruani.'
+                : 'Krijo një test me 100 pyetje. Create an exam with 100 questions. Plotësoni të gjitha pyetjet për të ruajtur testin.'}
             </p>
           </div>
         </div>
@@ -1544,15 +1544,15 @@ export function CreateExam() {
         {/* Exam Details */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Exam Information</CardTitle>
+            <CardTitle>Informatat e Testit</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Exam Title <span className="text-red-500">*</span>
+                Titulli i Testit <span className="text-red-500">*</span>
               </label>
               <Input
-                placeholder="Enter exam title..."
+                placeholder="Shkruaj titullin e testit..."
                 value={examTitle}
                 onChange={(e) => setExamTitle(e.target.value)}
                 className="w-full"
@@ -1564,11 +1564,11 @@ export function CreateExam() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Exam Description <span className="text-red-500">*</span>
+                Përshkrimi i Testit <span className="text-red-500">*</span>
               </label>
 
               <Textarea
-                placeholder="Enter exam description..."
+                placeholder="Shkruaj Përshkrimin e Testit..."
                 value={examDescription}
                 onChange={(e) => setExamDescription(e.target.value)}
                 className="w-full"
@@ -1583,7 +1583,7 @@ export function CreateExam() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Sector <span className="text-red-500">*</span>
+                  Klasa <span className="text-red-500">*</span>
                 </label>
                 <select
                   className="w-full border rounded-md h-10 px-3"
@@ -1591,7 +1591,7 @@ export function CreateExam() {
                   onChange={(e) => changeSectorIdDropdown(e.target.value)}
                   disabled={loadingSectors}
                 >
-                  <option value="">Select a sector...</option>
+                  <option value="">Zgjedh Klasen...</option>
                   {sectors.map((sector) => (
                     <option key={sector.id} value={sector.id}>
                       {sector.displayName}
@@ -1604,7 +1604,7 @@ export function CreateExam() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Passing Score
+                  Pikët Kaluese
                 </label>
                 <Input
                   type="text"
@@ -1622,7 +1622,7 @@ export function CreateExam() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Total Questions
+                  Totali i Pyetjeve
                 </label>
                 <Input type="number" value={TOTAL_QUESTIONS} disabled />
               </div>
@@ -1635,9 +1635,9 @@ export function CreateExam() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-lg font-semibold">Progress</h3>
+                <h3 className="text-lg font-semibold">Progresi</h3>
                 <p className="text-sm text-gray-600">
-                  Question {currentQuestionIndex + 1} of {TOTAL_QUESTIONS} •{' '}
+                  Pyetja {currentQuestionIndex + 1} prej {TOTAL_QUESTIONS} •{' '}
                   {completedQuestions} completed
                 </p>
               </div>
@@ -1654,7 +1654,7 @@ export function CreateExam() {
         {/* Question Form */}
         <Card>
           <CardHeader>
-            <CardTitle>Question {currentQuestionIndex + 1}</CardTitle>
+            <CardTitle>Pyetja {currentQuestionIndex + 1}</CardTitle>
           </CardHeader>
           <CardContent className="p-6 relative">
             {isSubmitting && (
@@ -1671,10 +1671,10 @@ export function CreateExam() {
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Question Title <span className="text-red-500">*</span>
+                  Titulli I Pyetjes <span className="text-red-500">*</span>
                 </label>
                 <Input
-                  placeholder="Enter your question here..."
+                  placeholder="Shkruaj pyetjen..."
                   value={currentQuestion.title}
                   onChange={(e) => handleQuestionTitleChange(e.target.value)}
                   className="w-full"
@@ -1689,7 +1689,7 @@ export function CreateExam() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description (Optional)
+                  Përshkrimi (Opsional)
                 </label>
 
                 <ReactQuill
@@ -1703,7 +1703,7 @@ export function CreateExam() {
               {/* Subject Selection */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Subject <span className="text-red-500">*</span>
+                  Lënda <span className="text-red-500">*</span>
                 </label>
                 <Select
                   value={selectedSubjectValue}
@@ -1719,15 +1719,15 @@ export function CreateExam() {
                     <SelectValue
                       placeholder={
                         loadingSubjects
-                          ? 'Loading subjects...'
-                          : 'Select a subject...'
+                          ? 'Duke u ngarkuar lëndët...'
+                          : 'Zgjedhni lëndën...'
                       }
                     />
                   </SelectTrigger>
                   <SelectContent>
                     {loadingSubjects ? (
                       <div className="p-2 text-sm text-muted-foreground">
-                        Loading subjects...
+                        Duke u ngarkuar lëndët...
                       </div>
                     ) : availableSubjects.length > 0 ? (
                       availableSubjects.map((subject) => (
@@ -1738,15 +1738,15 @@ export function CreateExam() {
                     ) : (
                       <div className="p-2 text-sm text-muted-foreground">
                         {sectorId
-                          ? 'No subjects available'
-                          : 'Please select a sector first'}
+                          ? 'Nuk ka lëndë të disponueshme.'
+                          : 'Zgjidhni fillimisht një lëndë.'}
                       </div>
                     )}
                   </SelectContent>
                 </Select>
                 {subjectsError && (
                   <p className="mt-1 text-sm text-red-600">
-                    Error loading subjects: {subjectsError}
+                    Ngarkimi i lëndëve shkoi keq: {subjectsError}
                   </p>
                 )}
                 {errors.questionSubject && (
@@ -1756,8 +1756,7 @@ export function CreateExam() {
                 )}
                 {!sectorId && (
                   <p className="mt-1 text-sm text-amber-600">
-                    Please select a sector in the exam information section above
-                    to see available subjects.
+                    Ju lutemi zgjedhni klasën tek informatat e testit, për të ngarkuar lëndët
                   </p>
                 )}
               </div>
@@ -1765,14 +1764,12 @@ export function CreateExam() {
               {/* Question Image */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Question Image (Optional)
+                  Imazhi i pyetjes (Optional)
                 </label>
                 <p className="mb-2 text-xs text-gray-500">
-                  Recommended: clear images up to{' '}
-                  <span className="font-semibold">2&nbsp;MB</span> in size and
-                  no larger than about{' '}
-                  <span className="font-semibold">600×600&nbsp;px</span> to keep
-                  loading fast and previews readable on all devices.
+                Rekomandohen imazhe të qarta deri në{' '}
+                  <span className="font-semibold">2&nbsp;MB</span> dhe jo më të mëdha se rreth{' '}
+                  <span className="font-semibold">600×600&nbsp;px</span> për të ruajtur ngarkimin e shpejtë dhe lexueshmërinë në të gjitha pajisjet.
                 </p>
                 <input
                   ref={fileInputRef}
@@ -1788,11 +1785,11 @@ export function CreateExam() {
                   disabled={isSubmitting}
                 >
                   <Upload className="w-5 h-5 mr-2" />
-                  {currentQuestion.imageFile ? 'Change Image' : 'Choose Image'}
+                  {currentQuestion.imageFile ? 'Ndrysho imazhin' : 'Zgjedh Imazhin'}
                 </Button>
                 {currentQuestion.imageFile && (
                   <p className="mt-2 text-sm text-gray-600">
-                    Selected: {currentQuestion.imageFile.name}
+                    E zgjedhur: {currentQuestion.imageFile.name}
                   </p>
                 )}
                 {(currentQuestion.imageUrl || imageObjectUrl) && (
@@ -1814,7 +1811,7 @@ export function CreateExam() {
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <label className="block text-sm font-medium text-gray-700">
-                    Answer Options <span className="text-red-500">*</span>
+                    Opsionet e përgjigjieve <span className="text-red-500">*</span>
                   </label>
                   <Button
                     variant="outline"
@@ -1824,7 +1821,7 @@ export function CreateExam() {
                     disabled={isSubmitting}
                   >
                     <Plus className="w-4 h-4 mr-1" />
-                    Add Option
+                    Shto një opsion
                   </Button>
                 </div>
 
@@ -1877,8 +1874,8 @@ export function CreateExam() {
                 )}
 
                 <p className="text-sm text-gray-500 mt-3">
-                  Check the correct answer(s) for this question. At least one
-                  answer must be marked as correct.
+                  Zgjedh pergjigjien e saktë për këtë pyetje. Së paku një pergjigjie duhet të zgjedhet si e saktë.
+                  
                 </p>
               </div>
             </div>
@@ -1891,7 +1888,7 @@ export function CreateExam() {
                 disabled={currentQuestionIndex === 0 || isSubmitting}
               >
                 <ChevronLeft className="w-4 h-4 mr-2" />
-                Previous
+                E kaluar
               </Button>
 
               <div className="flex space-x-2">
@@ -1900,7 +1897,7 @@ export function CreateExam() {
                     onClick={handleNext}
                     disabled={isSubmitting || hasErrors}
                   >
-                    Next
+                    Tjetra
                     <ChevronRight className="w-4 h-4 ml-2" />
                   </Button>
                 ) : (
@@ -1910,7 +1907,7 @@ export function CreateExam() {
                     disabled={isSubmitting || hasErrors}
                   >
                     <Save className="w-4 h-4 mr-2" />
-                    Save Exam
+                    Ruaj Testin
                   </Button>
                 )}
               </div>

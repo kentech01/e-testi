@@ -46,7 +46,7 @@ export function TestManagement() {
       
     } catch (error) {
       console.error('Failed to fetch exams:', error);
-      toast.error('Failed to load exams');
+      toast.error('Dështoi ngarkimi i testeve');
     } finally {
       setLoading(false);
     }
@@ -80,10 +80,10 @@ export function TestManagement() {
     try {
       await examService.deleteExam(examToDelete);
       setExams(exams.filter((exam) => exam.id !== examToDelete));
-      toast.success('Exam deleted successfully');
+      toast.success('Testi u fshi me sukses');
     } catch (error) {
       console.error('Failed to delete exam:', error);
-      toast.error('Failed to delete exam');
+      toast.error('Dështoi fshirja e testit');
     } finally {
       setDeleteDialogOpen(false);
       setExamToDelete(null);
@@ -95,9 +95,9 @@ export function TestManagement() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Exams</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Testet</h1>
           <p className="text-gray-600 mt-1">
-            Manage and organize all your exams in one place.
+            Menaxho dhe organizo të gjitha testet ne një vend.
           </p>
         </div>
         <Button
@@ -106,7 +106,7 @@ export function TestManagement() {
           style={{ minWidth: '160px' }}
         >
           <Plus className="w-4 h-4" />
-          Create New Exam
+          Krijo një test të ri
         </Button>
       </div>
 
@@ -115,26 +115,26 @@ export function TestManagement() {
         <CardContent className="p-0">
           {loading ? (
             <div className="flex items-center justify-center p-12">
-              <div className="text-gray-500">Loading exams...</div>
+              <div className="text-gray-500">Duke u ngarkuar provimet...</div>
             </div>
           ) : exams.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-12">
-              <p className="text-gray-500 mb-4">No exams found</p>
+              <p className="text-gray-500 mb-4">Nuk u gjet asnjë test</p>
               <Button onClick={handleCreateExam}>
                 <Plus className="w-4 h-4 mr-2" />
-                Create Your First Exam
+                Krijo testin tuaj të parë
               </Button>
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="font-semibold">Title</TableHead>
-                  <TableHead className="font-semibold">Sector</TableHead>
-                  <TableHead className="font-semibold">Status</TableHead>
-                  <TableHead className="font-semibold">Questions</TableHead>
+                  <TableHead className="font-semibold">Titulli</TableHead>
+                  <TableHead className="font-semibold">Klasa</TableHead>
+                  <TableHead className="font-semibold">Statusi</TableHead>
+                  <TableHead className="font-semibold">Pyetjet</TableHead>
                   <TableHead className="font-semibold text-right">
-                    Actions
+                    Veprime
                   </TableHead>
                 </TableRow>
               </TableHeader>

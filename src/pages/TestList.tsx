@@ -154,7 +154,7 @@ export function TestList({
     } catch (err: any) {
       console.error('Failed to fetch tests:', err);
       setError('Failed to load tests. Please try again.');
-      toast.error('Failed to load tests');
+      toast.error('Dështoi ngarkimi i testeve');
     } finally {
       setLoading(false);
     }

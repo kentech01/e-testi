@@ -183,9 +183,8 @@ export function Dashboard({ user }: DashboardProps) {
 
       // Navigate to the test
       navigate(`/tests/${randomTest.id}`);
-      toast.info(`Filloi test: ${randomTest.title}`);
+      toast.info(`Filloi testi: ${randomTest.title}`);
     } catch (error) {
-      console.error('Failed to start random test:', error);
       toast.error('Dështoi të fillonte testi. Ju lutem provoni përsëri.');
     } finally {
       setIsLoading(false);
