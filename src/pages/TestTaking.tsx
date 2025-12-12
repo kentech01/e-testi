@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import parse from "html-react-parser";
+import parse from 'html-react-parser';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -86,7 +86,24 @@ export function TestTaking({
 
   // Get current question object
   const currentQuestion = questions.find((q) => q.id === currentQuestionId);
-
+  const parsedTitle = useMemo(() => {
+    if (!currentQuestion) return '';
+    console.log(currentQuestion.subjectId === 'bcc364a1-4fe6-478c-ac9f-02e5aded179d');
+    
+    if (
+      currentQuestion.text?.includes('[') &&
+      currentQuestion.subjectId === 'bcc364a1-4fe6-478c-ac9f-02e5aded179d'
+    ) {
+      try {
+        return JSON.parse(currentQuestion.text);
+      } catch {
+        return currentQuestion.text;
+      }
+    }
+    return currentQuestion.text;
+  }, [currentQuestion]);
+  console.log(parsedTitle);
+  
   // Fetch exam, questions, and existing answers
   useEffect(() => {
     fetchExamData();
@@ -187,7 +204,6 @@ export function TestTaking({
 
     return () => clearInterval(timer);
   }, [exam, loading, examId]);
-   
 
   // Auto-submit countdown effect: when time is up, give user 10 seconds before final submit
   useEffect(() => {
@@ -336,7 +352,7 @@ export function TestTaking({
     const selectedOptionIds = new Set(
       existingAnswers.map((answer) => answer.selectedOptionId)
     );
-    
+
     setSelectedOptions(selectedOptionIds);
   };
 
@@ -401,7 +417,6 @@ export function TestTaking({
       const submitPromises = Array.from(selectedOptions).map(
         async (optionId) => {
           try {
-            
             const answer = await userAnswerService.submitAnswer({
               examId: String(examId),
               questionId: currentQuestionId,
@@ -409,13 +424,12 @@ export function TestTaking({
               points: currentQuestion.points || 1,
               timeSpentSeconds: timeSpent,
             });
-            
+
             return answer;
           } catch (error: any) {
             console.error(`Error submitting option ${optionId}:`, error);
             // If answer already exists, try to update it
             if (error?.response?.status === 400) {
-              
               // Answer already exists, find it and update
               const existingAnswer = userAnswers.find(
                 (a) =>
@@ -462,7 +476,6 @@ export function TestTaking({
       );
 
       const submittedAnswers = await Promise.all(submitPromises);
-      
 
       // Update local userAnswers state
       setUserAnswers((prev) => {
@@ -753,9 +766,25 @@ export function TestTaking({
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <div className="text-lg mb-8">{currentQuestion.text}</div>
+                <h1 className="text-lg mb-8">
+                  {Array.isArray(parsedTitle) ? (
+                    parsedTitle.map((val, index) =>
+                      index % 2 == 0 ? (
+                        <h1 className='inline-block'>{val}</h1>
+                      ) : (
+                        <math-field
+                          read-only
+                          value={val}
+                          style={{ fontSize: '22px', padding: '8px', display: "inline-block" }}
+                        ></math-field>
+                      )
+                    )
+                  ) : (
+                    <h1>{parsedTitle}</h1>
+                  )}
+                </h1>   
                 {currentQuestion?.description && (
-                  <div className='[&>ul]:list-disc [&>ol]:list-decimal'>
+                  <div className="[&>ul]:list-disc [&>ol]:list-decimal">
                     {parse(currentQuestion.description)}
                   </div>
                 )}

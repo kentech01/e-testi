@@ -26,6 +26,7 @@ export interface Question {
   orderNumber: number;
   points: number;
   isActive: boolean;
+  isComplex: boolean;
   options?: QuestionOption[];
   createdAt?: string;
   updatedAt?: string;

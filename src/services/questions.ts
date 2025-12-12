@@ -29,6 +29,7 @@ export interface Question
     | 'updatedAt'
   > {
   id: string;
+  subjectId: string
   examId: string;
   orderNumber: number;
   points: number;
@@ -47,6 +48,7 @@ export interface CreateQuestionRequest {
   parentId?: string;
   displayText?: string;
   orderNumber: number;
+  isComplex: boolean;
   points?: number;
   isActive?: boolean;
   options?: Array<{
