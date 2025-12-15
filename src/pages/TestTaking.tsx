@@ -75,6 +75,7 @@ export function TestTaking({
     new Set()
   );
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const complexAnswer = useRef<boolean>(false)
   const [submitting, setSubmitting] = useState(false);
   const [submittingAnswer, setSubmittingAnswer] = useState(false); // Track answer submission
   const [autoSubmitActive, setAutoSubmitActive] = useState(false); // Auto-submit countdown after time ends
@@ -86,6 +87,19 @@ export function TestTaking({
 
   // Get current question object
   const currentQuestion = questions.find((q) => q.id === currentQuestionId);
+  useEffect(()=>{
+    console.log(currentQuestion);
+    
+    if(currentQuestion){
+      if(currentQuestion!.subjectId! == 'bcc364a1-4fe6-478c-ac9f-02e5aded179d'){
+        currentQuestion!.options!.forEach((option:any)=>{
+          if(option.text.includes("~")){
+            complexAnswer.current = true;
+          }
+        })
+      }
+    }
+  }, [currentQuestion]);
   const parsedTitle = useMemo(() => {
     if (!currentQuestion) return '';
     console.log(currentQuestion.subjectId === 'bcc364a1-4fe6-478c-ac9f-02e5aded179d');
@@ -819,7 +833,11 @@ export function TestTaking({
                         htmlFor={`option-${option.id}`}
                         className="flex-1 cursor-pointer py-3"
                       >
-                        {option.optionLetter}. {option.text}
+                        {option.optionLetter}. {complexAnswer.current ? <math-field
+                          read-only
+                          value={option.text.replace(/^~\s*/, "")}
+                          style={{ fontSize: '22px', padding: '8px', display: "inline-block", background:"transparent" }}
+                        ></math-field>: option.text}
                       </Label>
                       {option.imageUrl && (
                         <img
