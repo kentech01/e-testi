@@ -629,6 +629,9 @@ export function CreateExam() {
     if (!complexCheck) {
       complexTitleRef.current = [complexTitleRef.current[0]];
     }
+    if (complexCheck) {
+      handleAddComplex();
+    }
     setQuestions(
       questions.map((q, index) =>
         index === currentQuestionIndex ? { ...q, isComplex: complexCheck } : q
@@ -658,7 +661,7 @@ export function CreateExam() {
     setComplexCount((prev) => prev.slice(0, -1));
   };
   const handleQuestionDescriptionChange = (description: string) => {
-    if (isFirstLoad.current) {
+    if (isFirstLoad.current && isEdit) {
       isFirstLoad.current = false; // ✅ ignore init call
       return;
     }
@@ -1424,7 +1427,7 @@ export function CreateExam() {
           if (!nextDbId) {
             // Check if all 100 questions are already created
             const currentCreatedIds = createdQuestionIdsRef.current;
-            if (currentCreatedIds.size >= TOTAL_QUESTIONS) {
+            if (currentCreatedIds.size >= TOTAL_QUESTIONS + 1) {
               // All questions created, can't create more - navigate to test-management
               navigate('/test-management');
               return;
