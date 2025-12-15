@@ -26,6 +26,7 @@ import {
 import {
   ArrowLeft,
   Plus,
+  Minus,
   X,
   Upload,
   ChevronLeft,
@@ -39,6 +40,7 @@ import type { Exam } from '../services/exams';
 import type { Question as ServiceQuestion } from '../services/questions';
 import useSectors from '../hooks/useSectors';
 import useSubjects from '../hooks/useSubjects';
+import { JSX } from 'react/jsx-runtime';
 
 interface AnswerOption {
   id: string;
@@ -53,6 +55,7 @@ interface Question {
   answerOptions: AnswerOption[];
   imageFile?: File | null;
   imageUrl?: string;
+  isComplex: boolean;
   subject?: string;
 }
 
@@ -69,13 +72,38 @@ export function CreateExam() {
 
   // Local state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [complexCount, setComplexCount] = useState<number[]>([]);
   const [examTitle, setExamTitle] = useState('');
   const [examDescription, setExamDescription] = useState('');
   const [sectorId, setSectorId] = useState<string>('');
   const [passingScoreText, setPassingScoreText] = useState<string>('40');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mainTitleState, setMainTitleState] = useState('');
+  const complexTitleRef = useRef<string[]>([]);
+  const [complexAnswerRadio, setComplexAnswerRadio] = useState<boolean>(false);
   const [examId, setExamId] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
+  const elements:
+    | string
+    | number
+    | bigint
+    | boolean
+    | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
+    | Iterable<React.ReactNode>
+    | Promise<
+        | string
+        | number
+        | bigint
+        | boolean
+        | React.ReactPortal
+        | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
+        | Iterable<React.ReactNode>
+        | null
+        | undefined
+      >
+    | JSX.Element[]
+    | null
+    | undefined = [];
   const [isLoading, setIsLoading] = useState(false);
   const modules = {
     toolbar: [
@@ -99,10 +127,10 @@ export function CreateExam() {
   // Debug: Log subjects when they change
   useEffect(() => {
     if (fetchedSubjects && fetchedSubjects.length > 0) {
-      console.log('Fetched subjects:', fetchedSubjects);
+      // console.log('Fetched subjects:', fetchedSubjects);
     }
     if (subjectsError) {
-      console.error('Subjects error:', subjectsError);
+      // console.error('Subjects error:', subjectsError);
     }
   }, [fetchedSubjects, subjectsError]);
   const [createdQuestionIds, setCreatedQuestionIds] = useState<Set<number>>(
@@ -127,6 +155,7 @@ export function CreateExam() {
       id: index + 1,
       title: '',
       description: '',
+      isComplex: false,
       answerOptions: [
         { id: `${index + 1}-1`, text: '', isCorrect: false },
         { id: `${index + 1}-2`, text: '', isCorrect: false },
@@ -284,6 +313,7 @@ export function CreateExam() {
             updatedQuestions.push({
               id: localId,
               title: dbQuestion.text,
+              isComplex: dbQuestion.isComplex,
               description: dbQuestion.description || '',
               answerOptions:
                 dbQuestion.options?.map((opt, idx) => ({
@@ -301,6 +331,7 @@ export function CreateExam() {
               id: localId,
               title: '',
               description: '',
+              isComplex: false,
               answerOptions: [
                 { id: `${localId}-1`, text: '', isCorrect: false },
                 { id: `${localId}-2`, text: '', isCorrect: false },
@@ -394,6 +425,39 @@ export function CreateExam() {
   }, [params.examId]);
 
   const currentQuestion = questions[currentQuestionIndex];
+  // console.log(currentQuestion);
+
+  const title =
+    currentQuestion.subject == 'bcc364a1-4fe6-478c-ac9f-02e5aded179d' &&
+    currentQuestion.title.includes('[')
+      ? JSON.parse(currentQuestion!.title)
+      : currentQuestion.title;
+
+  // console.log(title);
+  useEffect(() => {
+    if (Array.isArray(title)) {
+      setMainTitleState(title[0]);
+      complexTitleRef.current = title;
+      setComplexCount((prev) => {
+        const copy = [...prev];
+        for (let index = 0; index < (title.length - 1) / 2; index++) {
+          copy[index] = index;
+        }
+        return copy;
+      });
+    } else {
+      setMainTitleState(title);
+    }
+    if (currentQuestion.subject == 'bcc364a1-4fe6-478c-ac9f-02e5aded179d') {
+      let isComplexAnswer = false;
+      currentQuestion.answerOptions.forEach((option) => {
+        if (option.text.includes('~')) {
+          isComplexAnswer = true;
+        }
+      });
+      setComplexAnswerRadio(isComplexAnswer);
+    }
+  }, [currentQuestion]);
 
   // Get available subjects from API based on selected sector
   const availableSubjects = useMemo(() => {
@@ -471,7 +535,47 @@ export function CreateExam() {
       )
     );
   };
-
+  const handleAnswerComplexChange = () => {
+    if (complexAnswerRadio) {
+      setQuestions(
+        questions.map((q, index) =>
+          index === currentQuestionIndex
+            ? {
+                ...q,
+                answerOptions: q.answerOptions.map((option) =>
+                  option.text.startsWith('~')
+                    ? { ...option, text: option.text.replace(/^~\s*/, '') }
+                    : option
+                ),
+              }
+            : q
+        )
+      );
+    } else {
+      setQuestions(
+        questions.map((q, index) =>
+          index === currentQuestionIndex
+            ? {
+                ...q,
+                answerOptions: q.answerOptions.map((option) =>
+                  !option.text.startsWith('~')
+                    ? { ...option, text: `~${option.text}` }
+                    : option
+                ),
+              }
+            : q
+        )
+      );
+    }
+    setComplexAnswerRadio(!complexAnswerRadio);
+  };
+  const handleMathQuestionChange = (index: number, value: any) => {
+    complexTitleRef.current[index * 2 + 1] = value;
+    console.log(value);
+  };
+  const handleComplexTitleChange = (index: number, value: any) => {
+    complexTitleRef.current[index * 2 + 2] = value;
+  };
   const handleRemoveOption = (optionId: string) => {
     if (currentQuestion.answerOptions.length > 1) {
       setQuestions(
@@ -490,6 +594,8 @@ export function CreateExam() {
   };
 
   const handleOptionTextChange = (optionId: string, text: string) => {
+    console.log(text);
+    
     setQuestions(
       questions.map((q, index) =>
         index === currentQuestionIndex
@@ -518,16 +624,39 @@ export function CreateExam() {
       )
     );
   };
-
-  const handleQuestionTitleChange = (title: string) => {
+  const handleComplexChange = (isChecked: string) => {
+    let complexCheck = isChecked === 'true';
+    if (!complexCheck) {
+      complexTitleRef.current = [complexTitleRef.current[0]];
+    }
     setQuestions(
       questions.map((q, index) =>
-        index === currentQuestionIndex ? { ...q, title } : q
+        index === currentQuestionIndex ? { ...q, isComplex: complexCheck } : q
       )
     );
   };
+  const handleQuestionTitleChange = (title: string) => {
+    setMainTitleState(title);
+    complexTitleRef.current[0] = title;
+    if (!currentQuestion.isComplex) {
+      setQuestions(
+        questions.map((q, index) =>
+          index === currentQuestionIndex ? { ...q, title } : q
+        )
+      );
+    }
+  };
   let isFirstLoad = useRef(true);
-  
+  const handleAddComplex = () => {
+    complexTitleRef.current = [...complexTitleRef.current, '', ''];
+    setComplexCount((prev) => [
+      ...prev,
+      complexCount.length > 0 ? complexCount[complexCount.length - 1] + 1 : 1,
+    ]);
+  };
+  const handleReduceComplex = () => {
+    setComplexCount((prev) => prev.slice(0, -1));
+  };
   const handleQuestionDescriptionChange = (description: string) => {
     if (isFirstLoad.current) {
       isFirstLoad.current = false; // ✅ ignore init call
@@ -597,30 +726,39 @@ export function CreateExam() {
     return Object.keys(newErrors).length === 0;
   }, [examTitle, examDescription, sectorId, passingScoreText]);
 
-  const validateQuestion = useCallback((q: Question): boolean => {
-    const newErrors: typeof errors = {};
-    if (!q.title.trim())
-      newErrors.questionTitle = `Question ${q.id} title is required.`;
-    if (!q.subject || (typeof q.subject === 'string' && !q.subject.trim()))
-      newErrors.questionSubject = `Question ${q.id} subject is required.`;
-    if (!q.answerOptions.some((o) => o.isCorrect))
-      newErrors.questionOptions = 'At least one option must be marked correct.';
-    setErrors((prev) => ({ ...prev, ...newErrors }));
-    return Object.keys(newErrors).length === 0;
-  }, []);
+  const validateQuestion = useCallback(
+    (q: Question): boolean => {
+      const newErrors: typeof errors = {};
+      if (!mainTitleState.trim()) {
+        newErrors.questionTitle = `Question ${q.id} title is required.`;
+      }
+      if (!q.subject || (typeof q.subject === 'string' && !q.subject.trim())) {
+        newErrors.questionSubject = `Question ${q.id} subject is required.`;
+      }
+      if (!q.answerOptions.some((o) => o.isCorrect)) {
+        newErrors.questionOptions =
+          'At least one option must be marked correct.';
+      }
+      setErrors((prev) => ({ ...prev, ...newErrors }));
+      return Object.keys(newErrors).length === 0;
+    },
+    [mainTitleState]
+  );
 
   // Check if current question has validation errors
   const hasQuestionErrors = useMemo(() => {
     const q = currentQuestion;
     if (!q) return false;
-    const hasTitleError = !q.title.trim();
+    const hasTitleError = !mainTitleState?.trim();
     // More explicit check for missing subject
-    const hasSubjectError = !q.subject || 
-      q.subject === '' || 
+    const hasSubjectError =
+      !q.subject ||
+      q.subject === '' ||
       (typeof q.subject === 'string' && q.subject.trim() === '');
     const hasOptionsError = !q.answerOptions.some((o) => o.isCorrect);
+
     return hasTitleError || hasSubjectError || hasOptionsError;
-  }, [currentQuestion]);
+  }, [currentQuestion, mainTitleState]);
 
   // Check if exam has validation errors
   const hasExamErrors = useMemo(() => {
@@ -650,7 +788,7 @@ export function CreateExam() {
   const hasErrors =
     hasExamErrors || (hasQuestionBeenModified && hasQuestionErrors);
 
-  // Check if current question has changed compared to cached version
+  // Check if current question has changed compoared to cached version
   const hasQuestionChanged = useCallback((): boolean => {
     const q = questionsRef.current[currentQuestionIndex];
     if (!q || !examId) return true; // If no question or exam, treat as changed
@@ -662,10 +800,13 @@ export function CreateExam() {
     const cachedQuestion = cachedQuestions.find(
       (cq) => cq.orderNumber === q.id
     );
+
     if (!cachedQuestion) return true; // Question not in cache, treat as changed
 
     // Check if question fields changed
-    if (q.title !== (cachedQuestion.text || '')) return true;
+    if (JSON.stringify(complexTitleRef.current) !== (cachedQuestion.text || ''))
+      return true;
+    if (currentQuestion.isComplex !== cachedQuestion.isComplex) return true;
     if (q.description !== (cachedQuestion.description || '')) return true;
     // Compare subjectId - extract from cached question if it's an object
     const cachedSubjectId = (() => {
@@ -700,7 +841,13 @@ export function CreateExam() {
     }
 
     return false; // No changes detected
-  }, [currentQuestionIndex, examId]);
+  }, [
+    currentQuestionIndex,
+    examId,
+    complexTitleRef,
+    currentQuestion,
+    mainTitleState,
+  ]);
 
   // Check if exam data has changed
   const hasExamChanged = useCallback((): boolean => {
@@ -836,14 +983,16 @@ export function CreateExam() {
         optionLetter: optionLetterForIndex(idx),
         isCorrect: !!opt.isCorrect,
       }));
+      const title = JSON.stringify(complexTitleRef.current);
 
       const questionData = {
-        text: q.title,
+        text: title,
         imageUrl,
         examId: ensuredExamId!,
         subjectId: q.subject || undefined, // Send subjectId only if selected (which is the id from selected subject)
         orderNumber: q.id,
         points: 1,
+        isComplex: q.isComplex,
         isActive: true,
         description: q.description,
         options,
@@ -980,6 +1129,7 @@ export function CreateExam() {
         examId: examId,
         subjectId: questionSubject || undefined, // Send subjectId only if selected (which is the id from selected subject)
         orderNumber: localId,
+        isComplex: false,
         points: 1,
         isActive: true,
         options: defaultOptions,
@@ -1671,38 +1821,6 @@ export function CreateExam() {
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Titulli I Pyetjes <span className="text-red-500">*</span>
-                </label>
-                <Input
-                  placeholder="Shkruaj pyetjen..."
-                  value={currentQuestion.title}
-                  onChange={(e) => handleQuestionTitleChange(e.target.value)}
-                  className="w-full"
-                  disabled={isSubmitting}
-                />
-                {errors.questionTitle && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.questionTitle}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Përshkrimi (Opsional)
-                </label>
-
-                <ReactQuill
-                  theme="snow"
-                  value={currentQuestion.description}
-                onChange={(content) => handleQuestionDescriptionChange(content)}
-                  modules={modules}
-                />
-              </div>
-
-              {/* Subject Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Lënda <span className="text-red-500">*</span>
                 </label>
                 <Select
@@ -1756,10 +1874,151 @@ export function CreateExam() {
                 )}
                 {!sectorId && (
                   <p className="mt-1 text-sm text-amber-600">
-                    Ju lutemi zgjedhni klasën tek informatat e testit, për të ngarkuar lëndët
+                    Ju lutemi zgjedhni klasën tek informatat e testit, për të
+                    ngarkuar lëndët
                   </p>
                 )}
               </div>
+              {currentQuestion.subject ==
+                'bcc364a1-4fe6-478c-ac9f-02e5aded179d' && (
+                <div>
+                  <p className="block text-sm font-medium text-gray-700 mb-2">
+                    Shprehje komplekse:
+                  </p>
+                  <div className="flex gap-6">
+                    <div className="flex items-center">
+                      <input
+                        type="radio"
+                        id="isComplex"
+                        value="true"
+                        name="complex"
+                        checked={currentQuestion.isComplex}
+                        onChange={(e) => handleComplexChange(e.target.value)}
+                      />
+                      <label
+                        className="ml-1.5 text-sm font-medium text-gray-700 inline-block"
+                        htmlFor="isComplex"
+                      >
+                        Po
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="radio"
+                        id="isNotComplex"
+                        value="false"
+                        name="complex"
+                        checked={!currentQuestion.isComplex}
+                        onChange={(e) => handleComplexChange(e.target.value)}
+                      />
+                      <label
+                        className="ml-1.5 text-sm font-medium text-gray-700 inline-block"
+                        htmlFor="isNotComplex"
+                      >
+                        Jo
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Titulli I Pyetjes <span className="text-red-500">*</span>
+                </label>
+                <div className="flex items-center gap-2 ">
+                  <Input
+                    placeholder="Shkruaj pyetjen..."
+                    value={mainTitleState}
+                    onChange={(e) => handleQuestionTitleChange(e.target.value)}
+                    className="w-full"
+                    disabled={isSubmitting}
+                  />
+                  {currentQuestion.subject ==
+                    'bcc364a1-4fe6-478c-ac9f-02e5aded179d' &&
+                    currentQuestion.isComplex && (
+                      <>
+                        <button
+                          className="border-2 p-1 rounded-sm hover:bg-gray-100 transition-all"
+                          onClick={handleAddComplex}
+                        >
+                          <Plus className="w-4 h-4 " />
+                        </button>
+                        {complexCount.length> 1&& (
+                          <button
+                          className="border-2 p-1 rounded-sm hover:bg-gray-100 transition-all"
+                          onClick={handleReduceComplex}
+                        >
+                          <Minus className="w-4 h-4 " />
+                        </button>
+                        )}
+                      </>
+                    )}
+                </div>
+                {errors.questionTitle && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.questionTitle}
+                  </p>
+                )}
+              </div>
+              {currentQuestion.isComplex &&
+                complexCount!.map((value, index) => (
+                  <div>
+                    <math-field
+                      key={index}
+                      virtual-keyboard-mode="onfocus"
+                      value={complexTitleRef.current[index * 2 + 1] || ''}
+                      defaultMode="text"
+                      smart-mode="false"
+                      onInput={(e: any) => {
+                        handleMathQuestionChange(index, e.target.value);
+                      }}
+                      style={{
+                        fontSize: '22px',
+                        padding: '8px',
+                        width: '100%',
+                        background: '#f3f3f5',
+                        border: '1px solid #dbdbdb',
+                        marginBottom: '20px',
+                      }}
+                    ></math-field>
+                    <div className="flex items-center gap-2 ">
+                      <Input
+                        key={index}
+                        placeholder="Shkruaj pyetjen..."
+                        defaultValue={
+                          complexTitleRef.current[index * 2 + 2] ?? ''
+                        }
+                        onChange={(e) => {
+                          handleComplexTitleChange(index, e.target.value);
+                        }}
+                        className="w-full"
+                        disabled={isSubmitting}
+                      />
+                      <button
+                        className="border-2 p-1 rounded-sm hover:bg-gray-100 transition-all"
+                        onClick={handleAddComplex}
+                      >
+                        <Plus className="w-4 h-4 " />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Përshkrimi (Opsional)
+                </label>
+
+                <ReactQuill
+                  theme="snow"
+                  value={currentQuestion.description}
+                  onChange={(content) =>
+                    handleQuestionDescriptionChange(content)
+                  }
+                  modules={modules}
+                />
+              </div>
+
+              {/* Subject Selection */}
 
               {/* Question Image */}
               <div>
@@ -1767,9 +2026,12 @@ export function CreateExam() {
                   Imazhi i pyetjes (Optional)
                 </label>
                 <p className="mb-2 text-xs text-gray-500">
-                Rekomandohen imazhe të qarta deri në{' '}
-                  <span className="font-semibold">2&nbsp;MB</span> dhe jo më të mëdha se rreth{' '}
-                  <span className="font-semibold">600×600&nbsp;px</span> për të ruajtur ngarkimin e shpejtë dhe lexueshmërinë në të gjitha pajisjet.
+                  Rekomandohen imazhe të qarta deri në{' '}
+                  <span className="font-semibold">2&nbsp;MB</span> dhe jo më të
+                  mëdha se rreth{' '}
+                  <span className="font-semibold">600×600&nbsp;px</span> për të
+                  ruajtur ngarkimin e shpejtë dhe lexueshmërinë në të gjitha
+                  pajisjet.
                 </p>
                 <input
                   ref={fileInputRef}
@@ -1785,7 +2047,9 @@ export function CreateExam() {
                   disabled={isSubmitting}
                 >
                   <Upload className="w-5 h-5 mr-2" />
-                  {currentQuestion.imageFile ? 'Ndrysho imazhin' : 'Zgjedh Imazhin'}
+                  {currentQuestion.imageFile
+                    ? 'Ndrysho imazhin'
+                    : 'Zgjedh Imazhin'}
                 </Button>
                 {currentQuestion.imageFile && (
                   <p className="mt-2 text-sm text-gray-600">
@@ -1811,7 +2075,8 @@ export function CreateExam() {
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <label className="block text-sm font-medium text-gray-700">
-                    Opsionet e përgjigjieve <span className="text-red-500">*</span>
+                    Opsionet e përgjigjieve{' '}
+                    <span className="text-red-500">*</span>
                   </label>
                   <Button
                     variant="outline"
@@ -1824,6 +2089,48 @@ export function CreateExam() {
                     Shto një opsion
                   </Button>
                 </div>
+                {currentQuestion.subject ==
+                  'bcc364a1-4fe6-478c-ac9f-02e5aded179d' && (
+                  <div className="mb-8">
+                    <p className="block text-sm font-medium text-gray-700 mb-2">
+                      Pergjgjijie komplekse:
+                    </p>
+                    <div className="flex gap-6">
+                      <div className="flex items-center">
+                        <input
+                          type="radio"
+                          id="isComplexAnswer"
+                          value="true"
+                          name="complexAnswer"
+                          checked={complexAnswerRadio}
+                          onChange={() => handleAnswerComplexChange()}
+                        />
+                        <label
+                          className="ml-1.5 text-sm font-medium text-gray-700 inline-block"
+                          htmlFor="isComplex"
+                        >
+                          Po
+                        </label>
+                      </div>
+                      <div className="flex items-center">
+                        <input
+                          type="radio"
+                          id="isNotComplexAnswer"
+                          value="false"
+                          name="complexAnswer"
+                          checked={!complexAnswerRadio}
+                          onChange={() => handleAnswerComplexChange()}
+                        />
+                        <label
+                          className="ml-1.5 text-sm font-medium text-gray-700 inline-block"
+                          htmlFor="isNotComplex"
+                        >
+                          Jo
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div className="space-y-3">
                   {currentQuestion.answerOptions.map((option, idx) => (
@@ -1843,15 +2150,34 @@ export function CreateExam() {
                       <span className="font-medium text-gray-700 w-6">
                         {optionLetterForIndex(idx)}.
                       </span>
-                      <Input
-                        value={option.text}
-                        placeholder={`Option ${idx + 1}`}
-                        onChange={(e) =>
-                          handleOptionTextChange(option.id, e.target.value)
-                        }
-                        className="flex-1"
-                        disabled={isSubmitting}
-                      />
+                      {!complexAnswerRadio ? (
+                        <Input
+                          value={option.text}
+                          placeholder={`Option ${idx + 1}`}
+                          onChange={(e) =>
+                            handleOptionTextChange(option.id, e.target.value)
+                          }
+                          className="flex-1"
+                          disabled={isSubmitting}
+                        />
+                      ) : (
+                        <math-field
+                          virtual-keyboard-mode="onfocus"
+                          value={option.text}
+                          defaultMode="text"
+                          smart-mode="false"
+                          onInput={(e: any) => {
+                            handleOptionTextChange(option.id, e.target.value);
+                          }}
+                          style={{
+                            fontSize: '1.2rem',
+                            padding: '0 8px',
+                            width: '100%',
+                            background: '#f3f3f5',
+                            border: '1px solid #dbdbdb',
+                          }}
+                        ></math-field>
+                      )}
                       <Button
                         variant="ghost"
                         size="icon"
@@ -1874,8 +2200,8 @@ export function CreateExam() {
                 )}
 
                 <p className="text-sm text-gray-500 mt-3">
-                  Zgjedh pergjigjien e saktë për këtë pyetje. Së paku një pergjigjie duhet të zgjedhet si e saktë.
-                  
+                  Zgjedh pergjigjien e saktë për këtë pyetje. Së paku një
+                  pergjigjie duhet të zgjedhet si e saktë.
                 </p>
               </div>
             </div>
@@ -1887,8 +2213,7 @@ export function CreateExam() {
                 onClick={handlePrevious}
                 disabled={currentQuestionIndex === 0 || isSubmitting}
               >
-                <ChevronLeft className="w-4 h-4 mr-2" />
-                E kaluar
+                <ChevronLeft className="w-4 h-4 mr-2" />E kaluar
               </Button>
 
               <div className="flex space-x-2">
@@ -1932,7 +2257,6 @@ export function CreateExam() {
                   <button
                     key={question.id}
                     onClick={() => {
-                      console.log(question.id);
                       updateUrl(question.id - 1);
                       // navigate(
                       //   `/test-management/edit/${params.examId!}/${question.id}`
