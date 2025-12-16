@@ -612,7 +612,7 @@ export function CreateExam() {
 
   const handleOptionCorrectChange = (optionId: string, isCorrect: boolean) => {
     setQuestions(
-      questions.map((q, index) =>
+      questions.map((q, index) => 
         index === currentQuestionIndex
           ? {
               ...q,
