@@ -272,7 +272,7 @@ function AppContent() {
   const userForRouter = {
     name: user.displayName || 'User',
     email: user.email || '',
-    grade: user.grade || '12',
+    grade: user.grade || 'Klasa 12',
     school: user.school || 'Unknown School',
   };
 

@@ -31,6 +31,7 @@ export function Settings({
   const [name, setName] = React.useState(user.name);
   const [email, setEmail] = React.useState(user.email);
   const [school, setSchool] = React.useState(user.school || '');
+  const [grade, setGrade] = React.useState(user.grade || '');
   const [notifications, setNotifications] = React.useState(true);
   const [autoSave, setAutoSave] = React.useState(true);
   const [sound, setSound] = React.useState(false);
@@ -48,11 +49,11 @@ export function Settings({
         name={name}
         email={email}
         school={school}
-        grade={user.grade}
+        grade={grade}
         onNameChange={setName}
         onEmailChange={setEmail}
         onSchoolChange={setSchool}
-        onGradeChange={() => {}} // TODO: Implement grade change
+        onGradeChange={setGrade} // TODO: Implement grade change
         onSave={handleSaveProfile}
       />
 

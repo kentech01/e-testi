@@ -95,8 +95,8 @@ export function TestManagement() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Testet</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-3xl font-bold">Testet</h1>
+          <p className="mt-1">
             Menaxho dhe organizo të gjitha testet ne një vend.
           </p>
         </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 export function TestReview() {
   const { examId } = useParams<{ examId: string }>();
   const navigate = useNavigate();
+  const complexAnswer = useRef<boolean>(false);
   const [exam, setExam] = useState<Exam | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [examResults, setExamResults] = useState<ExamResults | null>(null);
@@ -52,7 +53,9 @@ export function TestReview() {
       setExamResults(results);
     } catch (error: any) {
       console.error('Failed to fetch data:', error);
-      toast.error('Nuk u arrit të ngarkohej rishikimi i testit. Provoni përsëri.');
+      toast.error(
+        'Nuk u arrit të ngarkohej rishikimi i testit. Provoni përsëri.'
+      );
       navigate('/tests');
     } finally {
       setLoading(false);
@@ -177,6 +180,20 @@ export function TestReview() {
             const userSelectedOptionIds = new Set(
               userAnswersForQuestion.map((a) => a.selectedOptionId)
             );
+            const parsedQuestionText = (() => {
+              if (
+                question.text?.includes('[') &&
+                question.subjectId === 'bcc364a1-4fe6-478c-ac9f-02e5aded179d'
+              ) {
+                try {
+                  return JSON.parse(question.text);
+                } catch {
+                  return question.text;
+                }
+              }
+            
+              return question.text;
+            })();
 
             return (
               <Card key={question.id}>
@@ -186,7 +203,23 @@ export function TestReview() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="text-lg">{question.text}</div>
+                  <div className="text-lg"><h1 className="text-lg mb-8">
+                  {Array.isArray(parsedQuestionText) ? (
+                    parsedQuestionText.map((val, index) =>
+                      index % 2 == 0 ? (
+                        <h1 className='inline-block'>{val}</h1>
+                      ) : (
+                        <math-field
+                          read-only
+                          value={val}
+                          style={{ fontSize: '22px', padding: '8px', display: "inline-block", background: "transparent", color: "var(--foreground)" }}
+                        ></math-field>
+                      )
+                    )
+                  ) : (
+                    <h1>{parsedQuestionText}</h1>
+                  )}
+                </h1> </div>
                   {question.imageUrl && (
                     <div className="w-full">
                       <div className="relative mx-auto max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl border rounded-lg overflow-hidden ">
@@ -206,9 +239,15 @@ export function TestReview() {
                         a.optionLetter.localeCompare(b.optionLetter)
                       )
                       .map((option) => {
+                        complexAnswer.current = false
                         const isCorrect = option.isCorrect;
                         const isSelected = userSelectedOptionIds.has(option.id);
                         const isIncorrectAndSelected = !isCorrect && isSelected;
+                        if (option.text.includes('~')) {
+                          complexAnswer.current = true;
+                          console.log(option.text, "textiii");
+                          
+                        }
 
                         let borderColor = 'border-gray-300';
                         let bgColor = 'bg-transparent';
@@ -236,7 +275,21 @@ export function TestReview() {
                             )}
                             <div className="flex-1">
                               <Label className="cursor-default">
-                                {option.optionLetter}. {option.text}
+                                {option.optionLetter}.{' '}
+                                {complexAnswer.current ? (
+                                  <math-field
+                                    read-only
+                                    value={option.text.replace(/^~\s*/, '')}
+                                    style={{
+                                      fontSize: '22px',
+                                      padding: '8px',
+                                      display: 'inline-block',
+                                      background: 'transparent', color: "var(--foreground)"
+                                    }}
+                                  ></math-field>
+                                ) : (
+                                  option.text
+                                )}
                               </Label>
                               {isSelected && (
                                 <span className="ml-2 text-xs text-muted-foreground">
