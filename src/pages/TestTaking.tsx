@@ -105,8 +105,7 @@ export function TestTaking({
     console.log(currentQuestion.subjectId === 'bcc364a1-4fe6-478c-ac9f-02e5aded179d');
     
     if (
-      currentQuestion.text?.includes('[') &&
-      currentQuestion.subjectId === 'bcc364a1-4fe6-478c-ac9f-02e5aded179d'
+      currentQuestion.text?.includes('[')
     ) {
       try {
         return JSON.parse(currentQuestion.text);
@@ -116,7 +115,6 @@ export function TestTaking({
     }
     return currentQuestion.text;
   }, [currentQuestion]);
-  console.log(parsedTitle);
   
   // Fetch exam, questions, and existing answers
   useEffect(() => {
@@ -789,7 +787,7 @@ export function TestTaking({
                         <math-field
                           read-only
                           value={val}
-                          style={{ fontSize: '22px', padding: '8px', display: "inline-block" }}
+                          style={{ fontSize: '22px', padding: '8px', display: "inline-block", background: "transparent", color: "var(--foreground)" }}
                         ></math-field>
                       )
                     )
@@ -836,7 +834,7 @@ export function TestTaking({
                         {option.optionLetter}. {complexAnswer.current ? <math-field
                           read-only
                           value={option.text.replace(/^~\s*/, "")}
-                          style={{ fontSize: '22px', padding: '8px', display: "inline-block", background:"transparent" }}
+                          style={{ fontSize: '22px', padding: '8px', display: "inline-block", background:"transparent" , color: "var(--foreground)" }}
                         ></math-field>: option.text}
                       </Label>
                       {option.imageUrl && (

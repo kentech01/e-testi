@@ -435,27 +435,31 @@ export function CreateExam() {
 
   // console.log(title);
   useEffect(() => {
-    if (Array.isArray(title)) {
-      setMainTitleState(title[0]);
-      complexTitleRef.current = title;
-      setComplexCount((prev) => {
-        const copy = [...prev];
-        for (let index = 0; index < (title.length - 1) / 2; index++) {
-          copy[index] = index;
-        }
-        return copy;
-      });
-    } else {
-      setMainTitleState(title);
-    }
-    if (currentQuestion.subject == 'bcc364a1-4fe6-478c-ac9f-02e5aded179d') {
-      let isComplexAnswer = false;
-      currentQuestion.answerOptions.forEach((option) => {
-        if (option.text.includes('~')) {
-          isComplexAnswer = true;
-        }
-      });
-      setComplexAnswerRadio(isComplexAnswer);
+    if(complexTitleRef.current.length <1){
+      if (Array.isArray(title)) {
+        setMainTitleState(title[0]);
+        complexTitleRef.current = title;
+        console.log(complexTitleRef.current, "1her bon");
+        
+        setComplexCount((prev) => {
+          const copy = [...prev];
+          for (let index = 0; index < (title.length - 1) / 2; index++) {
+            copy[index] = index;
+          }
+          return copy;
+        });
+      } else {
+        setMainTitleState(title);
+      }
+      if (currentQuestion.subject == 'bcc364a1-4fe6-478c-ac9f-02e5aded179d') {
+        let isComplexAnswer = false;
+        currentQuestion.answerOptions.forEach((option) => {
+          if (option.text.includes('~')) {
+            isComplexAnswer = true;
+          }
+        });
+        setComplexAnswerRadio(isComplexAnswer);
+      }
     }
   }, [currentQuestion]);
 
@@ -571,10 +575,12 @@ export function CreateExam() {
   };
   const handleMathQuestionChange = (index: number, value: any) => {
     complexTitleRef.current[index * 2 + 1] = value;
-    console.log(value);
+    console.log(complexTitleRef.current, "nchange");
   };
   const handleComplexTitleChange = (index: number, value: any) => {
     complexTitleRef.current[index * 2 + 2] = value;
+    console.log(complexTitleRef.current, "nchange te inputit");
+    
   };
   const handleRemoveOption = (optionId: string) => {
     if (currentQuestion.answerOptions.length > 1) {
@@ -628,7 +634,11 @@ export function CreateExam() {
     let complexCheck = isChecked === 'true';
     if (!complexCheck) {
       complexTitleRef.current = [complexTitleRef.current[0]];
+      console.log(complexTitleRef.current);
+      
+      setComplexCount([]);
     }
+    
     if (complexCheck) {
       handleAddComplex();
     }
@@ -987,6 +997,8 @@ export function CreateExam() {
         isCorrect: !!opt.isCorrect,
       }));
       const title = JSON.stringify(complexTitleRef.current);
+      console.log(title, "titulli");
+      
 
       const questionData = {
         text: title,
@@ -1093,7 +1105,7 @@ export function CreateExam() {
       );
       return { success: false };
     }
-  }, [currentQuestionIndex, persistExamData, validateQuestion, navigate]);
+  }, [currentQuestionIndex, persistExamData, validateQuestion, navigate,complexTitleRef.current]);
 
   const ensureQuestionExists = useCallback(
     async (localId: number): Promise<string | undefined> => {
@@ -1677,16 +1689,16 @@ export function CreateExam() {
           <Button
             variant="ghost"
             onClick={handleBack}
-            className="mr-4 text-gray-600 hover:text-gray-900"
+            className="mr-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Exams
           </Button>
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bol">
               {isEdit ? 'Përditëso testin' : 'Krijo një test të ri'}
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="mt-1">
               {isEdit
                 ? 'Përditëso pyetjet e testit. Sigurohuni qe te gjitha ndryshimet jane te kompletuara para se ta ruani.'
                 : 'Krijo një test me 100 pyetje. Create an exam with 100 questions. Plotësoni të gjitha pyetjet për të ruajtur testin.'}
@@ -1701,7 +1713,7 @@ export function CreateExam() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium mb-2">
                 Titulli i Testit <span className="text-red-500">*</span>
               </label>
               <Input
@@ -1716,7 +1728,7 @@ export function CreateExam() {
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium mb-2">
                 Përshkrimi i Testit <span className="text-red-500">*</span>
               </label>
 
@@ -1735,7 +1747,7 @@ export function CreateExam() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium mb-2">
                   Klasa <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -1756,7 +1768,7 @@ export function CreateExam() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium mb-2">
                   Pikët Kaluese
                 </label>
                 <Input
@@ -1774,7 +1786,7 @@ export function CreateExam() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium  mb-2">
                   Totali i Pyetjeve
                 </label>
                 <Input type="number" value={TOTAL_QUESTIONS} disabled />
@@ -1823,7 +1835,7 @@ export function CreateExam() {
             {/* Question Details */}
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium  mb-2">
                   Lënda <span className="text-red-500">*</span>
                 </label>
                 <Select
@@ -1885,7 +1897,7 @@ export function CreateExam() {
               {currentQuestion.subject ==
                 'bcc364a1-4fe6-478c-ac9f-02e5aded179d' && (
                 <div>
-                  <p className="block text-sm font-medium text-gray-700 mb-2">
+                  <p className="block text-sm font-medium  mb-2">
                     Shprehje komplekse:
                   </p>
                   <div className="flex gap-6">
@@ -1899,7 +1911,7 @@ export function CreateExam() {
                         onChange={(e) => handleComplexChange(e.target.value)}
                       />
                       <label
-                        className="ml-1.5 text-sm font-medium text-gray-700 inline-block"
+                        className="ml-1.5 text-sm font-medium  inline-block"
                         htmlFor="isComplex"
                       >
                         Po
@@ -1915,7 +1927,7 @@ export function CreateExam() {
                         onChange={(e) => handleComplexChange(e.target.value)}
                       />
                       <label
-                        className="ml-1.5 text-sm font-medium text-gray-700 inline-block"
+                        className="ml-1.5 text-sm font-medium  inline-block"
                         htmlFor="isNotComplex"
                       >
                         Jo
@@ -1925,7 +1937,7 @@ export function CreateExam() {
                 </div>
               )}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium mb-2">
                   Titulli I Pyetjes <span className="text-red-500">*</span>
                 </label>
                 <div className="flex items-center gap-2 ">
@@ -1979,9 +1991,9 @@ export function CreateExam() {
                         fontSize: '22px',
                         padding: '8px',
                         width: '100%',
-                        background: '#f3f3f5',
+                        background: 'transparent',
                         border: '1px solid #dbdbdb',
-                        marginBottom: '20px',
+                        marginBottom: '20px', color: "var(--foreground)"
                       }}
                     ></math-field>
                     <div className="flex items-center gap-2 ">
@@ -2007,7 +2019,7 @@ export function CreateExam() {
                   </div>
                 ))}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium  mb-2">
                   Përshkrimi (Opsional)
                 </label>
 
@@ -2025,7 +2037,7 @@ export function CreateExam() {
 
               {/* Question Image */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium  mb-2">
                   Imazhi i pyetjes (Optional)
                 </label>
                 <p className="mb-2 text-xs text-gray-500">
@@ -2077,7 +2089,7 @@ export function CreateExam() {
               {/* Answer Options */}
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium ">
                     Opsionet e përgjigjieve{' '}
                     <span className="text-red-500">*</span>
                   </label>
@@ -2095,7 +2107,7 @@ export function CreateExam() {
                 {currentQuestion.subject ==
                   'bcc364a1-4fe6-478c-ac9f-02e5aded179d' && (
                   <div className="mb-8">
-                    <p className="block text-sm font-medium text-gray-700 mb-2">
+                    <p className="block text-sm font-medium  mb-2">
                       Pergjgjijie komplekse:
                     </p>
                     <div className="flex gap-6">
@@ -2109,7 +2121,7 @@ export function CreateExam() {
                           onChange={() => handleAnswerComplexChange()}
                         />
                         <label
-                          className="ml-1.5 text-sm font-medium text-gray-700 inline-block"
+                          className="ml-1.5 text-sm font-medium  inline-block"
                           htmlFor="isComplex"
                         >
                           Po
@@ -2125,7 +2137,7 @@ export function CreateExam() {
                           onChange={() => handleAnswerComplexChange()}
                         />
                         <label
-                          className="ml-1.5 text-sm font-medium text-gray-700 inline-block"
+                          className="ml-1.5 text-sm font-medium  inline-block"
                           htmlFor="isNotComplex"
                         >
                           Jo
@@ -2150,7 +2162,7 @@ export function CreateExam() {
                           )
                         }
                       />
-                      <span className="font-medium text-gray-700 w-6">
+                      <span className="font-medium w-6">
                         {optionLetterForIndex(idx)}.
                       </span>
                       {!complexAnswerRadio ? (
@@ -2176,8 +2188,9 @@ export function CreateExam() {
                             fontSize: '1.2rem',
                             padding: '0 8px',
                             width: '100%',
-                            background: '#f3f3f5',
-                            border: '1px solid #dbdbdb',
+                            background: 'transparent',
+                            border: '1px solid #dbdbdb'
+                            , color: "var(--foreground)"
                           }}
                         ></math-field>
                       )}
