@@ -125,11 +125,14 @@ export function TestList({
         const results = examResultsMap.get(String(exam.id));
         // IMPORTANT: completion & pass status must be PER-USER, not global.
         // We therefore ignore Exam.isCompleted / Exam.hasPassed (which are global flags)
-        // and derive completion ONLY from whether this user has results.
-        const isCompleted = !!results;
-        const hasPassed = results?.hasPassed;
-        const score = results ? Math.round(results.accuracy) : undefined;
-        const timeSpentSeconds = results?.totalTimeSpent || 0;
+        // and derive completion ONLY from whether this user has actually submitted answers.
+        // getExamResults returns a result object even when userAnswers is empty, so we must
+        // check if the user actually has answers (results.answers.length > 0).
+        const hasActualAnswers = results?.answers && Array.isArray(results.answers) && results.answers.length > 0;
+        const isCompleted = hasActualAnswers;
+        const hasPassed = hasActualAnswers ? results?.hasPassed : undefined;
+        const score = hasActualAnswers && results ? Math.round(results.accuracy) : undefined;
+        const timeSpentSeconds = hasActualAnswers && results ? (results.totalTimeSpent || 0) : 0;
         const timeSpent =
           timeSpentSeconds > 0
             ? `${Math.floor(timeSpentSeconds / 60)} min`
