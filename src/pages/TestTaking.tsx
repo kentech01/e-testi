@@ -75,7 +75,7 @@ export function TestTaking({
     new Set()
   );
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
-  const complexAnswer = useRef<boolean>(false)
+  const complexAnswer = useRef<boolean>(false);
   const [submitting, setSubmitting] = useState(false);
   const [submittingAnswer, setSubmittingAnswer] = useState(false); // Track answer submission
   const [autoSubmitActive, setAutoSubmitActive] = useState(false); // Auto-submit countdown after time ends
@@ -87,26 +87,28 @@ export function TestTaking({
 
   // Get current question object
   const currentQuestion = questions.find((q) => q.id === currentQuestionId);
-  useEffect(()=>{
+  useEffect(() => {
     console.log(currentQuestion);
-    
-    if(currentQuestion){
-      if(currentQuestion!.subjectId! == 'bcc364a1-4fe6-478c-ac9f-02e5aded179d'){
-        currentQuestion!.options!.forEach((option:any)=>{
-          if(option.text.includes("~")){
+
+    if (currentQuestion) {
+      if (
+        currentQuestion!.subjectId! == 'bcc364a1-4fe6-478c-ac9f-02e5aded179d'
+      ) {
+        currentQuestion!.options!.forEach((option: any) => {
+          if (option.text.includes('~')) {
             complexAnswer.current = true;
           }
-        })
+        });
       }
     }
   }, [currentQuestion]);
   const parsedTitle = useMemo(() => {
     if (!currentQuestion) return '';
-    console.log(currentQuestion.subjectId === 'bcc364a1-4fe6-478c-ac9f-02e5aded179d');
-    
-    if (
-      currentQuestion.text?.includes('[')
-    ) {
+    console.log(
+      currentQuestion.subjectId === 'bcc364a1-4fe6-478c-ac9f-02e5aded179d'
+    );
+
+    if (currentQuestion.text?.includes('[')) {
       try {
         return JSON.parse(currentQuestion.text);
       } catch {
@@ -115,7 +117,7 @@ export function TestTaking({
     }
     return currentQuestion.text;
   }, [currentQuestion]);
-  
+
   // Fetch exam, questions, and existing answers
   useEffect(() => {
     fetchExamData();
@@ -192,9 +194,12 @@ export function TestTaking({
 
         // Update localStorage
         const savedTime = localStorage.getItem(`exam_timer_${examId}`);
+
         if (savedTime) {
           const parsed = JSON.parse(savedTime);
           const elapsed = Math.floor((Date.now() - parsed.startTime) / 1000);
+          console.log(elapsed, 'started');
+
           const remaining = Math.max(0, parsed.initialTime - elapsed);
 
           // Sync with calculated remaining time
@@ -631,13 +636,19 @@ export function TestTaking({
     try {
       // Submit current answer if any
       await submitCurrentAnswer();
+      const savedTime = localStorage.getItem(`exam_timer_${examId}`);
+
+      const parsed = JSON.parse(savedTime!);
+      const elapsed = Math.floor((Date.now() - parsed.startTime) / 1000);
 
       // Clear timer from localStorage
       localStorage.removeItem(`exam_timer_${examId}`);
 
       // Mark exam as completed in the backend (best-effort)
       try {
-        await examService.completeExam(examId);
+        const completeData = formatTime(elapsed)
+
+        await examService.completeExam(examId, completeData);
       } catch (err) {
         console.error('Failed to mark exam as completed:', err);
         // Don't block user if this fails
@@ -743,7 +754,7 @@ export function TestTaking({
               size="sm"
               disabled={submitting}
             >
-              {submitting ? 'Duke dërguar...' : 'Perfundo testin'}
+              {submitting ? 'Duke dërguar...' : 'Përfundo testin'}
             </Button>
           </div>
         </div>
@@ -782,19 +793,25 @@ export function TestTaking({
                   {Array.isArray(parsedTitle) ? (
                     parsedTitle.map((val, index) =>
                       index % 2 == 0 ? (
-                        <h1 className='inline-block'>{val}</h1>
+                        <h1 className="inline-block">{val}</h1>
                       ) : (
                         <math-field
                           read-only
                           value={val}
-                          style={{ fontSize: '22px', padding: '8px', display: "inline-block", background: "transparent", color: "var(--foreground)" }}
+                          style={{
+                            fontSize: '22px',
+                            padding: '8px',
+                            display: 'inline-block',
+                            background: 'transparent',
+                            color: 'var(--foreground)',
+                          }}
                         ></math-field>
                       )
                     )
                   ) : (
                     <h1>{parsedTitle}</h1>
                   )}
-                </h1>   
+                </h1>
                 {currentQuestion?.description && (
                   <div className="[&>ul]:list-disc [&>ol]:list-decimal">
                     {parse(currentQuestion.description)}
@@ -831,11 +848,22 @@ export function TestTaking({
                         htmlFor={`option-${option.id}`}
                         className="flex-1 cursor-pointer py-3"
                       >
-                        {option.optionLetter}. {complexAnswer.current ? <math-field
-                          read-only
-                          value={option.text.replace(/^~\s*/, "")}
-                          style={{ fontSize: '22px', padding: '8px', display: "inline-block", background:"transparent" , color: "var(--foreground)" }}
-                        ></math-field>: option.text}
+                        {option.optionLetter}.{' '}
+                        {complexAnswer.current ? (
+                          <math-field
+                            read-only
+                            value={option.text.replace(/^~\s*/, '')}
+                            style={{
+                              fontSize: '22px',
+                              padding: '8px',
+                              display: 'inline-block',
+                              background: 'transparent',
+                              color: 'var(--foreground)',
+                            }}
+                          ></math-field>
+                        ) : (
+                          option.text
+                        )}
                       </Label>
                       {option.imageUrl && (
                         <img
