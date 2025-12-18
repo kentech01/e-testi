@@ -112,6 +112,7 @@ export function TestList({
         } catch (err: any) {
           // Exam results not available or rate limited
           if (err?.response?.status === 429) {
+            console.log('Rate limited, stopping results fetch');
             break; // Stop if rate limited
           } else {
             console.log(`Results not available for exam ${exam.id}`);
@@ -122,15 +123,11 @@ export function TestList({
       // Map exams to Test format
       const mappedTests: Test[] = allExams.map((exam) => {
         const results = examResultsMap.get(String(exam.id));
-        // Prefer backend flags if available, otherwise fall back to isActive / results
-        const isCompleted =
-          typeof exam.isCompleted === 'boolean'
-            ? exam.isCompleted
-            : !!results || !exam.isActive;
-        const hasPassed =
-          typeof exam.hasPassed === 'boolean'
-            ? exam.hasPassed
-            : results?.hasPassed;
+        // IMPORTANT: completion & pass status must be PER-USER, not global.
+        // We therefore ignore Exam.isCompleted / Exam.hasPassed (which are global flags)
+        // and derive completion ONLY from whether this user has results.
+        const isCompleted = !!results;
+        const hasPassed = results?.hasPassed;
         const score = results ? Math.round(results.accuracy) : undefined;
         const timeSpentSeconds = results?.totalTimeSpent || 0;
         const timeSpent =
@@ -154,7 +151,7 @@ export function TestList({
     } catch (err: any) {
       console.error('Failed to fetch tests:', err);
       setError('Failed to load tests. Please try again.');
-      toast.error('Dështoi ngarkimi i testeve');
+      toast.error('Failed to load tests');
     } finally {
       setLoading(false);
     }
