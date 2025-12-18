@@ -182,8 +182,7 @@ export function TestReview() {
             );
             const parsedQuestionText = (() => {
               if (
-                question.text?.includes('[') &&
-                question.subjectId === 'bcc364a1-4fe6-478c-ac9f-02e5aded179d'
+                question.text?.includes('[')
               ) {
                 try {
                   return JSON.parse(question.text);

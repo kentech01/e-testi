@@ -556,7 +556,7 @@ export function TestList({
                         className="flex-1 bg-green-500 hover:bg-green-600"
                       >
                         <Play className="w-4 h-4 mr-1" />
-                        Let's go!
+                        Fillo!
                       </Button>
                     )}
                   </div>

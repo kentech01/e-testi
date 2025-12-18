@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { matchPath, useLocation, useNavigate } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
@@ -294,6 +294,27 @@ function AppContent() {
 
 // Main App Component with RecoilRoot
 export default function App() {
+  const location = useLocation();
+  const myFunction= ()=>{
+
+  }
+
+  useEffect(() => {
+    const isOnTestPage = matchPath(
+      { path: "/tests/:id/:uid", end: true },
+      location.pathname
+    );
+
+    if (!isOnTestPage) {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+      
+        if (key && key.startsWith("exam_timer")) {
+          localStorage.removeItem(key);
+        }
+      }
+    }
+  }, [location.pathname]);
   return (
     <RecoilRoot>
       <AppContent />

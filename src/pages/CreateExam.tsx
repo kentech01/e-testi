@@ -428,7 +428,7 @@ export function CreateExam() {
   // console.log(currentQuestion);
 
   const title =
-    currentQuestion.subject == 'bcc364a1-4fe6-478c-ac9f-02e5aded179d' &&
+    
     currentQuestion.title.includes('[')
       ? JSON.parse(currentQuestion!.title)
       : currentQuestion.title;
@@ -1803,7 +1803,7 @@ export function CreateExam() {
                 <h3 className="text-lg font-semibold">Progresi</h3>
                 <p className="text-sm text-gray-600">
                   Pyetja {currentQuestionIndex + 1} prej {TOTAL_QUESTIONS} •{' '}
-                  {completedQuestions} completed
+                  {completedQuestions} i kompletuar
                 </p>
               </div>
               <div className="text-right">
@@ -2038,7 +2038,7 @@ export function CreateExam() {
               {/* Question Image */}
               <div>
                 <label className="block text-sm font-medium  mb-2">
-                  Imazhi i pyetjes (Optional)
+                  Imazhi i pyetjes (Opsional)
                 </label>
                 <p className="mb-2 text-xs text-gray-500">
                   Rekomandohen imazhe të qarta deri në{' '}

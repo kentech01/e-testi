@@ -157,8 +157,8 @@ export class ExamService {
   }
 
   // Mark exam as completed
-  async completeExam(id: string | number): Promise<Exam> {
-    const response = await this.api.post<Exam>(`exams/${String(id)}/complete`);
+  async completeExam(id: string | number, time: string): Promise<Exam> {
+    const response = await this.api.post<Exam>(`exams/${String(id)}/complete`, time);
     return response.data;
   }
 

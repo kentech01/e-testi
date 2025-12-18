@@ -69,6 +69,7 @@ export function ProfileSettings({
                 onChange={(e) => onNameChange(e.target.value)}
                 placeholder="Shkruani emrin tuaj"
                 className="pl-10"
+                disabled
               />
             </div>
           </div>
@@ -82,6 +83,7 @@ export function ProfileSettings({
                 onChange={(e) => onEmailChange(e.target.value)}
                 placeholder="shkruani@email.com"
                 className="pl-10"
+                disabled
               />
             </div>
           </div>
