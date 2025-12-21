@@ -13,11 +13,12 @@ interface SettingsProps {
     name: string;
     email: string;
     grade: string;
-    school?: string;
+    school?: number | null;
+    municipality?: number | null
   };
   darkMode: boolean;
   onToggleDarkMode: () => void;
-  onUpdateProfile: (name: string, email: string) => void;
+  onUpdateProfile: (grade: string, school: number, municipality: number) => void;
   onLogout: () => void;
 }
 
@@ -30,15 +31,20 @@ export function Settings({
 }: SettingsProps) {
   const [name, setName] = React.useState(user.name);
   const [email, setEmail] = React.useState(user.email);
-  const [school, setSchool] = React.useState(user.school || '');
+  const [school, setSchool] = React.useState(user.school || 0);
   const [grade, setGrade] = React.useState(user.grade || '');
+  const [municipality, setMunicipality] = React.useState(user.municipality || 0);
   const [notifications, setNotifications] = React.useState(true);
   const [autoSave, setAutoSave] = React.useState(true);
   const [sound, setSound] = React.useState(false);
   const [emailNotifications, setEmailNotifications] = React.useState(true);
+  console.log(user);
+  
 
   const handleSaveProfile = () => {
-    onUpdateProfile(name, email);
+    onUpdateProfile(grade, school, municipality);
+    console.log(grade, school, municipality);
+    
   };
 
   return (
@@ -50,8 +56,8 @@ export function Settings({
         email={email}
         school={school}
         grade={grade}
-        onNameChange={setName}
-        onEmailChange={setEmail}
+        municipality={municipality}
+        onMunicipalityChange={setMunicipality}
         onSchoolChange={setSchool}
         onGradeChange={setGrade} // TODO: Implement grade change
         onSave={handleSaveProfile}

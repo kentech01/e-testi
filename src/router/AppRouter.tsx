@@ -84,12 +84,13 @@ interface AppRouterProps {
     name: string;
     email: string;
     grade: string;
-    school?: string;
+    school: number | null;
+    municipality: number | null;
   } | null;
   darkMode: boolean;
   onToggleDarkMode: () => void;
   onLogout: () => void;
-  onUpdateProfile: (name: string, email: string) => void;
+  onUpdateProfile: (grade: string, school: number, municipality: number) => void;
 }
 
 // Wrapper components for dynamic route parameters
@@ -180,7 +181,6 @@ const AppRouter: React.FC<AppRouterProps> = ({
       return;
     }
     const examData = await examService.getExamById(testId);
-    console.log(examData, "prej routeri");
     
     setCurrentTestId(typeof testId === 'number' ? testId : null);
     navigate(`/tests/${testId}`);

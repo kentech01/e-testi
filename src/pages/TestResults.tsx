@@ -67,6 +67,8 @@ export function TestResults({ testId, answers, onBack }: TestResultsProps) {
 
       // Fetch exam results
       const results = await userAnswerService.getExamResults(actualExamId!);
+      console.log(results);
+      
       setExamResults(results);
 
       // Fetch exam details

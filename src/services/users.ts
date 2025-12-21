@@ -12,6 +12,8 @@ export interface User {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  school: number | null;
+  municipality: number | null;
   // Relations (optional, populated when fetched with relations)
   userAnswers?: any[];
 }
@@ -62,7 +64,7 @@ export class UserService {
    * Update current user
    * PUT /users/profile
    */
-  async updateUser(data: UpdateUserRequest): Promise<User> {
+  async updateUser(data: any): Promise<User> {
     const response = await this.api.put<User>('users/profile', data);
     return response.data;
   }

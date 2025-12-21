@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
+import userService from './services/users';
 // Lazy load components
 const AuthModal = lazy(() =>
   import('./components/forms').then((module) => ({ default: module.AuthModal }))
@@ -79,7 +80,16 @@ function AppContent() {
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
     setDarkMode(savedDarkMode);
+
   }, []);
+  useEffect(()=>{
+    setShowAuth(false)
+    if(user){
+      if(user!.school == null){
+        setShowAuth(true)
+      }
+    }
+  }, [user])
 
   // Apply dark mode class to document
   useEffect(() => {
@@ -109,8 +119,9 @@ function AppContent() {
     setDarkMode((prev) => !prev);
   };
 
-  const handleUpdateProfile = (name: string, email: string) => {
+  const handleUpdateProfile = async (grade: string, school: number, municipality: number) => {
     // This would need to be implemented with Firebase user profile updates
+    await userService.updateUser({school, municipality})
     toast.success('Profili u përditësua me sukses!');
   };
 
@@ -260,7 +271,7 @@ function AppContent() {
         </main>
 
         <Suspense fallback={<LoadingFallback />}>
-          <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
+          <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} isLoggedIn={false} />
         </Suspense>
 
         <Toaster />
@@ -273,8 +284,11 @@ function AppContent() {
     name: user.displayName || 'User',
     email: user.email || '',
     grade: user.grade || 'Klasa 12',
-    school: user.school || 'Unknown School',
-  };
+    school: user.school || null,
+    municipality: user.municipality || null,
+  };  
+    
+
 
   return (
     <div className="flex h-screen bg-background">
@@ -286,6 +300,7 @@ function AppContent() {
           onLogout={handleLogout}
           onUpdateProfile={handleUpdateProfile}
         />
+          <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} isLoggedIn={true} />
       </Suspense>
       <Toaster />
     </div>
@@ -295,9 +310,6 @@ function AppContent() {
 // Main App Component with RecoilRoot
 export default function App() {
   const location = useLocation();
-  const myFunction= ()=>{
-
-  }
 
   useEffect(() => {
     const isOnTestPage = matchPath(

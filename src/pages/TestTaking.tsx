@@ -88,7 +88,6 @@ export function TestTaking({
   // Get current question object
   const currentQuestion = questions.find((q) => q.id === currentQuestionId);
   useEffect(() => {
-    console.log(currentQuestion);
 
     if (currentQuestion) {
       if (
@@ -198,7 +197,6 @@ export function TestTaking({
         if (savedTime) {
           const parsed = JSON.parse(savedTime);
           const elapsed = Math.floor((Date.now() - parsed.startTime) / 1000);
-          console.log(elapsed, 'started');
 
           const remaining = Math.max(0, parsed.initialTime - elapsed);
 

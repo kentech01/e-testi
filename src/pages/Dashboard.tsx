@@ -20,18 +20,20 @@ import {
   Pie,
   Cell,
 } from 'recharts';
-import { GraduationCap, BookOpen, Users, Plus } from 'lucide-react';
+import { GraduationCap, BookOpen, Users, Plus, School } from 'lucide-react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { examService } from '../services/exams';
 import { userAnswerService } from '../services/userAnswers';
 import { toast } from 'sonner';
+import { AuthModal } from '@/components/forms/AuthModal';
 
 export interface DashboardProps {
   user: {
     name: string;
     email: string;
     grade: string;
-    school?: string;
+    school: number| null;
+    municipality: number | null;
   } | null;
 }
 
@@ -229,7 +231,7 @@ export function Dashboard({ user }: DashboardProps) {
                     <div className="flex items-center space-x-1">
                       <Users className="w-4 h-4" />
                       <span className="text-sm truncate max-w-[200px]">
-                        {user.school.split(' - ')[0]}
+                        {"test"}
                       </span>
                     </div>
                   )}
@@ -391,6 +393,9 @@ export function Dashboard({ user }: DashboardProps) {
           </CardContent>
         </Card>
       </div>
+
+      {/*  */}
+
     </div>
   );
 }

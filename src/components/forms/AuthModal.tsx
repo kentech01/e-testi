@@ -25,33 +25,34 @@ import {
   AlertCircle,
   Loader2,
   Chrome,
+  School,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useFirebaseAuth } from '../../hooks/useFirebaseAuth';
 import useSectors from '../../hooks/useSectors';
+import userService from '@/services/users';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
+  isLoggedIn: boolean
 }
 
 // Memoized school list for better performance
-const kosovoSchools = [
-  'Liceu i Përgjithshëm "Sami Frashëri" - Prishtinë',
-  'Liceu i Përgjithshëm "Eqrem Çabej" - Prishtinë',
-  'Shkolla e Mesme "Shtjefën Gjeçovi" - Prishtinë',
-  'Liceu "Gjon Buzuku" - Prizren',
-  'Shkolla e Mesme Teknike "7 Shtatori" - Prizren',
-  'Liceu "Lidhja e Prizrenit" - Prizren',
-  'Shkolla e Mesme "Bahri Haxhiu" - Ferizaj',
-  'Liceu "Hajdar Dushi" - Pejë',
-  'Shkolla e Mesme "11 Marsi" - Gjakovë',
-  'Liceu "Hajdar Dushi" - Pejë',
-  'Shkolla e Mesme "Abdyl Frashëri" - Mitrovicë',
-  'Liceu "Ukshin Hoti" - Vushtrri',
-  'Shkolla e Mesme "Ismail Qemali" - Istog',
-];
 
+export interface Municipality {
+  id: number;
+  nameAlbanian: string;
+  nameEnglish: string;
+  nameSerbian: string;
+}
+interface School {
+  nameAlbanian: string;
+  nameEnglish: string;
+  nameSerbian: string;
+  idTeacherLicenseMunicipality: number;
+  id: number;
+}
 const passwordRequirements = [
   {
     id: 'length',
@@ -117,7 +118,7 @@ const getFirebaseErrorMessage = (errorCode: string): string => {
   }
 };
 
-export function AuthModal({ isOpen, onClose }: AuthModalProps) {
+export function AuthModal({ isOpen, onClose, isLoggedIn }: AuthModalProps) {
   const [currentStep, setCurrentStep] = useState<
     'login' | 'signup' | 'grade' | 'school'
   >('login');
@@ -128,9 +129,12 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     confirmPassword: '',
     name: '',
     grade: '',
-    school: '',
+    school: 0,
+    municipality: 0,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [kosovoCities, setKosovoCities] = useState<Municipality[]>([]);
+  const [kosovoSchools, setKosovoSchools] = useState<School[]>([]);
   const [authError, setAuthError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -155,6 +159,13 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   // Clear auth error when modal opens or step changes
   useEffect(() => {
+    fetch('/cities.json')
+      .then((res) => res.json())
+      .then((data) => {console.log(data);
+       setKosovoCities(data.teacherLicenseMunicipality)})
+      .catch((err) => console.log(err));
+  },[]);
+  useEffect(() => {
     if (isOpen) {
       setAuthError(null);
     }
@@ -163,6 +174,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   useEffect(() => {
     setAuthError(null);
   }, [currentStep]);
+  useEffect(()=>{
+    if(isLoggedIn){
+      setCurrentStep('school');
+    }
+  })
 
   // Memoized password validation
   const passwordValidation = useMemo(() => {
@@ -214,7 +230,18 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   // Optimized input handlers
   const handleInputChange = useCallback(
-    (field: string, value: string) => {
+    (field: string, value: string | number) => {
+      if (field === 'municipality') {
+        fetch('/schools.json')
+          .then((res) => res.json())
+          .then((data) => {
+            const filtered=data.teacherLicenseInstitution.filter((item:School) => item.idTeacherLicenseMunicipality == value)
+            if(filtered.length> 1){
+              setFormData((prev) => ({ ...prev, school: filtered[0]!.id }));
+            }
+            setKosovoSchools(filtered);
+          });
+      }
       setFormData((prev) => ({ ...prev, [field]: value }));
       if (errors[field]) {
         setErrors((prev) => ({ ...prev, [field]: '' }));
@@ -235,7 +262,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
     try {
       await signIn(formData.email, formData.password);
-      handleClose();
+      // handleClose();
     } catch (error: any) {
       const errorMessage = getFirebaseErrorMessage(error.code);
       setAuthError(errorMessage);
@@ -250,8 +277,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     setAuthError(null);
 
     try {
-      await signInWithGoogle();
-      handleClose();
+      const user = await signInWithGoogle();
+      return;
     } catch (error: any) {
       const errorMessage = getFirebaseErrorMessage(error.code);
       setAuthError(errorMessage);
@@ -262,26 +289,31 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   }, [signInWithGoogle]);
 
   const handleSignup = useCallback(async () => {
-    if (!validateForm()) return;
-
+    if(!isLoggedIn){
+      if (!validateForm()) return;
     setIsLoading(true);
     setAuthError(null);
 
     try {
-      await signUp(
+      const user = await signUp(
         formData.email,
         formData.password,
         formData.name,
         formData.grade,
-        formData.school
+        formData.school,
+        formData.municipality
       );
-      handleClose();
+      
     } catch (error: any) {
       const errorMessage = getFirebaseErrorMessage(error.code);
       setAuthError(errorMessage);
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
+    }
+    }else{
+      await userService.updateUser({school: formData.school, municipality: formData.municipality})
+      handleClose();
     }
   }, [formData, validateForm, signUp]);
 
@@ -292,7 +324,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       confirmPassword: '',
       name: '',
       grade: '',
-      school: '',
+      school: 0,
+      municipality: 0,
     });
     setErrors({});
     setAuthError(null);
@@ -678,9 +711,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         <div
                           className={`w-12 h-12 ${iconBg} rounded-lg mx-auto mb-3 flex items-center justify-center`}
                         >
-                          <GraduationCap
-                            className={`w-6 h-6 ${iconColor}`}
-                          />
+                          <GraduationCap className={`w-6 h-6 ${iconColor}`} />
                         </div>
                         <h4>{title}</h4>
                         <p className="text-sm text-muted-foreground mt-1">
@@ -702,7 +733,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 variant="outline"
                 onClick={() => setCurrentStep('signup')}
                 className="flex-1"
-                disabled={isFormLoading}
+                disabled={isFormLoading || isLoggedIn}
               >
                 Mbrapa
               </Button>
@@ -721,18 +752,39 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         return (
           <div className="space-y-6">
             <div className="text-center space-y-2">
-              <h3>Zgjidhni shkollën tuaj</h3>
+              <h3>Zgjidhni vendbanimin dhe shkollën tuaj</h3>
               <p className="text-sm text-muted-foreground">
                 Kjo do të na ndihmojë të krijojmë një eksperiencë të
                 personalizuar
               </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="komuna">Komuna</Label>
+              <Select
+                value={formData.municipality}
+                onValueChange={(value: any) =>
+                  handleInputChange('municipality', value)
+                }
+                disabled={isFormLoading}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Zgjidhni shkollën tuaj" />
+                </SelectTrigger>
+                <SelectContent>
+                  {kosovoCities!.map((city) => (
+                    <SelectItem key={city.id} value={city.id}>
+                      {city.nameAlbanian}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="school">Shkolla</Label>
               <Select
                 value={formData.school}
-                onValueChange={(value) => handleInputChange('school', value)}
+                onValueChange={(value:any) => handleInputChange('school', value)}
                 disabled={isFormLoading}
               >
                 <SelectTrigger>
@@ -740,8 +792,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 </SelectTrigger>
                 <SelectContent>
                   {kosovoSchools.map((school) => (
-                    <SelectItem key={school} value={school}>
-                      {school}
+                    <SelectItem key={school.id} value={school.id}>
+                      {school.nameAlbanian}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -763,19 +815,19 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 variant="outline"
                 onClick={() => setCurrentStep('grade')}
                 className="flex-1"
-                disabled={isFormLoading}
+                disabled={isFormLoading || isLoggedIn}
               >
                 Mbrapa
               </Button>
               <Button
                 onClick={handleSignup}
                 className="flex-1"
-                disabled={!canCompleteSignup || isFormLoading}
+                disabled={((!canCompleteSignup || isFormLoading) && !isLoggedIn) || (isLoggedIn && (formData.municipality == 0 || formData.school == 0))}
               >
                 {isFormLoading && (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 )}
-                Krijo llogari
+                {!isLoggedIn ? "Krijo llogari" : "Kompleto llogarinë"}
               </Button>
             </div>
           </div>
@@ -787,7 +839,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog open={isOpen} onOpenChange={!isLoggedIn && handleClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <div className="flex items-center space-x-3 mb-4">
