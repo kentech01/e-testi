@@ -57,7 +57,6 @@ export function ProfileSettings({
     fetch('/schools.json')
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setSelectedSchools(data.teacherLicenseInstitution)
         setKosovoSchools(data.teacherLicenseInstitution);
       })
@@ -65,7 +64,6 @@ export function ProfileSettings({
     fetch('/cities.json')
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setKosovoCities(data.teacherLicenseMunicipality);
       })
       .catch((err) => console.log(err));
@@ -75,7 +73,6 @@ export function ProfileSettings({
     const filtered=kosovoSchools.filter((item:School) => item.idTeacherLicenseMunicipality == value);
     setSelectedSchools(filtered);
     if(filtered.length > 0){
-      console.log("pi mor");
       
       onSchoolChange(filtered[0]!.id)
     }

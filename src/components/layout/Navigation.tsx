@@ -61,7 +61,6 @@ export function Navigation({
   useEffect(()=>{
     ensureSectorsLoaded();
   }, [])
-  console.log(sectors, user.grade, "qitu i gjan");
   
   const visibleMenuItems = menuItems.filter((item) => {
     if (item.id === 'test-management') {
