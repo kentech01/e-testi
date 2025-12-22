@@ -35,6 +35,13 @@ interface TestListProps {
   onStartTest: (testId: string | number) => void;
   onViewResults: (testId: string | number) => void;
   onStartNewExam: () => void;
+  user: {
+    name: string;
+    email: string;
+    grade: string;
+    school: number| null;
+    municipality: number | null;
+  } | null;
 }
 
 const subjectInfo = {
@@ -51,6 +58,7 @@ export function TestList({
   onStartTest,
   onViewResults,
   onStartNewExam,
+  user
 }: TestListProps) {
   const navigate = useNavigate();
   const [selectedTest, setSelectedTest] = useState<Test | null>(null);
@@ -151,6 +159,8 @@ export function TestList({
       });
 
       setTests(mappedTests);
+      console.log(mappedTests, "te");
+      
     } catch (err: any) {
       console.error('Failed to fetch tests:', err);
       setError('Failed to load tests. Please try again.');
@@ -416,7 +426,8 @@ export function TestList({
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {tests.map((test) => {
-              const isPassed = test.completed && test.hasPassed === true;
+              if(test.exam.sectorId == user?.grade){
+                const isPassed = test.completed && test.hasPassed === true;
               const isFailed = test.completed && test.hasPassed === false;
 
               return (
@@ -477,6 +488,7 @@ export function TestList({
                   </CardContent>
                 </Card>
               );
+              }
             })}
           </div>
         )}

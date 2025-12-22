@@ -26,6 +26,7 @@ import { examService } from '../services/exams';
 import { userAnswerService } from '../services/userAnswers';
 import { toast } from 'sonner';
 import { AuthModal } from '@/components/forms/AuthModal';
+import useSectors from '@/hooks/useSectors';
 
 export interface DashboardProps {
   user: {
@@ -72,14 +73,28 @@ const weeklyActivity = [
 ];
 
 const COLORS = ['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B'];
+interface School {
+  nameAlbanian: string;
+  nameEnglish: string;
+  nameSerbian: string;
+  idTeacherLicenseMunicipality: number;
+  id: number;
+}
 
 export function Dashboard({ user }: DashboardProps) {
+  
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [testsTotal, setTestsTotal] = useState(0);
   const [testsPassed, setTestsPassed] = useState(0);
   const [isStatsLoading, setIsStatsLoading] = useState(false);
-
+  const [schools, setSchools] = useState<School[]>([])
+  const {
+    sectors,
+    ensureSectorsLoaded,
+  } = useSectors();
+  
+  
   if (!user) {
     return <Navigate to="/" replace />;
   }
@@ -133,6 +148,13 @@ export function Dashboard({ user }: DashboardProps) {
     };
 
     loadTestStats();
+    ensureSectorsLoaded();
+    fetch('/schools.json')
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setSchools(data.teacherLicenseInstitution)
+      })
   }, []);
 
   const handleStartRandomTest = async () => {
@@ -225,13 +247,13 @@ export function Dashboard({ user }: DashboardProps) {
                 <div className="flex items-center space-x-4 text-blue-100 mt-1">
                   <div className="flex items-center space-x-1">
                     <GraduationCap className="w-4 h-4" />
-                    <span>Klasa {user.grade}</span>
+                    <span>{sectors.find(item=>item.id == user.grade)?.displayName}</span>
                   </div>
                   {user.school && (
                     <div className="flex items-center space-x-1">
                       <Users className="w-4 h-4" />
                       <span className="text-sm truncate max-w-[200px]">
-                        {"test"}
+                        {schools.find(item => item.id === user.school)?.nameAlbanian ?? "test"}
                       </span>
                     </div>
                   )}
