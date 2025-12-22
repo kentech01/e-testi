@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useMemo,
   useCallback,
+  useLayoutEffect,
 } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -212,9 +213,26 @@ export function CreateExam() {
 
   // Ref to access examCache without causing re-renders in callbacks
   const examCacheRef = useRef(examCache);
+  const questionNavScrollRef = useRef<HTMLDivElement>(null); // Ref for question navigation scroll container
+  const preservedScrollTop = useRef<number | null>(null); // Preserve scroll position during navigation
   useEffect(() => {
     examCacheRef.current = examCache;
   }, [examCache]);
+
+  // Restore scroll position after navigation/re-render
+  useEffect(() => {
+    if (preservedScrollTop.current !== null && questionNavScrollRef.current) {
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (questionNavScrollRef.current && preservedScrollTop.current !== null) {
+            questionNavScrollRef.current.scrollTop = preservedScrollTop.current;
+            preservedScrollTop.current = null; // Reset after restoring
+          }
+        });
+      });
+    }
+  }, [currentQuestionIndex]);
 
   // Fetch exam and question data if params are present (always fresh)
   useEffect(() => {
@@ -1177,6 +1195,11 @@ export function CreateExam() {
   const updateUrl = useCallback(
     (targetIndex?: number, dbQuestionId?: string) => {
       if (!examId) return;
+
+      // Preserve scroll position before navigation
+      if (questionNavScrollRef.current) {
+        preservedScrollTop.current = questionNavScrollRef.current.scrollTop;
+      }
 
       const index =
         typeof targetIndex === 'number' ? targetIndex : currentQuestionIndex;
@@ -2260,17 +2283,64 @@ export function CreateExam() {
             <Progress value={progress} className="h-2" />
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto">
+            <div 
+              ref={questionNavScrollRef}
+              className="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto"
+              style={{ scrollBehavior: 'auto' }}
+              onScroll={(e) => {
+                // Continuously track scroll position
+                if (questionNavScrollRef.current) {
+                  preservedScrollTop.current = questionNavScrollRef.current.scrollTop;
+                }
+              }}
+            >
               {questions.map((question, index) => {
                 const isCurrent = currentQuestion.id === question.id;
                 return (
                   <button
                     key={question.id}
-                    onClick={() => {
+                    type="button"
+                    tabIndex={0}
+                    onClick={(e) => {
+                      // Preserve scroll position immediately
+                      const scrollContainer = questionNavScrollRef.current;
+                      const scrollTop = scrollContainer?.scrollTop ?? 0;
+                      
                       updateUrl(question.id - 1);
                       // navigate(
                       //   `/test-management/edit/${params.examId!}/${question.id}`
                       // );
+                      
+                      // Restore scroll position immediately and after render
+                      if (scrollContainer) {
+                        // Immediate restore
+                        scrollContainer.scrollTop = scrollTop;
+                        // Multiple restores to ensure it sticks
+                        requestAnimationFrame(() => {
+                          if (scrollContainer) {
+                            scrollContainer.scrollTop = scrollTop;
+                          }
+                          requestAnimationFrame(() => {
+                            if (scrollContainer) {
+                              scrollContainer.scrollTop = scrollTop;
+                            }
+                          });
+                        });
+                      }
+                    }}
+                    onFocus={(e) => {
+                      // Prevent scroll on focus by blurring immediately
+                      const scrollContainer = questionNavScrollRef.current;
+                      if (scrollContainer) {
+                        const scrollTop = scrollContainer.scrollTop;
+                        // Blur to prevent focus scroll, then restore scroll
+                        e.currentTarget.blur();
+                        requestAnimationFrame(() => {
+                          if (scrollContainer) {
+                            scrollContainer.scrollTop = scrollTop;
+                          }
+                        });
+                      }
                     }}
                     className={`
                     w-8 h-8 text-xs rounded border transition-colors

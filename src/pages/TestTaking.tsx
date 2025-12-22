@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -84,10 +84,16 @@ export function TestTaking({
   const questionStartTime = useRef<number>(Date.now());
   const timerInitialized = useRef<boolean>(false);
   const autoSubmitStarted = useRef<boolean>(false);
+  const questionNavScrollRef = useRef<HTMLDivElement>(null); // Ref for question navigation scroll container
+  const navScrollStorageKey = useMemo(
+    () => `exam_nav_scroll_${examId}`,
+    [examId]
+  );
 
   // Get current question object
   const currentQuestion = questions.find((q) => q.id === currentQuestionId);
   useEffect(() => {
+    console.log(currentQuestion);
 
     if (currentQuestion) {
       if (
@@ -197,6 +203,7 @@ export function TestTaking({
         if (savedTime) {
           const parsed = JSON.parse(savedTime);
           const elapsed = Math.floor((Date.now() - parsed.startTime) / 1000);
+          console.log(elapsed, 'started');
 
           const remaining = Math.max(0, parsed.initialTime - elapsed);
 
@@ -348,6 +355,16 @@ export function TestTaking({
   };
 
   const navigateToQuestion = (questionId: string) => {
+    // Preserve scroll position before navigation (survives route remounts)
+    if (questionNavScrollRef.current) {
+      const scrollTop = questionNavScrollRef.current.scrollTop;
+      try {
+        sessionStorage.setItem(navScrollStorageKey, String(scrollTop));
+      } catch {
+        // Ignore storage errors (e.g. private mode)
+      }
+    }
+
     setCurrentQuestionId(questionId);
     navigate(`/tests/${examId}/${questionId}`);
     loadQuestionAnswers(questionId);
@@ -358,6 +375,23 @@ export function TestTaking({
       setShowSubmitConfirm(true);
     }
   };
+
+  // Restore scroll position after (re)mount or navigation
+  useLayoutEffect(() => {
+    try {
+      const stored = sessionStorage.getItem(navScrollStorageKey);
+      if (!stored) return;
+
+      const y = parseInt(stored, 10);
+      if (Number.isNaN(y)) return;
+
+      if (questionNavScrollRef.current) {
+        questionNavScrollRef.current.scrollTop = y;
+      }
+    } catch {
+      // Ignore storage errors
+    }
+  }, [navScrollStorageKey, currentQuestionId]);
 
   const loadQuestionAnswers = (questionId: string) => {
     // Load existing answers for this question
@@ -668,6 +702,8 @@ export function TestTaking({
     questions.length > 0 ? (answeredCount / questions.length) * 100 : 0;
   const currentQuestionIndex =
     questions.findIndex((q) => q.id === currentQuestionId) + 1;
+  const isLastQuestion =
+    questions.length > 0 && currentQuestionIndex === questions.length;
 
   if (loading) {
     return (
@@ -887,7 +923,7 @@ export function TestTaking({
                     <>Duke ruajtur...</>
                   ) : (
                     <>
-                      E radhës
+                      {isLastQuestion ? 'Perfundo' : 'E radhës'}
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </>
                   )}
@@ -908,7 +944,25 @@ export function TestTaking({
               <Progress value={progress} className="h-2" />
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto">
+              <div 
+                ref={questionNavScrollRef}
+                className="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto"
+                style={{ scrollBehavior: 'auto' }}
+                onScroll={(e) => {
+                  // Continuously persist scroll position so it can be restored after route changes
+                  if (questionNavScrollRef.current) {
+                    const scrollTop = questionNavScrollRef.current.scrollTop;
+                    try {
+                      sessionStorage.setItem(
+                        navScrollStorageKey,
+                        String(scrollTop)
+                      );
+                    } catch {
+                      // Ignore storage errors
+                    }
+                  }
+                }}
+              >
                 {questions.map((question, index) => {
                   const isAnswered = userAnswers.some(
                     (a) => a.questionId === question.id
@@ -918,7 +972,50 @@ export function TestTaking({
                   return (
                     <button
                       key={question.id}
-                      onClick={() => navigateToQuestion(question.id)}
+                      type="button"
+                      tabIndex={0}
+                      onMouseDown={(e) => {
+                        // Prevent the button from stealing focus and causing scroll jumps
+                        e.preventDefault();
+                      }}
+                      onClick={(e) => {
+                        // Preserve scroll position immediately
+                        const scrollContainer = questionNavScrollRef.current;
+                        const scrollTop = scrollContainer?.scrollTop ?? 0;
+                        
+                        navigateToQuestion(question.id);
+                        
+                        // Restore scroll position immediately and after render
+                        if (scrollContainer) {
+                          // Immediate restore
+                          scrollContainer.scrollTop = scrollTop;
+                          // Multiple restores to ensure it sticks
+                          requestAnimationFrame(() => {
+                            if (scrollContainer) {
+                              scrollContainer.scrollTop = scrollTop;
+                            }
+                            requestAnimationFrame(() => {
+                              if (scrollContainer) {
+                                scrollContainer.scrollTop = scrollTop;
+                              }
+                            });
+                          });
+                        }
+                      }}
+                      onFocus={(e) => {
+                        // Prevent scroll on focus by blurring immediately
+                        const scrollContainer = questionNavScrollRef.current;
+                        if (scrollContainer) {
+                          const scrollTop = scrollContainer.scrollTop;
+                          // Blur to prevent focus scroll, then restore scroll
+                          e.currentTarget.blur();
+                          requestAnimationFrame(() => {
+                            if (scrollContainer) {
+                              scrollContainer.scrollTop = scrollTop;
+                            }
+                          });
+                        }
+                      }}
                       className={`
                         w-8 h-8 text-xs rounded border transition-colors
                         ${
