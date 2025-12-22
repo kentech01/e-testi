@@ -136,6 +136,7 @@ export const useFirebaseAuth = () => {
                 ...userData,
                 municipality: profile?.municipality,
                 school: profile?.school,
+                grade: profile?.sectorId
               };
             }
             
@@ -223,12 +224,12 @@ export const useFirebaseAuth = () => {
       } catch {}
 
       // Store additional user data (grade, school) in the auth state
-      const result = await userService.updateUser({school, municipality})
+      const result = await userService.updateUser({school, municipality, sectorId: grade})
       if(result){
         setAuthState((prev) => ({
           ...prev,
           isAuthenticated: true,
-          user: userData ? { ...userData, grade, school, municipality } : null,
+          user: userData ? { ...userData, sectorId: grade, school, municipality } : null,
           token,
           loading: false,
         }));
@@ -244,6 +245,7 @@ export const useFirebaseAuth = () => {
       }, 300);
 
       toast.success('Llogaria u krijua me sukses!');
+      window.location.reload();
       return userCredential;
     } catch (error: any) {
       const errorMessage = getFirebaseErrorMessage(error.code);
@@ -285,6 +287,7 @@ export const useFirebaseAuth = () => {
           ...userData,
           municipality: profile?.municipality,
           school: profile?.school,
+          grade: profile?.sectorId
         };
       }
 

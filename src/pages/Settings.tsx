@@ -38,12 +38,10 @@ export function Settings({
   const [autoSave, setAutoSave] = React.useState(true);
   const [sound, setSound] = React.useState(false);
   const [emailNotifications, setEmailNotifications] = React.useState(true);
-  console.log(user);
   
 
   const handleSaveProfile = () => {
     onUpdateProfile(grade, school, municipality);
-    console.log(grade, school, municipality);
     
   };
 

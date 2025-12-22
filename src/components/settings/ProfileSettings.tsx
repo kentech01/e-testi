@@ -11,6 +11,7 @@ import {
 } from '../../ui/select';
 import { Button } from '../../ui/button';
 import { User, Mail, School, GraduationCap } from 'lucide-react';
+import useSectors from '@/hooks/useSectors';
 
 interface ProfileSettingsProps {
   name: string;
@@ -23,8 +24,6 @@ interface ProfileSettingsProps {
   onGradeChange: (grade: string) => void;
   onSave: () => void;
 }
-
-const grades = ['Klasa 9', 'Klasa 10', 'Klasa 11', 'Klasa 12'];
 interface School {
   nameAlbanian: string;
   nameEnglish: string;
@@ -52,11 +51,12 @@ export function ProfileSettings({
   const [kosovoSchools, setKosovoSchools] = useState<School[]>([]);
   const [selectedSchools, setSelectedSchools] = useState<School[]>([]);
   const [kosovoCities, setKosovoCities] = useState<Municipality[]>([]);
+  const {sectors, ensureSectorsLoaded} = useSectors();
   useEffect(() => {
+    ensureSectorsLoaded();
     fetch('/schools.json')
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setSelectedSchools(data.teacherLicenseInstitution)
         setKosovoSchools(data.teacherLicenseInstitution);
       })
@@ -64,7 +64,6 @@ export function ProfileSettings({
     fetch('/cities.json')
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setKosovoCities(data.teacherLicenseMunicipality);
       })
       .catch((err) => console.log(err));
@@ -74,7 +73,6 @@ export function ProfileSettings({
     const filtered=kosovoSchools.filter((item:School) => item.idTeacherLicenseMunicipality == value);
     setSelectedSchools(filtered);
     if(filtered.length > 0){
-      console.log("pi mor");
       
       onSchoolChange(filtered[0]!.id)
     }
@@ -127,9 +125,9 @@ export function ProfileSettings({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {grades.map((g) => (
-                    <SelectItem key={g} value={g}>
-                      {g}
+                  {sectors?.map((g) => (
+                    <SelectItem key={g.id} value={g.id}>
+                      {g.displayName}
                     </SelectItem>
                   ))}
                 </SelectContent>

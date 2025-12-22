@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../../ui/button';
 import { Badge } from '../../ui/badge';
@@ -15,6 +15,7 @@ import {
   ClipboardList,
 } from 'lucide-react';
 import { useIsAdmin } from '../../utils/admin';
+import useSectors from '@/hooks/useSectors';
 
 interface NavigationProps {
   user: {
@@ -54,8 +55,13 @@ export function Navigation({
   const navigate = useNavigate();
   const location = useLocation();
   const isAdmin = useIsAdmin();
+  const {sectors, ensureSectorsLoaded} = useSectors();
 
   // Filter menu items based on admin status
+  useEffect(()=>{
+    ensureSectorsLoaded();
+  }, [])
+  
   const visibleMenuItems = menuItems.filter((item) => {
     if (item.id === 'test-management') {
       return isAdmin;
@@ -92,7 +98,7 @@ export function Navigation({
             </p>
             <div className="flex items-center space-x-2">
               <Badge variant="secondary" className="text-xs">
-                Klasa {user.grade}
+                {sectors.find(item=>item.id == user.grade)?.displayName}
               </Badge>
             </div>
           </div>

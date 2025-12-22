@@ -176,9 +176,9 @@ export function AuthModal({ isOpen, onClose, isLoggedIn }: AuthModalProps) {
   }, [currentStep]);
   useEffect(()=>{
     if(isLoggedIn){
-      setCurrentStep('school');
+      setCurrentStep('grade');
     }
-  })
+  }, [])
 
   // Memoized password validation
   const passwordValidation = useMemo(() => {
@@ -242,6 +242,8 @@ export function AuthModal({ isOpen, onClose, isLoggedIn }: AuthModalProps) {
             setKosovoSchools(filtered);
           });
       }
+      console.log(field, value);
+      
       setFormData((prev) => ({ ...prev, [field]: value }));
       if (errors[field]) {
         setErrors((prev) => ({ ...prev, [field]: '' }));
@@ -312,7 +314,8 @@ export function AuthModal({ isOpen, onClose, isLoggedIn }: AuthModalProps) {
       setIsLoading(false);
     }
     }else{
-      await userService.updateUser({school: formData.school, municipality: formData.municipality})
+      
+      await userService.updateUser({school: formData.school, municipality: formData.municipality, sectorId: formData.grade})
       handleClose();
     }
   }, [formData, validateForm, signUp]);

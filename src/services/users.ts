@@ -3,6 +3,7 @@ import HttpClient from './httpClient';
 
 // Types based on backend User entity
 export interface User {
+  sectorId: string | undefined;
   id: string;
   firebaseUid: string;
   email: string;

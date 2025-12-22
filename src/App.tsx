@@ -18,6 +18,7 @@ import {
 import { Skeleton } from './ui/skeleton';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 import userService from './services/users';
+import useSectors from './hooks/useSectors';
 // Lazy load components
 const AuthModal = lazy(() =>
   import('./components/forms').then((module) => ({ default: module.AuthModal }))
@@ -74,7 +75,8 @@ function AppContent() {
   const [showAuth, setShowAuth] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
-  const { user, loading, signOut } = useFirebaseAuth(); // Get signOut from the hook
+  const { user, loading, signOut } = useFirebaseAuth(); // Get signOut from the hoo
+  
 
   // Initialize app state
   useEffect(() => {
@@ -85,7 +87,7 @@ function AppContent() {
   useEffect(()=>{
     setShowAuth(false)
     if(user){
-      if(user!.school == null){
+      if(user!.school == null || user!.municipality == null || user!.grade == null){
         setShowAuth(true)
       }
     }
@@ -121,7 +123,8 @@ function AppContent() {
 
   const handleUpdateProfile = async (grade: string, school: number, municipality: number) => {
     // This would need to be implemented with Firebase user profile updates
-    await userService.updateUser({school, municipality})
+    await userService.updateUser({sectorId: grade, school, municipality})
+    window.location.reload();
     toast.success('Profili u përditësua me sukses!');
   };
 
@@ -280,6 +283,7 @@ function AppContent() {
   }
 
   // Convert Firebase user to the format expected by AppRouter
+  
   const userForRouter = {
     name: user.displayName || 'User',
     email: user.email || '',

@@ -24,7 +24,7 @@ const MobileNavigation = React.lazy(() =>
 );
 
 // Lazy load pages and their types
-const Dashboard = React.lazy(() =>
+const   Dashboard = React.lazy(() =>
   import('../pages').then((module) => ({ default: module.Dashboard }))
 );
 const TestList = React.lazy(() =>
@@ -323,6 +323,7 @@ const AppRouter: React.FC<AppRouterProps> = ({
               element={
                 <ProtectedRoute>
                   <TestList
+                    user={user!}
                     onStartTest={handleStartTest}
                     onViewResults={handleViewResults}
                     onStartNewExam={handleStartNewExam}
