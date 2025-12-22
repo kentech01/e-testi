@@ -36,18 +36,19 @@ export const authService = {
     password: string,
     name: string,
     grade: string,
-    school: string
+    school: number,
+    municipality: number
   ): Promise<UserCredential> {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
 
       // Update the user's display name
       if (userCredential.user) {
-        await updateProfile(userCredential.user, { displayName: name });
+        await updateProfile(userCredential.user, { displayName: name,  });
       }
 
       return userCredential;
@@ -114,7 +115,7 @@ export const authService = {
   // Convert Firebase user to our UserData format
   convertFirebaseUser(firebaseUser: FirebaseUser | null): UserData | null {
     if (!firebaseUser) return null;
-
+    
     return {
       uid: firebaseUser.uid,
       email: firebaseUser.email,
@@ -169,7 +170,6 @@ export const storageService = {
       }
       return data.publicUrl;
     } catch (error) {
-      çç;
       throw error as any;
     }
   },

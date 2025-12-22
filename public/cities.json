@@ -1,0 +1,232 @@
+{
+    "teacherLicenseMunicipality": [
+    {
+      "nameAlbanian": "Deçan",
+      "nameEnglish": "Decan",
+      "nameSerbian": "Dečani",
+      "id": 1
+    },
+    {
+      "nameAlbanian": "Dragash",
+      "nameEnglish": "Dragash",
+      "nameSerbian": "Dragaš",
+      "id": 5
+    },
+    {
+      "nameAlbanian": "Ferizaj",
+      "nameEnglish": "Ferizaj",
+      "nameSerbian": "Uroševac",
+      "id": 25
+    },
+    {
+      "nameAlbanian": "Fushë Kosovë ",
+      "nameEnglish": "Fushe Kosove",
+      "nameSerbian": "Kosovo Polje ",
+      "id": 9
+    },
+    {
+      "nameAlbanian": "Gjakovë",
+      "nameEnglish": "Gjakova",
+      "nameSerbian": "Djakovica",
+      "id": 2
+    },
+    {
+      "nameAlbanian": "Gjilan",
+      "nameEnglish": "Gjilan",
+      "nameSerbian": "Gnjilane",
+      "id": 4
+    },
+    {
+      "nameAlbanian": "Gllogoc",
+      "nameEnglish": "Gllogoc",
+      "nameSerbian": "Glogovac",
+      "id": 3
+    },
+    {
+      "nameAlbanian": "Graçanicë",
+      "nameEnglish": "Gracanice",
+      "nameSerbian": "Gračanica",
+      "id": 34
+    },
+    {
+      "nameAlbanian": "Hani i Elezit",
+      "nameEnglish": "Hani i Elezit",
+      "nameSerbian": "Dženeral Janković",
+      "id": 33
+    },
+    {
+      "nameAlbanian": "Istog",
+      "nameEnglish": "Istog",
+      "nameSerbian": "Istok",
+      "id": 6
+    },
+    {
+      "nameAlbanian": "Junik",
+      "nameEnglish": "Junik",
+      "nameSerbian": "Junik",
+      "id": 31
+    },
+    {
+      "nameAlbanian": "Kaçanik",
+      "nameEnglish": "Kacanik",
+      "nameSerbian": "Kačanik",
+      "id": 7
+    },
+    {
+      "nameAlbanian": "Kamenicë",
+      "nameEnglish": "Kamenice",
+      "nameSerbian": "Kamenica",
+      "id": 10
+    },
+    {
+      "nameAlbanian": "Klinë",
+      "nameEnglish": "Kline",
+      "nameSerbian": "Klina",
+      "id": 8
+    },
+    {
+      "nameAlbanian": "Kllokot",
+      "nameEnglish": "Kllokot",
+      "nameSerbian": "Klokot",
+      "id": 37
+    },
+    {
+      "nameAlbanian": "Leposaviq",
+      "nameEnglish": "Leposaviq",
+      "nameSerbian": "Leposavić",
+      "id": 12
+    },
+    {
+      "nameAlbanian": "Lipjan",
+      "nameEnglish": "Lipjan",
+      "nameSerbian": "Lipljan",
+      "id": 13
+    },
+    {
+      "nameAlbanian": "Malishevë",
+      "nameEnglish": "Malisheve",
+      "nameSerbian": "Mališevo",
+      "id": 30
+    },
+    {
+      "nameAlbanian": "Mamushë",
+      "nameEnglish": "Mamushe",
+      "nameSerbian": "Mamuša",
+      "id": 32
+    },
+    {
+      "nameAlbanian": "Mitrovicë Jugore",
+      "nameEnglish": "Mitrovica South",
+      "nameSerbian": "Mitrovica Južna",
+      "id": 11
+    },
+    {
+      "nameAlbanian": "Mitrovicë Veriore",
+      "nameEnglish": "Mitrovica Northern",
+      "nameSerbian": "Mitrovica Severna ",
+      "id": 38
+    },
+    {
+      "nameAlbanian": "Novobërdë",
+      "nameEnglish": "Novoberde",
+      "nameSerbian": "Novo Brdo ",
+      "id": 14
+    },
+    {
+      "nameAlbanian": "Obiliq",
+      "nameEnglish": "Obiliq",
+      "nameSerbian": "Obilić",
+      "id": 15
+    },
+    {
+      "nameAlbanian": "Partesh",
+      "nameEnglish": "Partesh",
+      "nameSerbian": "Parteš",
+      "id": 36
+    },
+    {
+      "nameAlbanian": "Pejë",
+      "nameEnglish": "Peje",
+      "nameSerbian": "Peć",
+      "id": 17
+    },
+    {
+      "nameAlbanian": "Podujevë",
+      "nameEnglish": "Podujeve",
+      "nameSerbian": "Podujevo",
+      "id": 18
+    },
+    {
+      "nameAlbanian": "Prishtinë",
+      "nameEnglish": "Prishtine",
+      "nameSerbian": "Priština",
+      "id": 19
+    },
+    {
+      "nameAlbanian": "Prizren",
+      "nameEnglish": "Prizren",
+      "nameSerbian": "Prizren",
+      "id": 20
+    },
+    {
+      "nameAlbanian": "Rahovec",
+      "nameEnglish": "Rahovec",
+      "nameSerbian": "Orahovac ",
+      "id": 16
+    },
+    {
+      "nameAlbanian": "Ranillug",
+      "nameEnglish": " Ranillug",
+      "nameSerbian": "Ranillug",
+      "id": 35
+    },
+    {
+      "nameAlbanian": "Shtërpcë",
+      "nameEnglish": "Shterpce",
+      "nameSerbian": "Štrpce",
+      "id": 23
+    },
+    {
+      "nameAlbanian": "Shtime",
+      "nameEnglish": "Shtime",
+      "nameSerbian": "Štimlje",
+      "id": 22
+    },
+    {
+      "nameAlbanian": "Skënderaj",
+      "nameEnglish": "Skenderaj",
+      "nameSerbian": "Srbica",
+      "id": 21
+    },
+    {
+      "nameAlbanian": "Suharekë",
+      "nameEnglish": "Suhareke",
+      "nameSerbian": "Suva Reka ",
+      "id": 24
+    },
+    {
+      "nameAlbanian": "Viti",
+      "nameEnglish": "Viti",
+      "nameSerbian": "Vitina",
+      "id": 26
+    },
+    {
+      "nameAlbanian": "Vushtrri",
+      "nameEnglish": "Vushtrri",
+      "nameSerbian": "Vučitrn",
+      "id": 27
+    },
+    {
+      "nameAlbanian": "Zubin Potok",
+      "nameEnglish": "Zubin Potok",
+      "nameSerbian": "Zubin Potok",
+      "id": 28
+    },
+    {
+      "nameAlbanian": "Zveçan",
+      "nameEnglish": "Zvecan",
+      "nameSerbian": "Zvečan",
+      "id": 29
+    }
+  ]
+}

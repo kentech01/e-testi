@@ -5,7 +5,8 @@ export interface User {
   email: string | null;
   displayName: string | null;
   grade?: string;
-  school?: string;
+  municipality?: number | null;
+  school?: number | null;
 }
 
 export interface AuthState {

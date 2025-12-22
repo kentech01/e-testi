@@ -439,7 +439,6 @@ export function CreateExam() {
       if (Array.isArray(title)) {
         setMainTitleState(title[0]);
         complexTitleRef.current = title;
-        console.log(complexTitleRef.current, "1her bon");
         
         setComplexCount((prev) => {
           const copy = [...prev];
@@ -575,11 +574,9 @@ export function CreateExam() {
   };
   const handleMathQuestionChange = (index: number, value: any) => {
     complexTitleRef.current[index * 2 + 1] = value;
-    console.log(complexTitleRef.current, "nchange");
   };
   const handleComplexTitleChange = (index: number, value: any) => {
     complexTitleRef.current[index * 2 + 2] = value;
-    console.log(complexTitleRef.current, "nchange te inputit");
     
   };
   const handleRemoveOption = (optionId: string) => {
@@ -600,7 +597,6 @@ export function CreateExam() {
   };
 
   const handleOptionTextChange = (optionId: string, text: string) => {
-    console.log(text);
     
     setQuestions(
       questions.map((q, index) =>
@@ -634,7 +630,6 @@ export function CreateExam() {
     let complexCheck = isChecked === 'true';
     if (!complexCheck) {
       complexTitleRef.current = [complexTitleRef.current[0]];
-      console.log(complexTitleRef.current);
       
       setComplexCount([]);
     }
@@ -997,7 +992,6 @@ export function CreateExam() {
         isCorrect: !!opt.isCorrect,
       }));
       const title = JSON.stringify(complexTitleRef.current);
-      console.log(title, "titulli");
       
 
       const questionData = {

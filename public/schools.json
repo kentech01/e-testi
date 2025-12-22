@@ -1,0 +1,5758 @@
+{
+    "teacherLicenseInstitution": [
+    {
+      "nameAlbanian": "Tafil Kasumaj",
+      "nameEnglish": "Tafil Kasumaj",
+      "nameSerbian": "Tafil Kasumaj",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1041
+    },
+    {
+      "nameAlbanian": "Heronjët e Dukagjinit",
+      "nameEnglish": "Heronjët e Dukagjinit",
+      "nameSerbian": "Heronjët e Dukagjinit",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1042
+    },
+    {
+      "nameAlbanian": "Ardhmëria",
+      "nameEnglish": "Ardhmëria",
+      "nameSerbian": "Ardhmëria",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1043
+    },
+    {
+      "nameAlbanian": "Avni Rrustemi",
+      "nameEnglish": "Avni Rrustemi",
+      "nameSerbian": "Avni Rrustemi",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1044
+    },
+    {
+      "nameAlbanian": "Sylejman Vokshi",
+      "nameEnglish": "Sylejman Vokshi",
+      "nameSerbian": "Sylejman Vokshi",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1045
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Vokshit",
+      "nameEnglish": "Dëshmorët e Vokshit",
+      "nameSerbian": "Dëshmorët e Vokshit",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1046
+    },
+    {
+      "nameAlbanian": "Esad Mekuli",
+      "nameEnglish": "Esad Mekuli",
+      "nameSerbian": "Esad Mekuli",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1047
+    },
+    {
+      "nameAlbanian": "Vëllezërit Frashëri",
+      "nameEnglish": "Vëllezërit Frashëri",
+      "nameSerbian": "Vëllezërit Frashëri",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1048
+    },
+    {
+      "nameAlbanian": "Faik Konica",
+      "nameEnglish": "Faik Konica",
+      "nameSerbian": "Faik Konica",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1049
+    },
+    {
+      "nameAlbanian": "Rexhep Kadrijaj",
+      "nameEnglish": "Rexhep Kadrijaj",
+      "nameSerbian": "Rexhep Kadrijaj",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1050
+    },
+    {
+      "nameAlbanian": "Dëshmorët e  Kombit",
+      "nameEnglish": "Dëshmorët e  Kombit",
+      "nameSerbian": "Dëshmorët e  Kombit",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1051
+    },
+    {
+      "nameAlbanian": "Drita",
+      "nameEnglish": "Drita",
+      "nameSerbian": "Drita",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1052
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Baballoqit",
+      "nameEnglish": "Dëshmorët e Baballoqit",
+      "nameSerbian": "Dëshmorët e Baballoqit",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1053
+    },
+    {
+      "nameAlbanian": "Jusuf Gërvalla",
+      "nameEnglish": "Jusuf Gërvalla",
+      "nameSerbian": "Jusuf Gërvalla",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1054
+    },
+    {
+      "nameAlbanian": "Lan Selimi",
+      "nameEnglish": "Lan Selimi",
+      "nameSerbian": "Lan Selimi",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1055
+    },
+    {
+      "nameAlbanian": "Bajram Curri",
+      "nameEnglish": "Bajram Curri",
+      "nameSerbian": "Bajram Curri",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1056
+    },
+    {
+      "nameAlbanian": "Syl Alaj",
+      "nameEnglish": "Syl Alaj",
+      "nameSerbian": "Syl Alaj",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1057
+    },
+    {
+      "nameAlbanian": "Kuvendi i Verrave të Llukës",
+      "nameEnglish": "Kuvendi i Verrave të Llukës",
+      "nameSerbian": "Kuvendi i Verrave të Llukës",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1058
+    },
+    {
+      "nameAlbanian": "Lidhja e Prizrenit",
+      "nameEnglish": "Lidhja e Prizrenit",
+      "nameSerbian": "Lidhja e Prizrenit",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1059
+    },
+    {
+      "nameAlbanian": "Isa Boletini",
+      "nameEnglish": "Isa Boletini",
+      "nameSerbian": "Isa Boletini",
+      "idTeacherLicenseMunicipality": 1,
+      "id": 1060
+    },
+    {
+      "nameAlbanian": "Shaban Shabani",
+      "nameEnglish": "Shaban Shabani",
+      "nameSerbian": "Shaban Shabani",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1061
+    },
+    {
+      "nameAlbanian": "Fetah Sylejmani",
+      "nameEnglish": "Fetah Sylejmani",
+      "nameSerbian": "Fetah Sylejmani",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1062
+    },
+    {
+      "nameAlbanian": "Sezai Surroi",
+      "nameEnglish": "Sezai Surroi",
+      "nameSerbian": "Sezai Surroi",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1063
+    },
+    {
+      "nameAlbanian": "Ilmi Bahtijari",
+      "nameEnglish": "Ilmi Bahtijari",
+      "nameSerbian": "Ilmi Bahtijari",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1064
+    },
+    {
+      "nameAlbanian": "Ulina",
+      "nameEnglish": "Ulina",
+      "nameSerbian": "Ulina",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1065
+    },
+    {
+      "nameAlbanian": "28 Nëntori",
+      "nameEnglish": "28 Nëntori",
+      "nameSerbian": "28 Nëntori",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1066
+    },
+    {
+      "nameAlbanian": "Samidin Emini",
+      "nameEnglish": "Samidin Emini",
+      "nameSerbian": "Samidin Emini",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1067
+    },
+    {
+      "nameAlbanian": "Ruzhdi Berisha",
+      "nameEnglish": "Ruzhdi Berisha",
+      "nameSerbian": "Ruzhdi Berisha",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1068
+    },
+    {
+      "nameAlbanian": "Restelica",
+      "nameEnglish": "Restelica",
+      "nameSerbian": "Restelica",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1069
+    },
+    {
+      "nameAlbanian": "Zenuni",
+      "nameEnglish": "Zenuni",
+      "nameSerbian": "Zenuni",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1070
+    },
+    {
+      "nameAlbanian": "Svetlost",
+      "nameEnglish": "Svetlost",
+      "nameSerbian": "Svetlost",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1071
+    },
+    {
+      "nameAlbanian": "9 Maj",
+      "nameEnglish": "9 Maj",
+      "nameSerbian": "9 Maj",
+      "idTeacherLicenseMunicipality": 5,
+      "id": 1072
+    },
+    {
+      "nameAlbanian": "Gjimnazi shkenca shoqërore",
+      "nameEnglish": "Gjimnazi shkenca shoqërore",
+      "nameSerbian": "Gjimnazi shkenca shoqërore",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1073
+    },
+    {
+      "nameAlbanian": "Astrit Bytyqi",
+      "nameEnglish": "Astrit Bytyqi",
+      "nameSerbian": "Astrit Bytyqi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1074
+    },
+    {
+      "nameAlbanian": "Kuvendi i Arbërit",
+      "nameEnglish": "Kuvendi i Arbërit",
+      "nameSerbian": "Kuvendi i Arbërit",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1075
+    },
+    {
+      "nameAlbanian": "Mejdi Xhaferi",
+      "nameEnglish": "Mejdi Xhaferi",
+      "nameSerbian": "Mejdi Xhaferi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1076
+    },
+    {
+      "nameAlbanian": "Pavarësia",
+      "nameEnglish": "Pavarësia",
+      "nameSerbian": "Pavarësia",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1077
+    },
+    {
+      "nameAlbanian": "Faik Konica",
+      "nameEnglish": "Faik Konica",
+      "nameSerbian": "Faik Konica",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1078
+    },
+    {
+      "nameAlbanian": "Zenel Hajdini",
+      "nameEnglish": "Zenel Hajdini",
+      "nameSerbian": "Zenel Hajdini",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1079
+    },
+    {
+      "nameAlbanian": "Çesk Zadeja",
+      "nameEnglish": "Çesk Zadeja",
+      "nameSerbian": "Çesk Zadeja",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1080
+    },
+    {
+      "nameAlbanian": "Pjetër Bogdani",
+      "nameEnglish": "Pjetër Bogdani",
+      "nameSerbian": "Pjetër Bogdani",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1081
+    },
+    {
+      "nameAlbanian": "Elena Gjika",
+      "nameEnglish": "Elena Gjika",
+      "nameSerbian": "Elena Gjika",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1082
+    },
+    {
+      "nameAlbanian": "Dy Dëshmorët",
+      "nameEnglish": "Dy Dëshmorët",
+      "nameSerbian": "Dy Dëshmorët",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1083
+    },
+    {
+      "nameAlbanian": "Naim Frashëri",
+      "nameEnglish": "Naim Frashëri",
+      "nameSerbian": "Naim Frashëri",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1084
+    },
+    {
+      "nameAlbanian": "Konstadin Kristoforithi",
+      "nameEnglish": "Konstadin Kristoforithi",
+      "nameSerbian": "Konstadin Kristoforithi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1085
+    },
+    {
+      "nameAlbanian": "Dituria",
+      "nameEnglish": "Dituria",
+      "nameSerbian": "Dituria",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1086
+    },
+    {
+      "nameAlbanian": "Imri Halili",
+      "nameEnglish": "Imri Halili",
+      "nameSerbian": "Imri Halili",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1087
+    },
+    {
+      "nameAlbanian": "4 Prilli",
+      "nameEnglish": "4 Prilli",
+      "nameSerbian": "4 Prilli",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1088
+    },
+    {
+      "nameAlbanian": "Besim Rexhepi",
+      "nameEnglish": "Besim Rexhepi",
+      "nameSerbian": "Besim Rexhepi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1089
+    },
+    {
+      "nameAlbanian": "Jeta e Re",
+      "nameEnglish": "Jeta e Re",
+      "nameSerbian": "Jeta e Re",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1090
+    },
+    {
+      "nameAlbanian": "Ahmet Hoxha",
+      "nameEnglish": "Ahmet Hoxha",
+      "nameSerbian": "Ahmet Hoxha",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1091
+    },
+    {
+      "nameAlbanian": "Ganimete Tërbeshi",
+      "nameEnglish": "Ganimete Tërbeshi",
+      "nameSerbian": "Ganimete Tërbeshi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1092
+    },
+    {
+      "nameAlbanian": "Tefik Çanga",
+      "nameEnglish": "Tefik Çanga",
+      "nameSerbian": "Tefik Çanga",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1093
+    },
+    {
+      "nameAlbanian": "Rizah Matoshi",
+      "nameEnglish": "Rizah Matoshi",
+      "nameSerbian": "Rizah Matoshi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1094
+    },
+    {
+      "nameAlbanian": "Bilall Shala",
+      "nameEnglish": "Bilall Shala",
+      "nameSerbian": "Bilall Shala",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1095
+    },
+    {
+      "nameAlbanian": "Hajriz Muhadini",
+      "nameEnglish": "Hajriz Muhadini",
+      "nameSerbian": "Hajriz Muhadini",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1096
+    },
+    {
+      "nameAlbanian": "Vezir Jashari",
+      "nameEnglish": "Vezir Jashari",
+      "nameSerbian": "Vezir Jashari",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1097
+    },
+    {
+      "nameAlbanian": "Halit Ibishi",
+      "nameEnglish": "Halit Ibishi",
+      "nameSerbian": "Halit Ibishi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1098
+    },
+    {
+      "nameAlbanian": "Dardania",
+      "nameEnglish": "Dardania",
+      "nameSerbian": "Dardania",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1099
+    },
+    {
+      "nameAlbanian": "Ali Hadri",
+      "nameEnglish": "Ali Hadri",
+      "nameSerbian": "Ali Hadri",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1100
+    },
+    {
+      "nameAlbanian": "Skënderbeu",
+      "nameEnglish": "Skënderbeu",
+      "nameSerbian": "Skënderbeu",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1101
+    },
+    {
+      "nameAlbanian": "Mic Sokoli",
+      "nameEnglish": "Mic Sokoli",
+      "nameSerbian": "Mic Sokoli",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1102
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Lirisë",
+      "nameEnglish": "Dëshmorët e Lirisë",
+      "nameSerbian": "Dëshmorët e Lirisë",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1103
+    },
+    {
+      "nameAlbanian": "Kemajl Hetemi",
+      "nameEnglish": "Kemajl Hetemi",
+      "nameSerbian": "Kemajl Hetemi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1104
+    },
+    {
+      "nameAlbanian": "Tërrn",
+      "nameEnglish": "Tërrn",
+      "nameSerbian": "Tërrn",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1105
+    },
+    {
+      "nameAlbanian": "Pesë Dëshmorët e UÇK-së",
+      "nameEnglish": "Pesë Dëshmorët e UÇK-së",
+      "nameSerbian": "Pesë Dëshmorët e UÇK-së",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1106
+    },
+    {
+      "nameAlbanian": "Ramadan Rexhepi",
+      "nameEnglish": "Ramadan Rexhepi",
+      "nameSerbian": "Ramadan Rexhepi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1107
+    },
+    {
+      "nameAlbanian": "Muharrem Shemsedini",
+      "nameEnglish": "Muharrem Shemsedini",
+      "nameSerbian": "Muharrem Shemsedini",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1108
+    },
+    {
+      "nameAlbanian": "Visar Dodani",
+      "nameEnglish": "Visar Dodani",
+      "nameSerbian": "Visar Dodani",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1109
+    },
+    {
+      "nameAlbanian": "Abetarja",
+      "nameEnglish": "Abetarja",
+      "nameSerbian": "Abetarja",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1110
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Koshares",
+      "nameEnglish": "Dëshmorët e Koshares",
+      "nameSerbian": "Dëshmorët e Koshares",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1111
+    },
+    {
+      "nameAlbanian": "Liman Rekaj",
+      "nameEnglish": "Liman Rekaj",
+      "nameSerbian": "Liman Rekaj",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1112
+    },
+    {
+      "nameAlbanian": "Ismajl Qemajli",
+      "nameEnglish": "Ismajl Qemajli",
+      "nameSerbian": "Ismajl Qemajli",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1113
+    },
+    {
+      "nameAlbanian": "Afrim Abazi",
+      "nameEnglish": "Afrim Abazi",
+      "nameSerbian": "Afrim Abazi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1114
+    },
+    {
+      "nameAlbanian": "Gjon Serreçi",
+      "nameEnglish": "Gjon Serreçi",
+      "nameSerbian": "Gjon Serreçi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1115
+    },
+    {
+      "nameAlbanian": "Jeronim De Rada",
+      "nameEnglish": "Jeronim De Rada",
+      "nameSerbian": "Jeronim De Rada",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1116
+    },
+    {
+      "nameAlbanian": "Arsim Rexhepi",
+      "nameEnglish": "Arsim Rexhepi",
+      "nameSerbian": "Arsim Rexhepi",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1117
+    },
+    {
+      "nameAlbanian": "Ardhmëria Jonë",
+      "nameEnglish": "Ardhmëria Jonë",
+      "nameSerbian": "Ardhmëria Jonë",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1118
+    },
+    {
+      "nameAlbanian": "Qendra e Kompetencës",
+      "nameEnglish": "Qendra e Kompetencës",
+      "nameSerbian": "Qendra e Kompetencës",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1119
+    },
+    {
+      "nameAlbanian": "Enver Topalli",
+      "nameEnglish": "Enver Topalli",
+      "nameSerbian": "Enver Topalli",
+      "idTeacherLicenseMunicipality": 25,
+      "id": 1120
+    },
+    {
+      "nameAlbanian": "Minatori",
+      "nameEnglish": "Minatori",
+      "nameSerbian": "Minatori",
+      "idTeacherLicenseMunicipality": 9,
+      "id": 1121
+    },
+    {
+      "nameAlbanian": "Hoxhë Kadri Prishtina",
+      "nameEnglish": "Hoxhë Kadri Prishtina",
+      "nameSerbian": "Hoxhë Kadri Prishtina",
+      "idTeacherLicenseMunicipality": 9,
+      "id": 1122
+    },
+  
+    {
+      "nameAlbanian": "Selman Riza",
+      "nameEnglish": "Selman Riza",
+      "nameSerbian": "Selman Riza",
+      "idTeacherLicenseMunicipality": 9,
+      "id": 1124
+    },
+    {
+      "nameAlbanian": "Daut Bogujevci",
+      "nameEnglish": "Daut Bogujevci",
+      "nameSerbian": "Daut Bogujevci",
+      "idTeacherLicenseMunicipality": 9,
+      "id": 1125
+    },
+    {
+      "nameAlbanian": "Laura Scotti",
+      "nameEnglish": "Laura Scotti",
+      "nameSerbian": "Laura Scotti",
+      "idTeacherLicenseMunicipality": 9,
+      "id": 1126
+    },
+    {
+      "nameAlbanian": "Zejnel Salihu",
+      "nameEnglish": "Zejnel Salihu",
+      "nameSerbian": "Zejnel Salihu",
+      "idTeacherLicenseMunicipality": 9,
+      "id": 1127
+    },
+    {
+      "nameAlbanian": "Mihal Grameno",
+      "nameEnglish": "Mihal Grameno",
+      "nameSerbian": "Mihal Grameno",
+      "idTeacherLicenseMunicipality": 9,
+      "id": 1128
+    },
+    {
+      "nameAlbanian": "Lismir",
+      "nameEnglish": "Lismir",
+      "nameSerbian": "Lismir",
+      "idTeacherLicenseMunicipality": 9,
+      "id": 1129
+    },
+    {
+      "nameAlbanian": "Bajram Curri",
+      "nameEnglish": "Bajram Curri",
+      "nameSerbian": "Bajram Curri",
+      "idTeacherLicenseMunicipality": 9,
+      "id": 1130
+    },
+    {
+      "nameAlbanian": "Vëllezërit Frashëri",
+      "nameEnglish": "Vëllezërit Frashëri",
+      "nameSerbian": "Vëllezërit Frashëri",
+      "idTeacherLicenseMunicipality": 9,
+      "id": 1131
+    },
+    {
+      "nameAlbanian": "Hivzi Sulejmani",
+      "nameEnglish": "Hivzi Sulejmani",
+      "nameSerbian": "Hivzi Sulejmani",
+      "idTeacherLicenseMunicipality": 9,
+      "id": 1132
+    },
+    {
+      "nameAlbanian": "Kelmend Rizvanolli",
+      "nameEnglish": "Kelmend Rizvanolli",
+      "nameSerbian": "Kelmend Rizvanolli",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1133
+    },
+    {
+      "nameAlbanian": "Engjëll Gjoni",
+      "nameEnglish": "Engjëll Gjoni",
+      "nameSerbian": "Engjëll Gjoni",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1134
+    },
+    {
+      "nameAlbanian": "Shtjefen Kurti",
+      "nameEnglish": "Shtjefen Kurti",
+      "nameSerbian": "Shtjefen Kurti",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1135
+    },
+    {
+      "nameAlbanian": "Ukshin Miftari",
+      "nameEnglish": "Ukshin Miftari",
+      "nameSerbian": "Ukshin Miftari",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1136
+    },
+    {
+      "nameAlbanian": "Fan Noli",
+      "nameEnglish": "Fan Noli",
+      "nameSerbian": "Fan Noli",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1137
+    },
+    {
+      "nameAlbanian": "Rilindja",
+      "nameEnglish": "Rilindja",
+      "nameSerbian": "Rilindja",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1138
+    },
+    {
+      "nameAlbanian": "Ali M.Hasi",
+      "nameEnglish": "Ali M.Hasi",
+      "nameSerbian": "Ali M.Hasi",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1139
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Dushkajës",
+      "nameEnglish": "Dëshmorët e Dushkajës",
+      "nameSerbian": "Dëshmorët e Dushkajës",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1140
+    },
+    {
+      "nameAlbanian": "Ahmet Rrustemi",
+      "nameEnglish": "Ahmet Rrustemi",
+      "nameSerbian": "Ahmet Rrustemi",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1141
+    },
+    {
+      "nameAlbanian": "Isa Boletini",
+      "nameEnglish": "Isa Boletini",
+      "nameSerbian": "Isa Boletini",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1142
+    },
+    {
+      "nameAlbanian": "Haxhi Hoti",
+      "nameEnglish": "Haxhi Hoti",
+      "nameSerbian": "Haxhi Hoti",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1143
+    },
+    {
+      "nameAlbanian": "Shaban Gola",
+      "nameEnglish": "Shaban Gola",
+      "nameSerbian": "Shaban Gola",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1144
+    },
+    {
+      "nameAlbanian": "Gjergj Fishta",
+      "nameEnglish": "Gjergj Fishta",
+      "nameSerbian": "Gjergj Fishta",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1145
+    },
+    {
+      "nameAlbanian": "Mehmet Akif",
+      "nameEnglish": "Mehmet Akif",
+      "nameSerbian": "Mehmet Akif",
+      "idTeacherLicenseMunicipality": 2,
+      "idInternalUser": 472,
+      "id": 1146
+    },
+    {
+      "nameAlbanian": "Pjetër Bogdani",
+      "nameEnglish": "Pjetër Bogdani",
+      "nameSerbian": "Pjetër Bogdani",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1147
+    },
+    {
+      "nameAlbanian": "Malush Stavileci",
+      "nameEnglish": "Malush Stavileci",
+      "nameSerbian": "Malush Stavileci",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1148
+    },
+    {
+      "nameAlbanian": "Hamëz Cena",
+      "nameEnglish": "Hamëz Cena",
+      "nameSerbian": "Hamëz Cena",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1149
+    },
+    {
+      "nameAlbanian": "Kongresi i Manastirit",
+      "nameEnglish": "Kongresi i Manastirit",
+      "nameSerbian": "Kongresi i Manastirit",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1150
+    },
+    {
+      "nameAlbanian": "Nexhmedin Nixha",
+      "nameEnglish": "Nexhmedin Nixha",
+      "nameSerbian": "Nexhmedin Nixha",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1151
+    },
+    {
+      "nameAlbanian": "Kadri Kusari",
+      "nameEnglish": "Kadri Kusari",
+      "nameSerbian": "Kadri Kusari",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1152
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Kombit",
+      "nameEnglish": "Dëshmorët e Kombit",
+      "nameSerbian": "Dëshmorët e Kombit",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1153
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Hereqit",
+      "nameEnglish": "Dëshmorët e Hereqit",
+      "nameSerbian": "Dëshmorët e Hereqit",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1154
+    },
+    {
+      "nameAlbanian": "8 Dëshmorët",
+      "nameEnglish": "8 Dëshmorët",
+      "nameSerbian": "8 Dëshmorët",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1155
+    },
+    {
+      "nameAlbanian": "Dëshmorët Lleshi",
+      "nameEnglish": "Dëshmorët Lleshi",
+      "nameSerbian": "Dëshmorët Lleshi",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1156
+    },
+    {
+      "nameAlbanian": "Shk f muz Prenk Jakova",
+      "nameEnglish": "Shk f muz Prenk Jakova",
+      "nameSerbian": "Shk f muz Prenk Jakova",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1157
+    },
+    {
+      "nameAlbanian": "Asllan Berisha",
+      "nameEnglish": "Asllan Berisha",
+      "nameSerbian": "Asllan Berisha",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1158
+    },
+    {
+      "nameAlbanian": "Hysni Zajmi",
+      "nameEnglish": "Hysni Zajmi",
+      "nameSerbian": "Hysni Zajmi",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1159
+    },
+    {
+      "nameAlbanian": "Hajdar Dushi",
+      "nameEnglish": "Hajdar Dushi",
+      "nameSerbian": "Hajdar Dushi",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1160
+    },
+    {
+      "nameAlbanian": "Dy dëshmorët",
+      "nameEnglish": "Dy dëshmorët",
+      "nameSerbian": "Dy dëshmorët",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1161
+    },
+    {
+      "nameAlbanian": "Ganimete Tërbeshi",
+      "nameEnglish": "Ganimete Tërbeshi",
+      "nameSerbian": "Ganimete Tërbeshi",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1162
+    },
+    {
+      "nameAlbanian": "Zenel Sadiku",
+      "nameEnglish": "Zenel Sadiku",
+      "nameSerbian": "Zenel Sadiku",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1163
+    },
+    {
+      "nameAlbanian": "Luigj Gurakuqi",
+      "nameEnglish": "Luigj Gurakuqi",
+      "nameSerbian": "Luigj Gurakuqi",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1164
+    },
+    {
+      "nameAlbanian": "Anton Çetta",
+      "nameEnglish": "Anton Çetta",
+      "nameSerbian": "Anton Çetta",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1165
+    },
+    {
+      "nameAlbanian": "Pjetër Muqaj",
+      "nameEnglish": "Pjetër Muqaj",
+      "nameSerbian": "Pjetër Muqaj",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1166
+    },
+    {
+      "nameAlbanian": "Ganimete Tërbeshi",
+      "nameEnglish": "Ganimete Tërbeshi",
+      "nameSerbian": "Ganimete Tërbeshi",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1167
+    },
+    {
+      "nameAlbanian": "Bajram Sadriu",
+      "nameEnglish": "Bajram Sadriu",
+      "nameSerbian": "Bajram Sadriu",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1168
+    },
+    {
+      "nameAlbanian": "Ardhmëria",
+      "nameEnglish": "Ardhmëria",
+      "nameSerbian": "Ardhmëria",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1169
+    },
+    {
+      "nameAlbanian": "Sylejman Vokshi",
+      "nameEnglish": "Sylejman Vokshi",
+      "nameSerbian": "Sylejman Vokshi",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1170
+    },
+    {
+      "nameAlbanian": "Jahë Salihu",
+      "nameEnglish": "Jahë Salihu",
+      "nameSerbian": "Jahë Salihu",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1171
+    },
+    {
+      "nameAlbanian": "Yll Morina",
+      "nameEnglish": "Yll Morina",
+      "nameSerbian": "Yll Morina",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1172
+    },
+    {
+      "nameAlbanian": "Fehmi Agani",
+      "nameEnglish": "Fehmi Agani",
+      "nameSerbian": "Fehmi Agani",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1173
+    },
+    {
+      "nameAlbanian": "Emin Duraku",
+      "nameEnglish": "Emin Duraku",
+      "nameSerbian": "Emin Duraku",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1174
+    },
+    {
+      "nameAlbanian": "Mustafa Bakija 1",
+      "nameEnglish": "Mustafa Bakija 1",
+      "nameSerbian": "Mustafa Bakija 1",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1175
+    },
+    {
+      "nameAlbanian": "Selman Riza",
+      "nameEnglish": "Selman Riza",
+      "nameSerbian": "Selman Riza",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1176
+    },
+    {
+      "nameAlbanian": "Zef Lush Marku",
+      "nameEnglish": "Zef Lush Marku",
+      "nameSerbian": "Zef Lush Marku",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1177
+    },
+    {
+      "nameAlbanian": "Mazllum Këpuska",
+      "nameEnglish": "Mazllum Këpuska",
+      "nameSerbian": "Mazllum Këpuska",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1178
+    },
+    {
+      "nameAlbanian": "Zekiria Rexha",
+      "nameEnglish": "Zekiria Rexha",
+      "nameSerbian": "Zekiria Rexha",
+      "idTeacherLicenseMunicipality": 2,
+      "id": 1179
+    },
+    {
+      "nameAlbanian": "Bajram Curri",
+      "nameEnglish": "Bajram Curri",
+      "nameSerbian": "Bajram Curri",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1180
+    },
+    {
+      "nameAlbanian": "Esat Berisha",
+      "nameEnglish": "Esat Berisha",
+      "nameSerbian": "Esat Berisha",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1181
+    },
+    {
+      "nameAlbanian": "Mulla Idriz Gjilani",
+      "nameEnglish": "Mulla Idriz Gjilani",
+      "nameSerbian": "Mulla Idriz Gjilani",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1182
+    },
+    {
+      "nameAlbanian": "Liria",
+      "nameEnglish": "Liria",
+      "nameSerbian": "Liria",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1183
+    },
+    {
+      "nameAlbanian": "Abdullah Tahiri",
+      "nameEnglish": "Abdullah Tahiri",
+      "nameSerbian": "Abdullah Tahiri",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1184
+    },
+    {
+      "nameAlbanian": "Vehbi Ibrahimi",
+      "nameEnglish": "Vehbi Ibrahimi",
+      "nameSerbian": "Vehbi Ibrahimi",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1185
+    },
+    {
+      "nameAlbanian": "Zija Shemsiu",
+      "nameEnglish": "Zija Shemsiu",
+      "nameSerbian": "Zija Shemsiu",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1186
+    },
+    {
+      "nameAlbanian": "Rexhep Elmazi",
+      "nameEnglish": "Rexhep Elmazi",
+      "nameSerbian": "Rexhep Elmazi",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1187
+    },
+    {
+      "nameAlbanian": "Thimi Mitko",
+      "nameEnglish": "Thimi Mitko",
+      "nameSerbian": "Thimi Mitko",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1188
+    },
+    {
+      "nameAlbanian": "Musa Zajmi",
+      "nameEnglish": "Musa Zajmi",
+      "nameSerbian": "Musa Zajmi",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1189
+    },
+    {
+      "nameAlbanian": "Lagja e VIII",
+      "nameEnglish": "Lagja e VIII",
+      "nameSerbian": "Lagja e VIII",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1190
+    },
+    {
+      "nameAlbanian": "Agim Ramadani",
+      "nameEnglish": "Agim Ramadani",
+      "nameSerbian": "Agim Ramadani",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1191
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Kombit",
+      "nameEnglish": "Dëshmorët e Kombit",
+      "nameSerbian": "Dëshmorët e Kombit",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1192
+    },
+    {
+      "nameAlbanian": "Ramiz Cërnica",
+      "nameEnglish": "Ramiz Cërnica",
+      "nameSerbian": "Ramiz Cërnica",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1193
+    },
+    {
+      "nameAlbanian": "Mehmet Isai",
+      "nameEnglish": "Mehmet Isai",
+      "nameSerbian": "Mehmet Isai",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1194
+    },
+    {
+      "nameAlbanian": "Marin Barleti",
+      "nameEnglish": "Marin Barleti",
+      "nameSerbian": "Marin Barleti",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1195
+    },
+    {
+      "nameAlbanian": "Shkolla Fillore e Muzikës",
+      "nameEnglish": "Shkolla Fillore e Muzikës",
+      "nameSerbian": "Shkolla Fillore e Muzikës",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1196
+    },
+    {
+      "nameAlbanian": "Zenel Hajdini",
+      "nameEnglish": "Zenel Hajdini",
+      "nameSerbian": "Zenel Hajdini",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1197
+    },
+    {
+      "nameAlbanian": "Arbëria",
+      "nameEnglish": "Arbëria",
+      "nameSerbian": "Arbëria",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1198
+    },
+    {
+      "nameAlbanian": "Asllan Elezi",
+      "nameEnglish": "Asllan Elezi",
+      "nameSerbian": "Asllan Elezi",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1199
+    },
+    {
+      "nameAlbanian": "Sh m e Muzik",
+      "nameEnglish": "Sh m e Muzik",
+      "nameSerbian": "Sh m e Muzik",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1200
+    },
+    {
+      "nameAlbanian": "Fetah Qerimi",
+      "nameEnglish": "Fetah Qerimi",
+      "nameSerbian": "Fetah Qerimi",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1201
+    },
+    {
+      "nameAlbanian": "Skenderbeu",
+      "nameEnglish": "Skenderbeu",
+      "nameSerbian": "Skenderbeu",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1202
+    },
+    {
+      "nameAlbanian": "Nazim Hikmet",
+      "nameEnglish": "Nazim Hikmet",
+      "nameSerbian": "Nazim Hikmet",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1203
+    },
+    {
+      "nameAlbanian": "Vatra e Diturisë",
+      "nameEnglish": "Vatra e Diturisë",
+      "nameSerbian": "Vatra e Diturisë",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1204
+    },
+    {
+      "nameAlbanian": "Afërdita",
+      "nameEnglish": "Afërdita",
+      "nameSerbian": "Afërdita",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1205
+    },
+    {
+      "nameAlbanian": "Ibrahim Uruqi",
+      "nameEnglish": "Ibrahim Uruqi",
+      "nameSerbian": "Ibrahim Uruqi",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1206
+    },
+    {
+      "nameAlbanian": "Vesel Muja",
+      "nameEnglish": "Vesel Muja",
+      "nameSerbian": "Vesel Muja",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1207
+    },
+    {
+      "nameAlbanian": "Abaz Ajeti",
+      "nameEnglish": "Abaz Ajeti",
+      "nameSerbian": "Abaz Ajeti",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1208
+    },
+    {
+      "nameAlbanian": "Integji",
+      "nameEnglish": "Integji",
+      "nameSerbian": "Integji",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1209
+    },
+    {
+      "nameAlbanian": "Selami Hallaqi",
+      "nameEnglish": "Selami Hallaqi",
+      "nameSerbian": "Selami Hallaqi",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1210
+    },
+    {
+      "nameAlbanian": "Ardhmëria I",
+      "nameEnglish": "Ardhmëria I",
+      "nameSerbian": "Ardhmëria I",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1211
+    },
+    {
+      "nameAlbanian": "Ardhmëria II",
+      "nameEnglish": "Ardhmëria II",
+      "nameSerbian": "Ardhmëria II",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1212
+    },
+    {
+      "nameAlbanian": "Dardania",
+      "nameEnglish": "Dardania",
+      "nameSerbian": "Dardania",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1213
+    },
+    {
+      "nameAlbanian": "Gjimnazi Natyror Gjilan",
+      "nameEnglish": "Gjimnazi Natyror Gjilan",
+      "nameSerbian": "Gjimnazi Natyror Gjilan",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1214
+    },
+    {
+      "nameAlbanian": "Adem Kastrati",
+      "nameEnglish": "Adem Kastrati",
+      "nameSerbian": "Adem Kastrati",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1215
+    },
+    {
+      "nameAlbanian": "Sadulla Brestovci",
+      "nameEnglish": "Sadulla Brestovci",
+      "nameSerbian": "Sadulla Brestovci",
+      "idTeacherLicenseMunicipality": 4,
+      "id": 1216
+    },
+    {
+      "nameAlbanian": "24 Korriku",
+      "nameEnglish": "24 Korriku",
+      "nameSerbian": "24 Korriku",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1217
+    },
+    {
+      "nameAlbanian": "Gani Sylaj",
+      "nameEnglish": "Gani Sylaj",
+      "nameSerbian": "Gani Sylaj",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1218
+    },
+    {
+      "nameAlbanian": "Gjergj Kastriot Skënderbeu",
+      "nameEnglish": "Gjergj Kastriot Skënderbeu",
+      "nameSerbian": "Gjergj Kastriot Skënderbeu",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1219
+    },
+    {
+      "nameAlbanian": "Fehmi Lladrovci",
+      "nameEnglish": "Fehmi Lladrovci",
+      "nameSerbian": "Fehmi Lladrovci",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1220
+    },
+    {
+      "nameAlbanian": "Zenel Hajdini",
+      "nameEnglish": "Zenel Hajdini",
+      "nameSerbian": "Zenel Hajdini",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1221
+    },
+    {
+      "nameAlbanian": "Rilindja",
+      "nameEnglish": "Rilindja",
+      "nameSerbian": "Rilindja",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1222
+    },
+    {
+      "nameAlbanian": "Shaban Polluzha - Koreticë e Epërme",
+      "nameEnglish": "Shaban Polluzha - Koreticë e Epërme",
+      "nameSerbian": "Shaban Polluzha - Koreticë e Epërme",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1223
+    },
+    {
+      "nameAlbanian": "Rasim Kiçina",
+      "nameEnglish": "Rasim Kiçina",
+      "nameSerbian": "Rasim Kiçina",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1224
+    },
+    {
+      "nameAlbanian": "Halil Bajraktari",
+      "nameEnglish": "Halil Bajraktari",
+      "nameSerbian": "Halil Bajraktari",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1225
+    },
+    {
+      "nameAlbanian": "Shaban Polluzha - Polluzhë",
+      "nameEnglish": "Shaban Polluzha - Polluzhë",
+      "nameSerbian": "Shaban Polluzha - Polluzhë",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1226
+    },
+    {
+      "nameAlbanian": "Xheladin Gashi - Plaku",
+      "nameEnglish": "Xheladin Gashi - Plaku",
+      "nameSerbian": "Xheladin Gashi - Plaku",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1227
+    },
+    {
+      "nameAlbanian": "Xhevë Lladrovci",
+      "nameEnglish": "Xhevë Lladrovci",
+      "nameSerbian": "Xhevë Lladrovci",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1228
+    },
+    {
+      "nameAlbanian": "Shote Galica- Abri",
+      "nameEnglish": "Shote Galica- Abri",
+      "nameSerbian": "Shote Galica- Abri",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1229
+    },
+    {
+      "nameAlbanian": "Naim Frashëri",
+      "nameEnglish": "Naim Frashëri",
+      "nameSerbian": "Naim Frashëri",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1230
+    },
+    {
+      "nameAlbanian": "Ardhmëria",
+      "nameEnglish": "Ardhmëria",
+      "nameSerbian": "Ardhmëria",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1231
+    },
+    {
+      "nameAlbanian": "Hasan Prishtina",
+      "nameEnglish": "Hasan Prishtina",
+      "nameSerbian": "Hasan Prishtina",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1232
+    },
+    {
+      "nameAlbanian": "Jusuf Gërvalla",
+      "nameEnglish": "Jusuf Gërvalla",
+      "nameSerbian": "Jusuf Gërvalla",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1233
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Qëndresës II",
+      "nameEnglish": "Dëshmorët e Qëndresës II",
+      "nameSerbian": "Dëshmorët e Qëndresës II",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1234
+    },
+    {
+      "nameAlbanian": "Fazli Grajçevci",
+      "nameEnglish": "Fazli Grajçevci",
+      "nameSerbian": "Fazli Grajçevci",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1235
+    },
+    {
+      "nameAlbanian": "Luigj Gurakuqi",
+      "nameEnglish": "Luigj Gurakuqi",
+      "nameSerbian": "Luigj Gurakuqi",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1236
+    },
+    {
+      "nameAlbanian": "Rexhep Gjeli",
+      "nameEnglish": "Rexhep Gjeli",
+      "nameSerbian": "Rexhep Gjeli",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1237
+    },
+    {
+      "nameAlbanian": "Migjeni",
+      "nameEnglish": "Migjeni",
+      "nameSerbian": "Migjeni",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1238
+    },
+    {
+      "nameAlbanian": "Mehdi e Sylejman Bytyqi",
+      "nameEnglish": "Mehdi e Sylejman Bytyqi",
+      "nameSerbian": "Mehdi e Sylejman Bytyqi",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1239
+    },
+    {
+      "nameAlbanian": "Mehmet Gradica",
+      "nameEnglish": "Mehmet Gradica",
+      "nameSerbian": "Mehmet Gradica",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1240
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Fortesës",
+      "nameEnglish": "Dëshmorët e Fortesës",
+      "nameSerbian": "Dëshmorët e Fortesës",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1241
+    },
+    {
+      "nameAlbanian": "Fehmi dhe Islam Kastrati",
+      "nameEnglish": "Fehmi dhe Islam Kastrati",
+      "nameSerbian": "Fehmi dhe Islam Kastrati",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1242
+    },
+    {
+      "nameAlbanian": "Abedin Bujupi",
+      "nameEnglish": "Abedin Bujupi",
+      "nameSerbian": "Abedin Bujupi",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1243
+    },
+    {
+      "nameAlbanian": "Gani Elshani",
+      "nameEnglish": "Gani Elshani",
+      "nameSerbian": "Gani Elshani",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1244
+    },
+    {
+      "nameAlbanian": "Ali Gashi",
+      "nameEnglish": "Ali Gashi",
+      "nameSerbian": "Ali Gashi",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1245
+    },
+    {
+      "nameAlbanian": "Bajram Curri",
+      "nameEnglish": "Bajram Curri",
+      "nameSerbian": "Bajram Curri",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1246
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Drenicës",
+      "nameEnglish": "Dëshmorët e Drenicës",
+      "nameSerbian": "Dëshmorët e Drenicës",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1247
+    },
+    {
+      "nameAlbanian": "Arif Shala",
+      "nameEnglish": "Arif Shala",
+      "nameSerbian": "Arif Shala",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1248
+    },
+    {
+      "nameAlbanian": "Azem Bejta",
+      "nameEnglish": "Azem Bejta",
+      "nameSerbian": "Azem Bejta",
+      "idTeacherLicenseMunicipality": 3,
+      "id": 1249
+    },
+    {
+      "nameAlbanian": "Kështjella e Diturisë",
+      "nameEnglish": "Kështjella e Diturisë",
+      "nameSerbian": "Kështjella e Diturisë",
+      "idTeacherLicenseMunicipality": 33,
+      "id": 1250
+    },
+    {
+      "nameAlbanian": "Veli Ballazhi",
+      "nameEnglish": "Veli Ballazhi",
+      "nameSerbian": "Veli Ballazhi",
+      "idTeacherLicenseMunicipality": 33,
+      "id": 1251
+    },
+    {
+      "nameAlbanian": "Ilaz Thaçi",
+      "nameEnglish": "Ilaz Thaçi",
+      "nameSerbian": "Ilaz Thaçi",
+      "idTeacherLicenseMunicipality": 33,
+      "id": 1252
+    },
+    {
+      "nameAlbanian": "Dardania",
+      "nameEnglish": "Dardania",
+      "nameSerbian": "Dardania",
+      "idTeacherLicenseMunicipality": 33,
+      "id": 1253
+    },
+    {
+      "nameAlbanian": "Ardhmëria",
+      "nameEnglish": "Ardhmëria",
+      "nameSerbian": "Ardhmëria",
+      "idTeacherLicenseMunicipality": 33,
+      "id": 1254
+    },
+    {
+      "nameAlbanian": "Shpresa jonë",
+      "nameEnglish": "Shpresa jonë",
+      "nameSerbian": "Shpresa jonë",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1255
+    },
+    {
+      "nameAlbanian": "Ardhmëria Jonë",
+      "nameEnglish": "Ardhmëria Jonë",
+      "nameSerbian": "Ardhmëria Jonë",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1256
+    },
+    {
+      "nameAlbanian": "Lulet e Jetës",
+      "nameEnglish": "Lulet e Jetës",
+      "nameSerbian": "Lulet e Jetës",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1258
+    },
+    {
+      "nameAlbanian": "Pëllumbat e Ardhmërisë",
+      "nameEnglish": "Pëllumbat e Ardhmërisë",
+      "nameSerbian": "Pëllumbat e Ardhmërisë",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1259
+    },
+    {
+      "nameAlbanian": "Hysni Zajmi",
+      "nameEnglish": "Hysni Zajmi",
+      "nameSerbian": "Hysni Zajmi",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1260
+    },
+    {
+      "nameAlbanian": "Bajram Curri",
+      "nameEnglish": "Bajram Curri",
+      "nameSerbian": "Bajram Curri",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1261
+    },
+    {
+      "nameAlbanian": "Zymer Zeka",
+      "nameEnglish": "Zymer Zeka",
+      "nameSerbian": "Zymer Zeka",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1262
+    },
+    {
+      "nameAlbanian": "Tre Dëshmorët",
+      "nameEnglish": "Tre Dëshmorët",
+      "nameSerbian": "Tre Dëshmorët",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1263
+    },
+    {
+      "nameAlbanian": "Mehemt Akifi",
+      "nameEnglish": "Mehemt Akifi",
+      "nameSerbian": "Mehemt Akifi",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1264
+    },
+    {
+      "nameAlbanian": "Mithat Frashëri",
+      "nameEnglish": "Mithat Frashëri",
+      "nameSerbian": "Mithat Frashëri",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1265
+    },
+    {
+      "nameAlbanian": "Haxhi Zeka",
+      "nameEnglish": "Haxhi Zeka",
+      "nameSerbian": "Haxhi Zeka",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1266
+    },
+    {
+      "nameAlbanian": "Fan S Noli",
+      "nameEnglish": "Fan S Noli",
+      "nameSerbian": "Fan S Noli",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1267
+    },
+    {
+      "nameAlbanian": "Martin Camaj",
+      "nameEnglish": "Martin Camaj",
+      "nameSerbian": "Martin Camaj",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1268
+    },
+    {
+      "nameAlbanian": "Trepça",
+      "nameEnglish": "Trepça",
+      "nameSerbian": "Trepça",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1269
+    },
+    {
+      "nameAlbanian": "Avni Rrustemi",
+      "nameEnglish": "Avni Rrustemi",
+      "nameSerbian": "Avni Rrustemi",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1270
+    },
+    {
+      "nameAlbanian": "Ndre Mjeda",
+      "nameEnglish": "Ndre Mjeda",
+      "nameSerbian": "Ndre Mjeda",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1271
+    },
+    {
+      "nameAlbanian": "Ismail Qemajli",
+      "nameEnglish": "Ismail Qemajli",
+      "nameSerbian": "Ismail Qemajli",
+      "idTeacherLicenseMunicipality": 6,
+      "id": 1272
+    },
+    {
+      "nameAlbanian": "Edmond Hoxha",
+      "nameEnglish": "Edmond Hoxha",
+      "nameSerbian": "Edmond Hoxha",
+      "idTeacherLicenseMunicipality": 31,
+      "id": 1273
+    },
+    {
+      "nameAlbanian": "Kuvendi i Junikut",
+      "nameEnglish": "Kuvendi i Junikut",
+      "nameSerbian": "Kuvendi i Junikut",
+      "idTeacherLicenseMunicipality": 31,
+      "id": 1274
+    },
+    {
+      "nameAlbanian": "Idriz Seferi",
+      "nameEnglish": "Idriz Seferi",
+      "nameSerbian": "Idriz Seferi",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1275
+    },
+    {
+      "nameAlbanian": "Kadri Zeka",
+      "nameEnglish": "Kadri Zeka",
+      "nameSerbian": "Kadri Zeka",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1276
+    },
+    {
+      "nameAlbanian": "Jusuf Gërvalla",
+      "nameEnglish": "Jusuf Gërvalla",
+      "nameSerbian": "Jusuf Gërvalla",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1277
+    },
+    {
+      "nameAlbanian": "Agimi",
+      "nameEnglish": "Agimi",
+      "nameSerbian": "Agimi",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1278
+    },
+    {
+      "nameAlbanian": "Emin Duraku",
+      "nameEnglish": "Emin Duraku",
+      "nameSerbian": "Emin Duraku",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1279
+    },
+    {
+      "nameAlbanian": "Feriz Guri dhe Vëllezërit Çaka",
+      "nameEnglish": "Feriz Guri dhe Vëllezërit Çaka",
+      "nameSerbian": "Feriz Guri dhe Vëllezërit Çaka",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1280
+    },
+    {
+      "nameAlbanian": "Ali Asllani",
+      "nameEnglish": "Ali Asllani",
+      "nameSerbian": "Ali Asllani",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1281
+    },
+    {
+      "nameAlbanian": "Qamil Ilazi",
+      "nameEnglish": "Qamil Ilazi",
+      "nameSerbian": "Qamil Ilazi",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1282
+    },
+    {
+      "nameAlbanian": "Nazmi Osmani",
+      "nameEnglish": "Nazmi Osmani",
+      "nameSerbian": "Nazmi Osmani",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1283
+    },
+    {
+      "nameAlbanian": "7 Shtatori",
+      "nameEnglish": "7 Shtatori",
+      "nameSerbian": "7 Shtatori",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1284
+    },
+    {
+      "nameAlbanian": "Dituria",
+      "nameEnglish": "Dituria",
+      "nameSerbian": "Dituria",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1285
+    },
+    {
+      "nameAlbanian": "Skenderbeu",
+      "nameEnglish": "Skenderbeu",
+      "nameSerbian": "Skenderbeu",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1286
+    },
+    {
+      "nameAlbanian": "Gafurr Luma",
+      "nameEnglish": "Gafurr Luma",
+      "nameSerbian": "Gafurr Luma",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1287
+    },
+    {
+      "nameAlbanian": "Agim Bajrami",
+      "nameEnglish": "Agim Bajrami",
+      "nameSerbian": "Agim Bajrami",
+      "idTeacherLicenseMunicipality": 7,
+      "id": 1288
+    },
+    {
+      "nameAlbanian": "Filizat",
+      "nameEnglish": "Filizat",
+      "nameSerbian": "Filizat",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1289
+    },
+    {
+      "nameAlbanian": "Fan Noli",
+      "nameEnglish": "Fan Noli",
+      "nameSerbian": "Fan Noli",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1290
+    },
+    {
+      "nameAlbanian": "Metush Krasniqi",
+      "nameEnglish": "Metush Krasniqi",
+      "nameSerbian": "Metush Krasniqi",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1291
+    },
+    {
+      "nameAlbanian": "Sejdi Kryeziu",
+      "nameEnglish": "Sejdi Kryeziu",
+      "nameSerbian": "Sejdi Kryeziu",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1292
+    },
+    {
+      "nameAlbanian": "Dëshmorët e kombit",
+      "nameEnglish": "Dëshmorët e kombit",
+      "nameSerbian": "Dëshmorët e kombit",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1293
+    },
+    {
+      "nameAlbanian": "Andrea Durrsaku",
+      "nameEnglish": "Andrea Durrsaku",
+      "nameSerbian": "Andrea Durrsaku",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1294
+    },
+    {
+      "nameAlbanian": "Desanka Maksimoviç",
+      "nameEnglish": "Desanka Maksimoviç",
+      "nameSerbian": "Desanka Maksimoviç",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1295
+    },
+    {
+      "nameAlbanian": "Xhelal Sopi",
+      "nameEnglish": "Xhelal Sopi",
+      "nameSerbian": "Xhelal Sopi",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1296
+    },
+    {
+      "nameAlbanian": "Ismail Qemali",
+      "nameEnglish": "Ismail Qemali",
+      "nameSerbian": "Ismail Qemali",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1297
+    },
+    {
+      "nameAlbanian": "Bratstvo",
+      "nameEnglish": "Bratstvo",
+      "nameSerbian": "Bratstvo",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1298
+    },
+    {
+      "nameAlbanian": "Hasan Prishtina",
+      "nameEnglish": "Hasan Prishtina",
+      "nameSerbian": "Hasan Prishtina",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1299
+    },
+    {
+      "nameAlbanian": "Skënderbeu",
+      "nameEnglish": "Skënderbeu",
+      "nameSerbian": "Skënderbeu",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1300
+    },
+    {
+      "nameAlbanian": "17 Shkurti",
+      "nameEnglish": "17 Shkurti",
+      "nameSerbian": "17 Shkurti",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1301
+    },
+    {
+      "nameAlbanian": "Abdullah Krashnica",
+      "nameEnglish": "Abdullah Krashnica",
+      "nameSerbian": "Abdullah Krashnica",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1302
+    },
+    {
+      "nameAlbanian": "Rexhep Mala",
+      "nameEnglish": "Rexhep Mala",
+      "nameSerbian": "Rexhep Mala",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1303
+    },
+    {
+      "nameAlbanian": "Asllan Thaçi",
+      "nameEnglish": "Asllan Thaçi",
+      "nameSerbian": "Asllan Thaçi",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1304
+    },
+    {
+      "nameAlbanian": "Xhavit Ahmeti",
+      "nameEnglish": "Xhavit Ahmeti",
+      "nameSerbian": "Xhavit Ahmeti",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1305
+    },
+    {
+      "nameAlbanian": "Sadri Misini",
+      "nameEnglish": "Sadri Misini",
+      "nameSerbian": "Sadri Misini",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1306
+    },
+    {
+      "nameAlbanian": "Avni Rrustemi",
+      "nameEnglish": "Avni Rrustemi",
+      "nameSerbian": "Avni Rrustemi",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1307
+    },
+    {
+      "nameAlbanian": "Tehniçka shkolla",
+      "nameEnglish": "Tehniçka shkolla",
+      "nameSerbian": "Tehniçka shkolla",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1308
+    },
+    {
+      "nameAlbanian": "9 Maj",
+      "nameEnglish": "9 Maj",
+      "nameSerbian": "9 Maj",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1309
+    },
+    {
+      "nameAlbanian": "Gimnazija",
+      "nameEnglish": "Gimnazija",
+      "nameSerbian": "Gimnazija",
+      "idTeacherLicenseMunicipality": 10,
+      "id": 1310
+    },
+    {
+      "nameAlbanian": "Xhafer Gashi",
+      "nameEnglish": "Xhafer Gashi",
+      "nameSerbian": "Xhafer Gashi",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1311
+    },
+    {
+      "nameAlbanian": "Dëshmorët",
+      "nameEnglish": "Dëshmorët",
+      "nameSerbian": "Dëshmorët",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1312
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Kombit",
+      "nameEnglish": "Dëshmorët e Kombit",
+      "nameSerbian": "Dëshmorët e Kombit",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1313
+    },
+    {
+      "nameAlbanian": "Ali Krasniqi",
+      "nameEnglish": "Ali Krasniqi",
+      "nameSerbian": "Ali Krasniqi",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1314
+    },
+    {
+      "nameAlbanian": "Atë Shtjefën Gjeçovi",
+      "nameEnglish": "Atë Shtjefën Gjeçovi",
+      "nameSerbian": "Atë Shtjefën Gjeçovi",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1315
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Qëndresës",
+      "nameEnglish": "Dëshmorët e Qëndresës",
+      "nameSerbian": "Dëshmorët e Qëndresës",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1316
+    },
+    {
+      "nameAlbanian": "Esad Mekuli",
+      "nameEnglish": "Esad Mekuli",
+      "nameSerbian": "Esad Mekuli",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1317
+    },
+    {
+      "nameAlbanian": "Isa Boletini",
+      "nameEnglish": "Isa Boletini",
+      "nameSerbian": "Isa Boletini",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1318
+    },
+    {
+      "nameAlbanian": "Avni Zhabota",
+      "nameEnglish": "Avni Zhabota",
+      "nameSerbian": "Avni Zhabota",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1319
+    },
+    {
+      "nameAlbanian": "Emin Duraku",
+      "nameEnglish": "Emin Duraku",
+      "nameSerbian": "Emin Duraku",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1320
+    },
+    {
+      "nameAlbanian": "Motrat Qiriazi",
+      "nameEnglish": "Motrat Qiriazi",
+      "nameSerbian": "Motrat Qiriazi",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1321
+    },
+    {
+      "nameAlbanian": "Xhevë LLadrovci",
+      "nameEnglish": "Xhevë LLadrovci",
+      "nameSerbian": "Xhevë LLadrovci",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1322
+    },
+    {
+      "nameAlbanian": "Ismet Rraci",
+      "nameEnglish": "Ismet Rraci",
+      "nameSerbian": "Ismet Rraci",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1323
+    },
+    {
+      "nameAlbanian": "Tre dëshmorët",
+      "nameEnglish": "Tre dëshmorët",
+      "nameSerbian": "Tre dëshmorët",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1324
+    },
+    {
+      "nameAlbanian": "Azem Bejta",
+      "nameEnglish": "Azem Bejta",
+      "nameSerbian": "Azem Bejta",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1325
+    },
+    {
+      "nameAlbanian": "Atë Gjergj Fishta",
+      "nameEnglish": "Atë Gjergj Fishta",
+      "nameSerbian": "Atë Gjergj Fishta",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1326
+    },
+    {
+      "nameAlbanian": "Nënë Tereza",
+      "nameEnglish": "Nënë Tereza",
+      "nameSerbian": "Nënë Tereza",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1327
+    },
+    {
+      "nameAlbanian": "Ymer Berisha",
+      "nameEnglish": "Ymer Berisha",
+      "nameSerbian": "Ymer Berisha",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1329
+    },
+    {
+      "nameAlbanian": "Luigj Gurakuqi",
+      "nameEnglish": "Luigj Gurakuqi",
+      "nameSerbian": "Luigj Gurakuqi",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1330
+    },
+    {
+      "nameAlbanian": "Fehmi Agani",
+      "nameEnglish": "Fehmi Agani",
+      "nameSerbian": "Fehmi Agani",
+      "idTeacherLicenseMunicipality": 8,
+      "id": 1331
+    },
+    {
+      "nameAlbanian": "Gjon Sereqi",
+      "nameEnglish": "Gjon Sereqi",
+      "nameSerbian": "Gjon Sereqi",
+      "idTeacherLicenseMunicipality": 37,
+      "id": 1332
+    },
+    {
+      "nameAlbanian": "Kadri Bistrica",
+      "nameEnglish": "Kadri Bistrica",
+      "nameSerbian": "Kadri Bistrica",
+      "idTeacherLicenseMunicipality": 12,
+      "id": 1333
+    },
+    {
+      "nameAlbanian": "Ibrahim Krasniqi",
+      "nameEnglish": "Ibrahim Krasniqi",
+      "nameSerbian": "Ibrahim Krasniqi",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1334
+    },
+    {
+      "nameAlbanian": "Nezë Bujani",
+      "nameEnglish": "Nezë Bujani",
+      "nameSerbian": "Nezë Bujani",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1335
+    },
+    {
+      "nameAlbanian": "Hasan Prishtina",
+      "nameEnglish": "Hasan Prishtina",
+      "nameSerbian": "Hasan Prishtina",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1336
+    },
+    {
+      "nameAlbanian": "Rexhep Akllapi",
+      "nameEnglish": "Rexhep Akllapi",
+      "nameSerbian": "Rexhep Akllapi",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1337
+    },
+    {
+      "nameAlbanian": "Vezir Kolshi",
+      "nameEnglish": "Vezir Kolshi",
+      "nameSerbian": "Vezir Kolshi",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1338
+    },
+    {
+      "nameAlbanian": "Fehmi Agani",
+      "nameEnglish": "Fehmi Agani",
+      "nameSerbian": "Fehmi Agani",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1339
+    },
+    {
+      "nameAlbanian": "Drita",
+      "nameEnglish": "Drita",
+      "nameSerbian": "Drita",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1340
+    },
+    {
+      "nameAlbanian": "Vëllezërit Damaneku",
+      "nameEnglish": "Vëllezërit Damaneku",
+      "nameSerbian": "Vëllezërit Damaneku",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1341
+    },
+    {
+      "nameAlbanian": "Kadri Beba",
+      "nameEnglish": "Kadri Beba",
+      "nameSerbian": "Kadri Beba",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1342
+    },
+    {
+      "nameAlbanian": "Katër Dëshmorët",
+      "nameEnglish": "Katër Dëshmorët",
+      "nameSerbian": "Katër Dëshmorët",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1343
+    },
+    {
+      "nameAlbanian": "Skëndërbeu",
+      "nameEnglish": "Skëndërbeu",
+      "nameSerbian": "Skëndërbeu",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1344
+    },
+    {
+      "nameAlbanian": "SHML Mikste",
+      "nameEnglish": "SHML Mikste",
+      "nameSerbian": "SHML Mikste",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1345
+    },
+    {
+      "nameAlbanian": "Ulpiana",
+      "nameEnglish": "Ulpiana",
+      "nameSerbian": "Ulpiana",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1346
+    },
+    {
+      "nameAlbanian": "Adem Gllavica",
+      "nameEnglish": "Adem Gllavica",
+      "nameSerbian": "Adem Gllavica",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1347
+    },
+    {
+      "nameAlbanian": "Vëllezërit Frashëri",
+      "nameEnglish": "Vëllezërit Frashëri",
+      "nameSerbian": "Vëllezërit Frashëri",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1348
+    },
+    {
+      "nameAlbanian": "Zenel Hajdini",
+      "nameEnglish": "Zenel Hajdini",
+      "nameSerbian": "Zenel Hajdini",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1350
+    },
+    {
+      "nameAlbanian": "Ismail Luma",
+      "nameEnglish": "Ismail Luma",
+      "nameSerbian": "Ismail Luma",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1351
+    },
+    {
+      "nameAlbanian": "Emin Duraku",
+      "nameEnglish": "Emin Duraku",
+      "nameSerbian": "Emin Duraku",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1352
+    },
+    {
+      "nameAlbanian": "Ernest Koliqi",
+      "nameEnglish": "Ernest Koliqi",
+      "nameSerbian": "Ernest Koliqi",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1353
+    },
+    {
+      "nameAlbanian": "Shtjefën Gjeqovi",
+      "nameEnglish": "Shtjefën Gjeqovi",
+      "nameSerbian": "Shtjefën Gjeqovi",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1354
+    },
+    {
+      "nameAlbanian": "Hasan Zyko Kamberi",
+      "nameEnglish": "Hasan Zyko Kamberi",
+      "nameSerbian": "Hasan Zyko Kamberi",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1355
+    },
+    {
+      "nameAlbanian": "Migjeni",
+      "nameEnglish": "Migjeni",
+      "nameSerbian": "Migjeni",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1356
+    },
+    {
+      "nameAlbanian": "Dy dëshmorët",
+      "nameEnglish": "Dy dëshmorët",
+      "nameSerbian": "Dy dëshmorët",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1357
+    },
+    {
+      "nameAlbanian": "Haradin Bajrami",
+      "nameEnglish": "Haradin Bajrami",
+      "nameSerbian": "Haradin Bajrami",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1358
+    },
+    {
+      "nameAlbanian": "Ibrahim Banushi",
+      "nameEnglish": "Ibrahim Banushi",
+      "nameSerbian": "Ibrahim Banushi",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1359
+    },
+    {
+      "nameAlbanian": "17 Shkurti",
+      "nameEnglish": "17 Shkurti",
+      "nameSerbian": "17 Shkurti",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1360
+    },
+    {
+      "nameAlbanian": "7 Marsi",
+      "nameEnglish": "7 Marsi",
+      "nameSerbian": "7 Marsi",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1361
+    },
+    {
+      "nameAlbanian": "12 Prilli",
+      "nameEnglish": "12 Prilli",
+      "nameSerbian": "12 Prilli",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1363
+    },
+    {
+      "nameAlbanian": "Naim Frashëri",
+      "nameEnglish": "Naim Frashëri",
+      "nameSerbian": "Naim Frashëri",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1364
+    },
+    {
+      "nameAlbanian": "17 Shkurti",
+      "nameEnglish": "17 Shkurti",
+      "nameSerbian": "17 Shkurti",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1365
+    },
+    {
+      "nameAlbanian": "Ramadan Morina",
+      "nameEnglish": "Ramadan Morina",
+      "nameSerbian": "Ramadan Morina",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1366
+    },
+    {
+      "nameAlbanian": "Dëshmorët e fshatit Bubavec",
+      "nameEnglish": "Dëshmorët e fshatit Bubavec",
+      "nameSerbian": "Dëshmorët e fshatit Bubavec",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1367
+    },
+    {
+      "nameAlbanian": "28 Nëntori",
+      "nameEnglish": "28 Nëntori",
+      "nameSerbian": "28 Nëntori",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1368
+    },
+    {
+      "nameAlbanian": "Kajtaz Ramadani",
+      "nameEnglish": "Kajtaz Ramadani",
+      "nameSerbian": "Kajtaz Ramadani",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1369
+    },
+    {
+      "nameAlbanian": "Hasan Prishtina",
+      "nameEnglish": "Hasan Prishtina",
+      "nameSerbian": "Hasan Prishtina",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1370
+    },
+    {
+      "nameAlbanian": "Vesel Pagarusha",
+      "nameEnglish": "Vesel Pagarusha",
+      "nameSerbian": "Vesel Pagarusha",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1371
+    },
+    {
+      "nameAlbanian": "Ganimete Tërbeshi",
+      "nameEnglish": "Ganimete Tërbeshi",
+      "nameSerbian": "Ganimete Tërbeshi",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1372
+    },
+    {
+      "nameAlbanian": "Ibrahim Mazreku",
+      "nameEnglish": "Ibrahim Mazreku",
+      "nameSerbian": "Ibrahim Mazreku",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1373
+    },
+    {
+      "nameAlbanian": "Asim Vokshi",
+      "nameEnglish": "Asim Vokshi",
+      "nameSerbian": "Asim Vokshi",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1374
+    },
+    {
+      "nameAlbanian": "Salih Bytyqi",
+      "nameEnglish": "Salih Bytyqi",
+      "nameSerbian": "Salih Bytyqi",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1375
+    },
+    {
+      "nameAlbanian": "Hilmi Hoti",
+      "nameEnglish": "Hilmi Hoti",
+      "nameSerbian": "Hilmi Hoti",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1376
+    },
+    {
+      "nameAlbanian": "Gjergj Fishta",
+      "nameEnglish": "Gjergj Fishta",
+      "nameSerbian": "Gjergj Fishta",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1377
+    },
+    {
+      "nameAlbanian": "Petro Nino Luarasi",
+      "nameEnglish": "Petro Nino Luarasi",
+      "nameSerbian": "Petro Nino Luarasi",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1378
+    },
+    {
+      "nameAlbanian": "Fehmi Agani",
+      "nameEnglish": "Fehmi Agani",
+      "nameSerbian": "Fehmi Agani",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1379
+    },
+    {
+      "nameAlbanian": "Gjergj Kastrioti",
+      "nameEnglish": "Gjergj Kastrioti",
+      "nameSerbian": "Gjergj Kastrioti",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1380
+    },
+    {
+      "nameAlbanian": "Migjeni",
+      "nameEnglish": "Migjeni",
+      "nameSerbian": "Migjeni",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1381
+    },
+    {
+      "nameAlbanian": "Labinot Krasniqi",
+      "nameEnglish": "Labinot Krasniqi",
+      "nameSerbian": "Labinot Krasniqi",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1382
+    },
+    {
+      "nameAlbanian": "Afrim Krasniqi",
+      "nameEnglish": "Afrim Krasniqi",
+      "nameSerbian": "Afrim Krasniqi",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1383
+    },
+    {
+      "nameAlbanian": "Bajram Curri",
+      "nameEnglish": "Bajram Curri",
+      "nameSerbian": "Bajram Curri",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1384
+    },
+    {
+      "nameAlbanian": "Xhevë Krasniqi - Lladroci\"\"",
+      "nameEnglish": "Xhevë Krasniqi - Lladroci\"\"",
+      "nameSerbian": "Xhevë Krasniqi - Lladroci\"\"",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1385
+    },
+    {
+      "nameAlbanian": "Beqir Gashi",
+      "nameEnglish": "Beqir Gashi",
+      "nameSerbian": "Beqir Gashi",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1386
+    },
+    {
+      "nameAlbanian": "Visar Krasniqi",
+      "nameEnglish": "Visar Krasniqi",
+      "nameSerbian": "Visar Krasniqi",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1387
+    },
+    {
+      "nameAlbanian": "Ismail Qemali",
+      "nameEnglish": "Ismail Qemali",
+      "nameSerbian": "Ismail Qemali",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1388
+    },
+    {
+      "nameAlbanian": "Dëshmorët e kombit Gunca",
+      "nameEnglish": "Dëshmorët e kombit Gunca",
+      "nameSerbian": "Dëshmorët e kombit Gunca",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1389
+    },
+    {
+      "nameAlbanian": "Rifat Berisha",
+      "nameEnglish": "Rifat Berisha",
+      "nameSerbian": "Rifat Berisha",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1390
+    },
+    {
+      "nameAlbanian": "Afrim Buqaj",
+      "nameEnglish": "Afrim Buqaj",
+      "nameSerbian": "Afrim Buqaj",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1391
+    },
+    {
+      "nameAlbanian": "Qendra e Kompetencës",
+      "nameEnglish": "Qendra e Kompetencës",
+      "nameSerbian": "Qendra e Kompetencës",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1392
+    },
+    {
+      "nameAlbanian": "Abdyl Frashëri",
+      "nameEnglish": "Abdyl Frashëri",
+      "nameSerbian": "Abdyl Frashëri",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1393
+    },
+    {
+      "nameAlbanian": "18 Prilli",
+      "nameEnglish": "18 Prilli",
+      "nameSerbian": "18 Prilli",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1394
+    },
+    {
+      "nameAlbanian": "Imer Krasniqi",
+      "nameEnglish": "Imer Krasniqi",
+      "nameSerbian": "Imer Krasniqi",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1395
+    },
+    {
+      "nameAlbanian": "Tafil Kelmendi",
+      "nameEnglish": "Tafil Kelmendi",
+      "nameSerbian": "Tafil Kelmendi",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1396
+    },
+    {
+      "nameAlbanian": "Habib Berisha",
+      "nameEnglish": "Habib Berisha",
+      "nameSerbian": "Habib Berisha",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1397
+    },
+    {
+      "nameAlbanian": "Emin Duraku",
+      "nameEnglish": "Emin Duraku",
+      "nameSerbian": "Emin Duraku",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1398
+    },
+    {
+      "nameAlbanian": "Ismet Jashari-Kumanova",
+      "nameEnglish": "Ismet Jashari-Kumanova",
+      "nameSerbian": "Ismet Jashari-Kumanova",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1399
+    },
+    {
+      "nameAlbanian": "Lasgush Poradeci",
+      "nameEnglish": "Lasgush Poradeci",
+      "nameSerbian": "Lasgush Poradeci",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1400
+    },
+    {
+      "nameAlbanian": "Ruzhdi Xhyliqi",
+      "nameEnglish": "Ruzhdi Xhyliqi",
+      "nameSerbian": "Ruzhdi Xhyliqi",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1401
+    },
+    {
+      "nameAlbanian": "Nuhi Mazreku",
+      "nameEnglish": "Nuhi Mazreku",
+      "nameSerbian": "Nuhi Mazreku",
+      "idTeacherLicenseMunicipality": 30,
+      "id": 1402
+    },
+    {
+      "nameAlbanian": "Zybeyde Hanim",
+      "nameEnglish": "Zybeyde Hanim",
+      "nameSerbian": "Zybeyde Hanim",
+      "idTeacherLicenseMunicipality": 32,
+      "id": 1403
+    },
+    {
+      "nameAlbanian": "Anadolu",
+      "nameEnglish": "Anadolu",
+      "nameSerbian": "Anadolu",
+      "idTeacherLicenseMunicipality": 32,
+      "id": 1404
+    },
+    {
+      "nameAlbanian": "Ataturk",
+      "nameEnglish": "Ataturk",
+      "nameSerbian": "Ataturk",
+      "idTeacherLicenseMunicipality": 32,
+      "id": 1405
+    },
+    {
+      "nameAlbanian": "Nëna Terezë",
+      "nameEnglish": "Nëna Terezë",
+      "nameSerbian": "Nëna Terezë",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1406
+    },
+    {
+      "nameAlbanian": "Gjergj Kastriot Skënderbeu",
+      "nameEnglish": "Gjergj Kastriot Skënderbeu",
+      "nameSerbian": "Gjergj Kastriot Skënderbeu",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1407
+    },
+    {
+      "nameAlbanian": "Jashar Begu",
+      "nameEnglish": "Jashar Begu",
+      "nameSerbian": "Jashar Begu",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1408
+    },
+    {
+      "nameAlbanian": "Fazli Greiçevci",
+      "nameEnglish": "Fazli Greiçevci",
+      "nameSerbian": "Fazli Greiçevci",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1409
+    },
+    {
+      "nameAlbanian": "Bislim Imeri",
+      "nameEnglish": "Bislim Imeri",
+      "nameSerbian": "Bislim Imeri",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1410
+    },
+    {
+      "nameAlbanian": "Mehë Uka",
+      "nameEnglish": "Mehë Uka",
+      "nameSerbian": "Mehë Uka",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1411
+    },
+    {
+      "nameAlbanian": "Musa Hoti",
+      "nameEnglish": "Musa Hoti",
+      "nameSerbian": "Musa Hoti",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1412
+    },
+    {
+      "nameAlbanian": "Ismail Qemali",
+      "nameEnglish": "Ismail Qemali",
+      "nameSerbian": "Ismail Qemali",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1413
+    },
+    {
+      "nameAlbanian": "Jusuf Rexha",
+      "nameEnglish": "Jusuf Rexha",
+      "nameSerbian": "Jusuf Rexha",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1414
+    },
+    {
+      "nameAlbanian": "Elena Gjika",
+      "nameEnglish": "Elena Gjika",
+      "nameSerbian": "Elena Gjika",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1415
+    },
+    {
+      "nameAlbanian": "Andon Zako Çajupi",
+      "nameEnglish": "Andon Zako Çajupi",
+      "nameSerbian": "Andon Zako Çajupi",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1416
+    },
+    {
+      "nameAlbanian": "Aziz Sylejmani",
+      "nameEnglish": "Aziz Sylejmani",
+      "nameSerbian": "Aziz Sylejmani",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1417
+    },
+    {
+      "nameAlbanian": "Harun Beka",
+      "nameEnglish": "Harun Beka",
+      "nameSerbian": "Harun Beka",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1418
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Kaçanollit",
+      "nameEnglish": "Dëshmorët e Kaçanollit",
+      "nameSerbian": "Dëshmorët e Kaçanollit",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1419
+    },
+    {
+      "nameAlbanian": "Bislim Halimi",
+      "nameEnglish": "Bislim Halimi",
+      "nameSerbian": "Bislim Halimi",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1420
+    },
+    {
+      "nameAlbanian": "Bedri Gjinaj",
+      "nameEnglish": "Bedri Gjinaj",
+      "nameSerbian": "Bedri Gjinaj",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1421
+    },
+    {
+      "nameAlbanian": "Xhevat Jusufi",
+      "nameEnglish": "Xhevat Jusufi",
+      "nameSerbian": "Xhevat Jusufi",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1422
+    },
+    {
+      "nameAlbanian": "Frang Bardhi",
+      "nameEnglish": "Frang Bardhi",
+      "nameSerbian": "Frang Bardhi",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1423
+    },
+    {
+      "nameAlbanian": "Trepça",
+      "nameEnglish": "Trepça",
+      "nameSerbian": "Trepça",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1424
+    },
+    {
+      "nameAlbanian": "Hasan Prishtina",
+      "nameEnglish": "Hasan Prishtina",
+      "nameSerbian": "Hasan Prishtina",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1425
+    },
+    {
+      "nameAlbanian": "Tefta Tashko",
+      "nameEnglish": "Tefta Tashko",
+      "nameSerbian": "Tefta Tashko",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1426
+    },
+    {
+      "nameAlbanian": "Arkitekt Sinani",
+      "nameEnglish": "Arkitekt Sinani",
+      "nameSerbian": "Arkitekt Sinani",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1427
+    },
+    {
+      "nameAlbanian": "Dr.Xheladin Deda",
+      "nameEnglish": "Dr.Xheladin Deda",
+      "nameSerbian": "Dr.Xheladin Deda",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1428
+    },
+    {
+      "nameAlbanian": "Shaban Idrizi",
+      "nameEnglish": "Shaban Idrizi",
+      "nameSerbian": "Shaban Idrizi",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1429
+    },
+    {
+      "nameAlbanian": "Elmaz Peci",
+      "nameEnglish": "Elmaz Peci",
+      "nameSerbian": "Elmaz Peci",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1430
+    },
+    {
+      "nameAlbanian": "Eqrem Çabej",
+      "nameEnglish": "Eqrem Çabej",
+      "nameSerbian": "Eqrem Çabej",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1431
+    },
+    {
+      "nameAlbanian": "Migjeni",
+      "nameEnglish": "Migjeni",
+      "nameSerbian": "Migjeni",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1432
+    },
+    {
+      "nameAlbanian": "Nonda Bulka",
+      "nameEnglish": "Nonda Bulka",
+      "nameSerbian": "Nonda Bulka",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1433
+    },
+    {
+      "nameAlbanian": "Sefedin Smakolli",
+      "nameEnglish": "Sefedin Smakolli",
+      "nameSerbian": "Sefedin Smakolli",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1434
+    },
+    {
+      "nameAlbanian": "Sylejman Vokshi",
+      "nameEnglish": "Sylejman Vokshi",
+      "nameSerbian": "Sylejman Vokshi",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1435
+    },
+    {
+      "nameAlbanian": "Shemsi Ahmeti",
+      "nameEnglish": "Shemsi Ahmeti",
+      "nameSerbian": "Shemsi Ahmeti",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1436
+    },
+    {
+      "nameAlbanian": "Avni Shabani",
+      "nameEnglish": "Avni Shabani",
+      "nameSerbian": "Avni Shabani",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1437
+    },
+    {
+      "nameAlbanian": "Abdullah Shabani",
+      "nameEnglish": "Abdullah Shabani",
+      "nameSerbian": "Abdullah Shabani",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1438
+    },
+    {
+      "nameAlbanian": "Sh M Ekonomike",
+      "nameEnglish": "Sh M Ekonomike",
+      "nameSerbian": "Sh M Ekonomike",
+      "idTeacherLicenseMunicipality": 14,
+      "id": 1440
+    },
+    {
+      "nameAlbanian": "Asdreni",
+      "nameEnglish": "Asdreni",
+      "nameSerbian": "Asdreni",
+      "idTeacherLicenseMunicipality": 14,
+      "id": 1441
+    },
+    {
+      "nameAlbanian": "Hanumshahe dhe Tefik Zymberi",
+      "nameEnglish": "Hanumshahe dhe Tefik Zymberi",
+      "nameSerbian": "Hanumshahe dhe Tefik Zymberi",
+      "idTeacherLicenseMunicipality": 14,
+      "id": 1442
+    },
+    {
+      "nameAlbanian": "Minatori",
+      "nameEnglish": "Minatori",
+      "nameSerbian": "Minatori",
+      "idTeacherLicenseMunicipality": 14,
+      "id": 1443
+    },
+    {
+      "nameAlbanian": "Fazli Graiçevci",
+      "nameEnglish": "Fazli Graiçevci",
+      "nameSerbian": "Fazli Graiçevci",
+      "idTeacherLicenseMunicipality": 15,
+      "id": 1444
+    },
+    {
+      "nameAlbanian": "Pandeli Sotiri",
+      "nameEnglish": "Pandeli Sotiri",
+      "nameSerbian": "Pandeli Sotiri",
+      "idTeacherLicenseMunicipality": 15,
+      "id": 1445
+    },
+    {
+      "nameAlbanian": "Dr. Ibrahim Rugova",
+      "nameEnglish": "Dr. Ibrahim Rugova",
+      "nameSerbian": "Dr. Ibrahim Rugova",
+      "idTeacherLicenseMunicipality": 15,
+      "id": 1446
+    },
+    {
+      "nameAlbanian": "Migjeni",
+      "nameEnglish": "Migjeni",
+      "nameSerbian": "Migjeni",
+      "idTeacherLicenseMunicipality": 15,
+      "id": 1447
+    },
+    {
+      "nameAlbanian": "Abdurrahmon Gërguri",
+      "nameEnglish": "Abdurrahmon Gërguri",
+      "nameSerbian": "Abdurrahmon Gërguri",
+      "idTeacherLicenseMunicipality": 15,
+      "id": 1448
+    },
+    {
+      "nameAlbanian": "Hasan Prishtina",
+      "nameEnglish": "Hasan Prishtina",
+      "nameSerbian": "Hasan Prishtina",
+      "idTeacherLicenseMunicipality": 15,
+      "id": 1449
+    },
+    {
+      "nameAlbanian": "17 Shkurti",
+      "nameEnglish": "17 Shkurti",
+      "nameSerbian": "17 Shkurti",
+      "idTeacherLicenseMunicipality": 15,
+      "id": 1450
+    },
+    {
+      "nameAlbanian": "Ismail Dumoshi",
+      "nameEnglish": "Ismail Dumoshi",
+      "nameSerbian": "Ismail Dumoshi",
+      "idTeacherLicenseMunicipality": 15,
+      "id": 1451
+    },
+    {
+      "nameAlbanian": "Naim Frashëri",
+      "nameEnglish": "Naim Frashëri",
+      "nameSerbian": "Naim Frashëri",
+      "idTeacherLicenseMunicipality": 15,
+      "id": 1452
+    },
+    {
+      "nameAlbanian": "Rrita Jonë",
+      "nameEnglish": "Rrita Jonë",
+      "nameSerbian": "Rrita Jonë",
+      "idTeacherLicenseMunicipality": 15,
+      "id": 1453
+    },
+    {
+      "nameAlbanian": "Xheladin Deda",
+      "nameEnglish": "Xheladin Deda",
+      "nameSerbian": "Xheladin Deda",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1454
+    },
+    {
+      "nameAlbanian": "Migjeni",
+      "nameEnglish": "Migjeni",
+      "nameSerbian": "Migjeni",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1455
+    },
+    {
+      "nameAlbanian": "Bedri Pejani",
+      "nameEnglish": "Bedri Pejani",
+      "nameSerbian": "Bedri Pejani",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1456
+    },
+    {
+      "nameAlbanian": "Ali Hadri",
+      "nameEnglish": "Ali Hadri",
+      "nameSerbian": "Ali Hadri",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1457
+    },
+    {
+      "nameAlbanian": "Sh.m. Mjekësisë",
+      "nameEnglish": "Sh.m. Mjekësisë",
+      "nameSerbian": "Sh.m. Mjekësisë",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1458
+    },
+    {
+      "nameAlbanian": "Shk m Muzikës",
+      "nameEnglish": "Shk m Muzikës",
+      "nameSerbian": "Shk m Muzikës",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1459
+    },
+    {
+      "nameAlbanian": "Shaban Spahija",
+      "nameEnglish": "Shaban Spahija",
+      "nameSerbian": "Shaban Spahija",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1460
+    },
+    {
+      "nameAlbanian": "Odhise Paskali",
+      "nameEnglish": "Odhise Paskali",
+      "nameSerbian": "Odhise Paskali",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1461
+    },
+    {
+      "nameAlbanian": "Hil Mosi",
+      "nameEnglish": "Hil Mosi",
+      "nameSerbian": "Hil Mosi",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1462
+    },
+    {
+      "nameAlbanian": "Sami Frashëri",
+      "nameEnglish": "Sami Frashëri",
+      "nameSerbian": "Sami Frashëri",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1463
+    },
+    {
+      "nameAlbanian": "Smail Hajdaraj",
+      "nameEnglish": "Smail Hajdaraj",
+      "nameSerbian": "Smail Hajdaraj",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1464
+    },
+    {
+      "nameAlbanian": "Lidhja e Pejës",
+      "nameEnglish": "Lidhja e Pejës",
+      "nameSerbian": "Lidhja e Pejës",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1465
+    },
+    {
+      "nameAlbanian": "7 Shtatori",
+      "nameEnglish": "7 Shtatori",
+      "nameSerbian": "7 Shtatori",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1466
+    },
+    {
+      "nameAlbanian": "Ali Kelmendi",
+      "nameEnglish": "Ali Kelmendi",
+      "nameSerbian": "Ali Kelmendi",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1467
+    },
+    {
+      "nameAlbanian": "Rilindja",
+      "nameEnglish": "Rilindja",
+      "nameSerbian": "Rilindja",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1468
+    },
+    {
+      "nameAlbanian": "Skënderbeu",
+      "nameEnglish": "Skënderbeu",
+      "nameSerbian": "Skënderbeu",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1469
+    },
+    {
+      "nameAlbanian": "Xhemail Kada",
+      "nameEnglish": "Xhemail Kada",
+      "nameSerbian": "Xhemail Kada",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1470
+    },
+    {
+      "nameAlbanian": "Pëllumbat e Paqes",
+      "nameEnglish": "Pëllumbat e Paqes",
+      "nameSerbian": "Pëllumbat e Paqes",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1471
+    },
+    {
+      "nameAlbanian": "Vaso Pashë Shkodrani",
+      "nameEnglish": "Vaso Pashë Shkodrani",
+      "nameSerbian": "Vaso Pashë Shkodrani",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1472
+    },
+    {
+      "nameAlbanian": "Asdreni",
+      "nameEnglish": "Asdreni",
+      "nameSerbian": "Asdreni",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1473
+    },
+    {
+      "nameAlbanian": "8 Marsi",
+      "nameEnglish": "8 Marsi",
+      "nameSerbian": "8 Marsi",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1474
+    },
+    {
+      "nameAlbanian": "Ramiz Sadiku",
+      "nameEnglish": "Ramiz Sadiku",
+      "nameSerbian": "Ramiz Sadiku",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1475
+    },
+    {
+      "nameAlbanian": "Lidhja e Prizrenit",
+      "nameEnglish": "Lidhja e Prizrenit",
+      "nameSerbian": "Lidhja e Prizrenit",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1476
+    },
+    {
+      "nameAlbanian": "Dardania",
+      "nameEnglish": "Dardania",
+      "nameSerbian": "Dardania",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1477
+    },
+    {
+      "nameAlbanian": "Mehmet Shoshi",
+      "nameEnglish": "Mehmet Shoshi",
+      "nameSerbian": "Mehmet Shoshi",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1478
+    },
+    {
+      "nameAlbanian": "2 Korriku",
+      "nameEnglish": "2 Korriku",
+      "nameSerbian": "2 Korriku",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1479
+    },
+    {
+      "nameAlbanian": "Fan Noli",
+      "nameEnglish": "Fan Noli",
+      "nameSerbian": "Fan Noli",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1480
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Kombit",
+      "nameEnglish": "Dëshmorët e Kombit",
+      "nameSerbian": "Dëshmorët e Kombit",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1481
+    },
+    {
+      "nameAlbanian": "28 Nëntori",
+      "nameEnglish": "28 Nëntori",
+      "nameSerbian": "28 Nëntori",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1482
+    },
+    {
+      "nameAlbanian": "Pjetër Budi",
+      "nameEnglish": "Pjetër Budi",
+      "nameSerbian": "Pjetër Budi",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1483
+    },
+    {
+      "nameAlbanian": "Skender Çeku",
+      "nameEnglish": "Skender Çeku",
+      "nameSerbian": "Skender Çeku",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1484
+    },
+    {
+      "nameAlbanian": "Haxhi Zeka",
+      "nameEnglish": "Haxhi Zeka",
+      "nameSerbian": "Haxhi Zeka",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1485
+    },
+    {
+      "nameAlbanian": "Naum Veqilharqi",
+      "nameEnglish": "Naum Veqilharqi",
+      "nameSerbian": "Naum Veqilharqi",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1486
+    },
+    {
+      "nameAlbanian": "Zef Serembe",
+      "nameEnglish": "Zef Serembe",
+      "nameSerbian": "Zef Serembe",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1487
+    },
+    {
+      "nameAlbanian": "Dr.Ibrahim Rugova",
+      "nameEnglish": "Dr.Ibrahim Rugova",
+      "nameSerbian": "Dr.Ibrahim Rugova",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1488
+    },
+    {
+      "nameAlbanian": "Armela",
+      "nameEnglish": "Armela",
+      "nameSerbian": "Armela",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1489
+    },
+    {
+      "nameAlbanian": "Pavarësia",
+      "nameEnglish": "Pavarësia",
+      "nameSerbian": "Pavarësia",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1490
+    },
+    {
+      "nameAlbanian": "Fan S Noli",
+      "nameEnglish": "Fan S Noli",
+      "nameSerbian": "Fan S Noli",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1491
+    },
+    {
+      "nameAlbanian": "Jetullah Islami",
+      "nameEnglish": "Jetullah Islami",
+      "nameSerbian": "Jetullah Islami",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1492
+    },
+    {
+      "nameAlbanian": "Aleksandër Xhuvani",
+      "nameEnglish": "Aleksandër Xhuvani",
+      "nameSerbian": "Aleksandër Xhuvani",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1493
+    },
+    {
+      "nameAlbanian": "Isa Boletini",
+      "nameEnglish": "Isa Boletini",
+      "nameSerbian": "Isa Boletini",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1494
+    },
+    {
+      "nameAlbanian": "Zahir Pajaziti",
+      "nameEnglish": "Zahir Pajaziti",
+      "nameSerbian": "Zahir Pajaziti",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1495
+    },
+    {
+      "nameAlbanian": "Shefki Kuleta",
+      "nameEnglish": "Shefki Kuleta",
+      "nameSerbian": "Shefki Kuleta",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1496
+    },
+    {
+      "nameAlbanian": "Sheqë Mirofci",
+      "nameEnglish": "Sheqë Mirofci",
+      "nameSerbian": "Sheqë Mirofci",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1497
+    },
+    {
+      "nameAlbanian": "Naum Veqilharxhi",
+      "nameEnglish": "Naum Veqilharxhi",
+      "nameSerbian": "Naum Veqilharxhi",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1498
+    },
+    {
+      "nameAlbanian": "Sami Frashëri",
+      "nameEnglish": "Sami Frashëri",
+      "nameSerbian": "Sami Frashëri",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1499
+    },
+    {
+      "nameAlbanian": "Luigj Gurakuqi",
+      "nameEnglish": "Luigj Gurakuqi",
+      "nameSerbian": "Luigj Gurakuqi",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1500
+    },
+    {
+      "nameAlbanian": "Drita",
+      "nameEnglish": "Drita",
+      "nameSerbian": "Drita",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1501
+    },
+    {
+      "nameAlbanian": "Kongresi i Manastirit",
+      "nameEnglish": "Kongresi i Manastirit",
+      "nameSerbian": "Kongresi i Manastirit",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1502
+    },
+    {
+      "nameAlbanian": "Naim Frashëri",
+      "nameEnglish": "Naim Frashëri",
+      "nameSerbian": "Naim Frashëri",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1503
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Kombit",
+      "nameEnglish": "Dëshmorët e Kombit",
+      "nameSerbian": "Dëshmorët e Kombit",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1504
+    },
+    {
+      "nameAlbanian": "Jetullah Gashi",
+      "nameEnglish": "Jetullah Gashi",
+      "nameSerbian": "Jetullah Gashi",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1505
+    },
+    {
+      "nameAlbanian": "Lasgush Poradeci",
+      "nameEnglish": "Lasgush Poradeci",
+      "nameSerbian": "Lasgush Poradeci",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1506
+    },
+    {
+      "nameAlbanian": "Hyzriu e Samiu",
+      "nameEnglish": "Hyzriu e Samiu",
+      "nameSerbian": "Hyzriu e Samiu",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1507
+    },
+    {
+      "nameAlbanian": "Esad Mekuli",
+      "nameEnglish": "Esad Mekuli",
+      "nameSerbian": "Esad Mekuli",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1508
+    },
+    {
+      "nameAlbanian": "Hasan Ramadani",
+      "nameEnglish": "Hasan Ramadani",
+      "nameSerbian": "Hasan Ramadani",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1509
+    },
+    {
+      "nameAlbanian": "Ali Ajeti",
+      "nameEnglish": "Ali Ajeti",
+      "nameSerbian": "Ali Ajeti",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1510
+    },
+    {
+      "nameAlbanian": "Musli Dumoshi",
+      "nameEnglish": "Musli Dumoshi",
+      "nameSerbian": "Musli Dumoshi",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1511
+    },
+    {
+      "nameAlbanian": "Ali Hadri",
+      "nameEnglish": "Ali Hadri",
+      "nameSerbian": "Ali Hadri",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1512
+    },
+    {
+      "nameAlbanian": "Zenel Hajdini",
+      "nameEnglish": "Zenel Hajdini",
+      "nameSerbian": "Zenel Hajdini",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1513
+    },
+    {
+      "nameAlbanian": "Elfir Behrami",
+      "nameEnglish": "Elfir Behrami",
+      "nameSerbian": "Elfir Behrami",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1514
+    },
+    {
+      "nameAlbanian": "Dituria",
+      "nameEnglish": "Dituria",
+      "nameSerbian": "Dituria",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1515
+    },
+    {
+      "nameAlbanian": "Afrimi e Fahriu",
+      "nameEnglish": "Afrimi e Fahriu",
+      "nameSerbian": "Afrimi e Fahriu",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1516
+    },
+    {
+      "nameAlbanian": "Hamit Sejdiu",
+      "nameEnglish": "Hamit Sejdiu",
+      "nameSerbian": "Hamit Sejdiu",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1517
+    },
+    {
+      "nameAlbanian": "Nuhi Gashi",
+      "nameEnglish": "Nuhi Gashi",
+      "nameSerbian": "Nuhi Gashi",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1518
+    },
+    {
+      "nameAlbanian": "Rilindja",
+      "nameEnglish": "Rilindja",
+      "nameSerbian": "Rilindja",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1519
+    },
+    {
+      "nameAlbanian": "Shaban Shala",
+      "nameEnglish": "Shaban Shala",
+      "nameSerbian": "Shaban Shala",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1520
+    },
+    {
+      "nameAlbanian": "Ilir Konushevci",
+      "nameEnglish": "Ilir Konushevci",
+      "nameSerbian": "Ilir Konushevci",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1521
+    },
+    {
+      "nameAlbanian": "Jahë Hasani",
+      "nameEnglish": "Jahë Hasani",
+      "nameSerbian": "Jahë Hasani",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1522
+    },
+    {
+      "nameAlbanian": "Shefki Latifi",
+      "nameEnglish": "Shefki Latifi",
+      "nameSerbian": "Shefki Latifi",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1523
+    },
+    {
+      "nameAlbanian": "Eqrem Çabej",
+      "nameEnglish": "Eqrem Çabej",
+      "nameSerbian": "Eqrem Çabej",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1524
+    },
+    {
+      "nameAlbanian": "Xheladin Rekaliu",
+      "nameEnglish": "Xheladin Rekaliu",
+      "nameSerbian": "Xheladin Rekaliu",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1525
+    },
+    {
+      "nameAlbanian": "Enver Maloku",
+      "nameEnglish": "Enver Maloku",
+      "nameSerbian": "Enver Maloku",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1526
+    },
+    {
+      "nameAlbanian": "Emin Duraku",
+      "nameEnglish": "Emin Duraku",
+      "nameSerbian": "Emin Duraku",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1527
+    },
+    {
+      "nameAlbanian": "Kadri Kadriu",
+      "nameEnglish": "Kadri Kadriu",
+      "nameSerbian": "Kadri Kadriu",
+      "idTeacherLicenseMunicipality": 18,
+      "id": 1528
+    },
+    {
+      "nameAlbanian": "Mehmet Gjevori",
+      "nameEnglish": "Mehmet Gjevori",
+      "nameSerbian": "Mehmet Gjevori",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1529
+    },
+    {
+      "nameAlbanian": "Ahmet Gashi",
+      "nameEnglish": "Ahmet Gashi",
+      "nameSerbian": "Ahmet Gashi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1530
+    },
+    {
+      "nameAlbanian": "Gjimnazi i Specializuar Matematikor",
+      "nameEnglish": "Gjimnazi i Specializuar Matematikor",
+      "nameSerbian": "Gjimnazi i Specializuar Matematikor",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1531
+    },
+    {
+      "nameAlbanian": "Qamil Batalli",
+      "nameEnglish": "Qamil Batalli",
+      "nameSerbian": "Qamil Batalli",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1532
+    },
+    {
+      "nameAlbanian": "Afrim Gashi",
+      "nameEnglish": "Afrim Gashi",
+      "nameSerbian": "Afrim Gashi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1533
+    },
+    {
+      "nameAlbanian": "Rilindja",
+      "nameEnglish": "Rilindja",
+      "nameSerbian": "Rilindja",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1534
+    },
+    {
+      "nameAlbanian": "Shkëndija",
+      "nameEnglish": "Shkëndija",
+      "nameSerbian": "Shkëndija",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1535
+    },
+    {
+      "nameAlbanian": "Teuta",
+      "nameEnglish": "Teuta",
+      "nameSerbian": "Teuta",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1536
+    },
+    {
+      "nameAlbanian": "Tefik Çanga",
+      "nameEnglish": "Tefik Çanga",
+      "nameSerbian": "Tefik Çanga",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1537
+    },
+    {
+      "nameAlbanian": "Nexhmi Mustafa",
+      "nameEnglish": "Nexhmi Mustafa",
+      "nameSerbian": "Nexhmi Mustafa",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1538
+    },
+    {
+      "nameAlbanian": "Filip Shiroka",
+      "nameEnglish": "Filip Shiroka",
+      "nameSerbian": "Filip Shiroka",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1539
+    },
+    {
+      "nameAlbanian": "Ganimete Tërbeshi",
+      "nameEnglish": "Ganimete Tërbeshi",
+      "nameSerbian": "Ganimete Tërbeshi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1540
+    },
+    {
+      "nameAlbanian": "Fan S Noli",
+      "nameEnglish": "Fan S Noli",
+      "nameSerbian": "Fan S Noli",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1541
+    },
+    {
+      "nameAlbanian": "Isa Boletini",
+      "nameEnglish": "Isa Boletini",
+      "nameSerbian": "Isa Boletini",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1542
+    },
+    {
+      "nameAlbanian": "Mitrush Kuteli",
+      "nameEnglish": "Mitrush Kuteli",
+      "nameSerbian": "Mitrush Kuteli",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1543
+    },
+    {
+      "nameAlbanian": "Nëna Tereza",
+      "nameEnglish": "Nëna Tereza",
+      "nameSerbian": "Nëna Tereza",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1544
+    },
+    {
+      "nameAlbanian": "Prenk Jakova",
+      "nameEnglish": "Prenk Jakova",
+      "nameSerbian": "Prenk Jakova",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1545
+    },
+    {
+      "nameAlbanian": "Gjin Gazulli",
+      "nameEnglish": "Gjin Gazulli",
+      "nameSerbian": "Gjin Gazulli",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1546
+    },
+    {
+      "nameAlbanian": "7 Shtatori",
+      "nameEnglish": "7 Shtatori",
+      "nameSerbian": "7 Shtatori",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1547
+    },
+    {
+      "nameAlbanian": "Abdyl Frashëri",
+      "nameEnglish": "Abdyl Frashëri",
+      "nameSerbian": "Abdyl Frashëri",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1548
+    },
+    {
+      "nameAlbanian": "Alauddin",
+      "nameEnglish": "Alauddin",
+      "nameSerbian": "Alauddin",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1549
+    },
+    {
+      "nameAlbanian": "Përparimi",
+      "nameEnglish": "Përparimi",
+      "nameSerbian": "Përparimi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1550
+    },
+    {
+      "nameAlbanian": "Hoxhë Kadri Prishtina",
+      "nameEnglish": "Hoxhë Kadri Prishtina",
+      "nameSerbian": "Hoxhë Kadri Prishtina",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1551
+    },
+    {
+      "nameAlbanian": "Shkolla e Gjelbër",
+      "nameEnglish": "Shkolla e Gjelbër",
+      "nameSerbian": "Shkolla e Gjelbër",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1552
+    },
+    {
+      "nameAlbanian": "Sami Frashëri",
+      "nameEnglish": "Sami Frashëri",
+      "nameSerbian": "Sami Frashëri",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1553
+    },
+    {
+      "nameAlbanian": "Xhavit Ahmeti",
+      "nameEnglish": "Xhavit Ahmeti",
+      "nameSerbian": "Xhavit Ahmeti",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1554
+    },
+    {
+      "nameAlbanian": "Pavarësia",
+      "nameEnglish": "Pavarësia",
+      "nameSerbian": "Pavarësia",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1555
+    },
+    {
+      "nameAlbanian": "Xhevdet Doda",
+      "nameEnglish": "Xhevdet Doda",
+      "nameSerbian": "Xhevdet Doda",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1556
+    },
+    {
+      "nameAlbanian": "28 Nëntori",
+      "nameEnglish": "28 Nëntori",
+      "nameSerbian": "28 Nëntori",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1557
+    },
+    {
+      "nameAlbanian": "Shtjefën Gjeqovi",
+      "nameEnglish": "Shtjefën Gjeqovi",
+      "nameSerbian": "Shtjefën Gjeqovi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1558
+    },
+    {
+      "nameAlbanian": "Eqrem Çabej",
+      "nameEnglish": "Eqrem Çabej",
+      "nameSerbian": "Eqrem Çabej",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1559
+    },
+    {
+      "nameAlbanian": "Dr Ali Sokoli",
+      "nameEnglish": "Dr Ali Sokoli",
+      "nameSerbian": "Dr Ali Sokoli",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1560
+    },
+    {
+      "nameAlbanian": "Faik Konica",
+      "nameEnglish": "Faik Konica",
+      "nameSerbian": "Faik Konica",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1561
+    },
+    {
+      "nameAlbanian": "Elena Gjika",
+      "nameEnglish": "Elena Gjika",
+      "nameSerbian": "Elena Gjika",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1562
+    },
+    {
+      "nameAlbanian": "Emin Duraku",
+      "nameEnglish": "Emin Duraku",
+      "nameSerbian": "Emin Duraku",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1563
+    },
+    {
+      "nameAlbanian": "Dardania",
+      "nameEnglish": "Dardania",
+      "nameSerbian": "Dardania",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1564
+    },
+    {
+      "nameAlbanian": "Asim Vokshi",
+      "nameEnglish": "Asim Vokshi",
+      "nameSerbian": "Asim Vokshi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1571
+    },
+    {
+      "nameAlbanian": "Ardhmëria",
+      "nameEnglish": "Ardhmëria",
+      "nameSerbian": "Ardhmëria",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1572
+    },
+    {
+      "nameAlbanian": "Lulevera",
+      "nameEnglish": "Lulevera",
+      "nameSerbian": "Lulevera",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1573
+    },
+    {
+      "nameAlbanian": "Hilmi Rakovica",
+      "nameEnglish": "Hilmi Rakovica",
+      "nameSerbian": "Hilmi Rakovica",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1574
+    },
+    {
+      "nameAlbanian": "Azemi dhe Salihu",
+      "nameEnglish": "Azemi dhe Salihu",
+      "nameSerbian": "Azemi dhe Salihu",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1575
+    },
+    {
+      "nameAlbanian": "7 Marsi",
+      "nameEnglish": "7 Marsi",
+      "nameSerbian": "7 Marsi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1576
+    },
+    {
+      "nameAlbanian": "Xhemail Mustafa",
+      "nameEnglish": "Xhemail Mustafa",
+      "nameSerbian": "Xhemail Mustafa",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1577
+    },
+    {
+      "nameAlbanian": "Avni Rrustemi",
+      "nameEnglish": "Avni Rrustemi",
+      "nameSerbian": "Avni Rrustemi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1578
+    },
+    {
+      "nameAlbanian": "Dituria",
+      "nameEnglish": "Dituria",
+      "nameSerbian": "Dituria",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1579
+    },
+    {
+      "nameAlbanian": "Ditët e Minatorit",
+      "nameEnglish": "Ditët e Minatorit",
+      "nameSerbian": "Ditët e Minatorit",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1580
+    },
+    {
+      "nameAlbanian": "Andon Z Çajupi",
+      "nameEnglish": "Andon Z Çajupi",
+      "nameSerbian": "Andon Z Çajupi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1581
+    },
+    {
+      "nameAlbanian": "Ali Kelmendi",
+      "nameEnglish": "Ali Kelmendi",
+      "nameSerbian": "Ali Kelmendi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1582
+    },
+    {
+      "nameAlbanian": "Zenel Hajdini",
+      "nameEnglish": "Zenel Hajdini",
+      "nameSerbian": "Zenel Hajdini",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1583
+    },
+    {
+      "nameAlbanian": "Ismail Qemali",
+      "nameEnglish": "Ismail Qemali",
+      "nameSerbian": "Ismail Qemali",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1584
+    },
+    {
+      "nameAlbanian": "Iliria",
+      "nameEnglish": "Iliria",
+      "nameSerbian": "Iliria",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1585
+    },
+    {
+      "nameAlbanian": "Gjergj Fishta",
+      "nameEnglish": "Gjergj Fishta",
+      "nameSerbian": "Gjergj Fishta",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1586
+    },
+    {
+      "nameAlbanian": "Hasan Prishtina",
+      "nameEnglish": "Hasan Prishtina",
+      "nameSerbian": "Hasan Prishtina",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1587
+    },
+    {
+      "nameAlbanian": "Meto Bajraktari",
+      "nameEnglish": "Meto Bajraktari",
+      "nameSerbian": "Meto Bajraktari",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1588
+    },
+    {
+      "nameAlbanian": "Pjetër Bogdani",
+      "nameEnglish": "Pjetër Bogdani",
+      "nameSerbian": "Pjetër Bogdani",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1589
+    },
+    {
+      "nameAlbanian": "Nazim Gafurri",
+      "nameEnglish": "Nazim Gafurri",
+      "nameSerbian": "Nazim Gafurri",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1590
+    },
+    {
+      "nameAlbanian": "Naim Frashëri",
+      "nameEnglish": "Naim Frashëri",
+      "nameSerbian": "Naim Frashëri",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1591
+    },
+    {
+      "nameAlbanian": "Nazim Kokollari-Budakova",
+      "nameEnglish": "Nazim Kokollari-Budakova",
+      "nameSerbian": "Nazim Kokollari-Budakova",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1592
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Hasit",
+      "nameEnglish": "Dëshmorët e Hasit",
+      "nameSerbian": "Dëshmorët e Hasit",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1593
+    },
+    {
+      "nameAlbanian": "Sinan Thaqi",
+      "nameEnglish": "Sinan Thaqi",
+      "nameSerbian": "Sinan Thaqi",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1594
+    },
+    {
+      "nameAlbanian": "Xhevat Berisha",
+      "nameEnglish": "Xhevat Berisha",
+      "nameSerbian": "Xhevat Berisha",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1595
+    },
+    {
+      "nameAlbanian": "Sh e ulët e muzikës",
+      "nameEnglish": "Sh e ulët e muzikës",
+      "nameSerbian": "Sh e ulët e muzikës",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1596
+    },
+    {
+      "nameAlbanian": "Luciano Motroni",
+      "nameEnglish": "Luciano Motroni",
+      "nameSerbian": "Luciano Motroni",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1597
+    },
+    {
+      "nameAlbanian": "11 Marsi",
+      "nameEnglish": "11 Marsi",
+      "nameSerbian": "11 Marsi",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1598
+    },
+    {
+      "nameAlbanian": "Sh e ulët e baletit",
+      "nameEnglish": "Sh e ulët e baletit",
+      "nameSerbian": "Sh e ulët e baletit",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1599
+    },
+    {
+      "nameAlbanian": "Lorenc Antoni",
+      "nameEnglish": "Lorenc Antoni",
+      "nameSerbian": "Lorenc Antoni",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1600
+    },
+    {
+      "nameAlbanian": "Sharr",
+      "nameEnglish": "Sharr",
+      "nameSerbian": "Sharr",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1601
+    },
+    {
+      "nameAlbanian": "Brigada125",
+      "nameEnglish": "Brigada125",
+      "nameSerbian": "Brigada125",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1602
+    },
+    {
+      "nameAlbanian": "Meto Bajraktari",
+      "nameEnglish": "Meto Bajraktari",
+      "nameSerbian": "Meto Bajraktari",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1603
+    },
+    {
+      "nameAlbanian": "Svjetllost",
+      "nameEnglish": "Svjetllost",
+      "nameSerbian": "Svjetllost",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1604
+    },
+    {
+      "nameAlbanian": "Pllanjan",
+      "nameEnglish": "Pllanjan",
+      "nameSerbian": "Pllanjan",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1605
+    },
+    {
+      "nameAlbanian": "Izvor",
+      "nameEnglish": "Izvor",
+      "nameSerbian": "Izvor",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1606
+    },
+    {
+      "nameAlbanian": "25 Maji",
+      "nameEnglish": "25 Maji",
+      "nameSerbian": "25 Maji",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1607
+    },
+    {
+      "nameAlbanian": "Nënë Tereza",
+      "nameEnglish": "Nënë Tereza",
+      "nameSerbian": "Nënë Tereza",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1608
+    },
+    {
+      "nameAlbanian": "Lef Nosi",
+      "nameEnglish": "Lef Nosi",
+      "nameSerbian": "Lef Nosi",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1609
+    },
+    {
+      "nameAlbanian": "Ymer Prizreni",
+      "nameEnglish": "Ymer Prizreni",
+      "nameSerbian": "Ymer Prizreni",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1610
+    },
+    {
+      "nameAlbanian": "Gjon Buzuku",
+      "nameEnglish": "Gjon Buzuku",
+      "nameSerbian": "Gjon Buzuku",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1611
+    },
+    {
+      "nameAlbanian": "Remzi Ademaj",
+      "nameEnglish": "Remzi Ademaj",
+      "nameSerbian": "Remzi Ademaj",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1612
+    },
+    {
+      "nameAlbanian": "Zambaku",
+      "nameEnglish": "Zambaku",
+      "nameSerbian": "Zambaku",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1613
+    },
+    {
+      "nameAlbanian": "Hysen Rexhepi",
+      "nameEnglish": "Hysen Rexhepi",
+      "nameSerbian": "Hysen Rexhepi",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1614
+    },
+    {
+      "nameAlbanian": "Gani Saramati",
+      "nameEnglish": "Gani Saramati",
+      "nameSerbian": "Gani Saramati",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1615
+    },
+    {
+      "nameAlbanian": "Atmaxhë",
+      "nameEnglish": "Atmaxhë",
+      "nameSerbian": "Atmaxhë",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1616
+    },
+    {
+      "nameAlbanian": "Krushë e vogël",
+      "nameEnglish": "Krushë e vogël",
+      "nameSerbian": "Krushë e vogël",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1617
+    },
+    {
+      "nameAlbanian": "Qendra e Kompetencës Prizren",
+      "nameEnglish": "Qendra e Kompetencës Prizren",
+      "nameSerbian": "Qendra e Kompetencës Prizren",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1618
+    },
+    {
+      "nameAlbanian": "Grncare",
+      "nameEnglish": "Grncare",
+      "nameSerbian": "Grncare",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1619
+    },
+    {
+      "nameAlbanian": "Vëllezërit Frashëri",
+      "nameEnglish": "Vëllezërit Frashëri",
+      "nameSerbian": "Vëllezërit Frashëri",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1620
+    },
+    {
+      "nameAlbanian": "Bajram Curri",
+      "nameEnglish": "Bajram Curri",
+      "nameSerbian": "Bajram Curri",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1621
+    },
+    {
+      "nameAlbanian": "Nazim Buduri",
+      "nameEnglish": "Nazim Buduri",
+      "nameSerbian": "Nazim Buduri",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1622
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Kabashit",
+      "nameEnglish": "Dëshmorët e Kabashit",
+      "nameSerbian": "Dëshmorët e Kabashit",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1623
+    },
+    {
+      "nameAlbanian": "Besim Nreca",
+      "nameEnglish": "Besim Nreca",
+      "nameSerbian": "Besim Nreca",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1624
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Vërrinit",
+      "nameEnglish": "Dëshmorët e Vërrinit",
+      "nameSerbian": "Dëshmorët e Vërrinit",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1625
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Zhurit",
+      "nameEnglish": "Dëshmorët e Zhurit",
+      "nameSerbian": "Dëshmorët e Zhurit",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1626
+    },
+    {
+      "nameAlbanian": "Hysni Temaj",
+      "nameEnglish": "Hysni Temaj",
+      "nameSerbian": "Hysni Temaj",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1627
+    },
+    {
+      "nameAlbanian": "Ibrahim Fehmiu",
+      "nameEnglish": "Ibrahim Fehmiu",
+      "nameSerbian": "Ibrahim Fehmiu",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1628
+    },
+    {
+      "nameAlbanian": "Haziz Tola",
+      "nameEnglish": "Haziz Tola",
+      "nameSerbian": "Haziz Tola",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1629
+    },
+    {
+      "nameAlbanian": "Mustafa Bakiu",
+      "nameEnglish": "Mustafa Bakiu",
+      "nameSerbian": "Mustafa Bakiu",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1630
+    },
+    {
+      "nameAlbanian": "Abdyl Frasheri",
+      "nameEnglish": "Abdyl Frasheri",
+      "nameSerbian": "Abdyl Frasheri",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1631
+    },
+    {
+      "nameAlbanian": "Zef Lush Marku",
+      "nameEnglish": "Zef Lush Marku",
+      "nameSerbian": "Zef Lush Marku",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1632
+    },
+    {
+      "nameAlbanian": "Zenun Çoçaj",
+      "nameEnglish": "Zenun Çoçaj",
+      "nameSerbian": "Zenun Çoçaj",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1633
+    },
+    {
+      "nameAlbanian": "Dy dëshmorët",
+      "nameEnglish": "Dy dëshmorët",
+      "nameSerbian": "Dy dëshmorët",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1634
+    },
+    {
+      "nameAlbanian": "Luigj Gurakuqi",
+      "nameEnglish": "Luigj Gurakuqi",
+      "nameSerbian": "Luigj Gurakuqi",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1635
+    },
+    {
+      "nameAlbanian": "Naim Frashëri",
+      "nameEnglish": "Naim Frashëri",
+      "nameSerbian": "Naim Frashëri",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1636
+    },
+    {
+      "nameAlbanian": "Mithat Frashëri",
+      "nameEnglish": "Mithat Frashëri",
+      "nameSerbian": "Mithat Frashëri",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1637
+    },
+    {
+      "nameAlbanian": "Ardhmëria",
+      "nameEnglish": "Ardhmëria",
+      "nameSerbian": "Ardhmëria",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1638
+    },
+    {
+      "nameAlbanian": "Pjeter Mazreku",
+      "nameEnglish": "Pjeter Mazreku",
+      "nameSerbian": "Pjeter Mazreku",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1639
+    },
+    {
+      "nameAlbanian": "Hasim Maliqaj",
+      "nameEnglish": "Hasim Maliqaj",
+      "nameSerbian": "Hasim Maliqaj",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1640
+    },
+    {
+      "nameAlbanian": "22 Dëshmorët",
+      "nameEnglish": "22 Dëshmorët",
+      "nameSerbian": "22 Dëshmorët",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1641
+    },
+    {
+      "nameAlbanian": "Nefit Jusufi",
+      "nameEnglish": "Nefit Jusufi",
+      "nameSerbian": "Nefit Jusufi",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1642
+    },
+    {
+      "nameAlbanian": "Mic Sokoli",
+      "nameEnglish": "Mic Sokoli",
+      "nameSerbian": "Mic Sokoli",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1643
+    },
+    {
+      "nameAlbanian": "Ekrem Rexha-Drini",
+      "nameEnglish": "Ekrem Rexha-Drini",
+      "nameSerbian": "Ekrem Rexha-Drini",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1644
+    },
+    {
+      "nameAlbanian": "Pjetër Budi",
+      "nameEnglish": "Pjetër Budi",
+      "nameSerbian": "Pjetër Budi",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1645
+    },
+    {
+      "nameAlbanian": "Mushnikova",
+      "nameEnglish": "Mushnikova",
+      "nameSerbian": "Mushnikova",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1646
+    },
+    {
+      "nameAlbanian": "Herojntë e Lumës",
+      "nameEnglish": "Herojntë e Lumës",
+      "nameSerbian": "Herojntë e Lumës",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1647
+    },
+    {
+      "nameAlbanian": "Shtjefën Gjeçovi",
+      "nameEnglish": "Shtjefën Gjeçovi",
+      "nameSerbian": "Shtjefën Gjeçovi",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1648
+    },
+    {
+      "nameAlbanian": "Mati Logoreci",
+      "nameEnglish": "Mati Logoreci",
+      "nameSerbian": "Mati Logoreci",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1649
+    },
+    {
+      "nameAlbanian": "Lidhja e Prizrenit",
+      "nameEnglish": "Lidhja e Prizrenit",
+      "nameSerbian": "Lidhja e Prizrenit",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1650
+    },
+    {
+      "nameAlbanian": "Emin Duraku",
+      "nameEnglish": "Emin Duraku",
+      "nameSerbian": "Emin Duraku",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1651
+    },
+    {
+      "nameAlbanian": "Fatmir Berisha",
+      "nameEnglish": "Fatmir Berisha",
+      "nameSerbian": "Fatmir Berisha",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1652
+    },
+    {
+      "nameAlbanian": "Motrat Qiriazi",
+      "nameEnglish": "Motrat Qiriazi",
+      "nameSerbian": "Motrat Qiriazi",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1653
+    },
+    {
+      "nameAlbanian": "Fadil Hisari",
+      "nameEnglish": "Fadil Hisari",
+      "nameSerbian": "Fadil Hisari",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1654
+    },
+    {
+      "nameAlbanian": "Lekë Dukagjini",
+      "nameEnglish": "Lekë Dukagjini",
+      "nameSerbian": "Lekë Dukagjini",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1655
+    },
+    {
+      "nameAlbanian": "31 Marsi",
+      "nameEnglish": "31 Marsi",
+      "nameSerbian": "31 Marsi",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1656
+    },
+    {
+      "nameAlbanian": "Nesimi Elshani",
+      "nameEnglish": "Nesimi Elshani",
+      "nameSerbian": "Nesimi Elshani",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1657
+    },
+    {
+      "nameAlbanian": "Selajdin Mullaabazi-Mici",
+      "nameEnglish": "Selajdin Mullaabazi-Mici",
+      "nameSerbian": "Selajdin Mullaabazi-Mici",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1658
+    },
+    {
+      "nameAlbanian": "Sakip Bellaqa",
+      "nameEnglish": "Sakip Bellaqa",
+      "nameSerbian": "Sakip Bellaqa",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1659
+    },
+    {
+      "nameAlbanian": "Shkolla e ulët e muzikës",
+      "nameEnglish": "Shkolla e ulët e muzikës",
+      "nameSerbian": "Shkolla e ulët e muzikës",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1660
+    },
+    {
+      "nameAlbanian": "Milaim Krasniqi",
+      "nameEnglish": "Milaim Krasniqi",
+      "nameSerbian": "Milaim Krasniqi",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1661
+    },
+    {
+      "nameAlbanian": "Mustafë Ibishi",
+      "nameEnglish": "Mustafë Ibishi",
+      "nameSerbian": "Mustafë Ibishi",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1662
+    },
+    {
+      "nameAlbanian": "Sylejman Vokshi",
+      "nameEnglish": "Sylejman Vokshi",
+      "nameSerbian": "Sylejman Vokshi",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1663
+    },
+    {
+      "nameAlbanian": "Vëllezërit Frashëri",
+      "nameEnglish": "Vëllezërit Frashëri",
+      "nameSerbian": "Vëllezërit Frashëri",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1664
+    },
+    {
+      "nameAlbanian": "Bajram Curri",
+      "nameEnglish": "Bajram Curri",
+      "nameSerbian": "Bajram Curri",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1665
+    },
+    {
+      "nameAlbanian": "Faik Konica",
+      "nameEnglish": "Faik Konica",
+      "nameSerbian": "Faik Konica",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1666
+    },
+    {
+      "nameAlbanian": "Zatriq",
+      "nameEnglish": "Zatriq",
+      "nameSerbian": "Zatriq",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1667
+    },
+    {
+      "nameAlbanian": "Rilindja",
+      "nameEnglish": "Rilindja",
+      "nameSerbian": "Rilindja",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1668
+    },
+    {
+      "nameAlbanian": "Hamëz Thaqi",
+      "nameEnglish": "Hamëz Thaqi",
+      "nameSerbian": "Hamëz Thaqi",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1669
+    },
+    {
+      "nameAlbanian": "Skender Kastrati",
+      "nameEnglish": "Skender Kastrati",
+      "nameSerbian": "Skender Kastrati",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1670
+    },
+    {
+      "nameAlbanian": "Sapniq",
+      "nameEnglish": "Sapniq",
+      "nameSerbian": "Sapniq",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1671
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Lirisë",
+      "nameEnglish": "Dëshmorët e Lirisë",
+      "nameSerbian": "Dëshmorët e Lirisë",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1672
+    },
+    {
+      "nameAlbanian": "Rudolf Walther",
+      "nameEnglish": "Rudolf Walther",
+      "nameSerbian": "Rudolf Walther",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1673
+    },
+    {
+      "nameAlbanian": "4 Dëshmorët",
+      "nameEnglish": "4 Dëshmorët",
+      "nameSerbian": "4 Dëshmorët",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1674
+    },
+    {
+      "nameAlbanian": "3 Dëshmorët",
+      "nameEnglish": "3 Dëshmorët",
+      "nameSerbian": "3 Dëshmorët",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1675
+    },
+    {
+      "nameAlbanian": "Haki Stërmilli",
+      "nameEnglish": "Haki Stërmilli",
+      "nameSerbian": "Haki Stërmilli",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1676
+    },
+    {
+      "nameAlbanian": "Heronjtë e Kosovës",
+      "nameEnglish": "Heronjtë e Kosovës",
+      "nameSerbian": "Heronjtë e Kosovës",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1677
+    },
+    {
+      "nameAlbanian": "Lidhja e Prizrenit",
+      "nameEnglish": "Lidhja e Prizrenit",
+      "nameSerbian": "Lidhja e Prizrenit",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1678
+    },
+    {
+      "nameAlbanian": "12 Maji",
+      "nameEnglish": "12 Maji",
+      "nameSerbian": "12 Maji",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1679
+    },
+    {
+      "nameAlbanian": "Xhelal Hajda Toni",
+      "nameEnglish": "Xhelal Hajda Toni",
+      "nameSerbian": "Xhelal Hajda Toni",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1680
+    },
+    {
+      "nameAlbanian": "Ukshin Hoti",
+      "nameEnglish": "Ukshin Hoti",
+      "nameSerbian": "Ukshin Hoti",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1681
+    },
+    {
+      "nameAlbanian": "Liria",
+      "nameEnglish": "Liria",
+      "nameSerbian": "Liria",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1682
+    },
+    {
+      "nameAlbanian": "Tulipanët",
+      "nameEnglish": "Tulipanët",
+      "nameSerbian": "Tulipanët",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1683
+    },
+    {
+      "nameAlbanian": "Sadedin Hajda",
+      "nameEnglish": "Sadedin Hajda",
+      "nameSerbian": "Sadedin Hajda",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1684
+    },
+    {
+      "nameAlbanian": "Gëzim Hamza - Piktori",
+      "nameEnglish": "Gëzim Hamza - Piktori",
+      "nameSerbian": "Gëzim Hamza - Piktori",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1685
+    },
+    {
+      "nameAlbanian": "Isa Boletini",
+      "nameEnglish": "Isa Boletini",
+      "nameSerbian": "Isa Boletini",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1686
+    },
+    {
+      "nameAlbanian": "Bekim Sylka",
+      "nameEnglish": "Bekim Sylka",
+      "nameSerbian": "Bekim Sylka",
+      "idTeacherLicenseMunicipality": 16,
+      "id": 1687
+    },
+    {
+      "nameAlbanian": "Osman Mani",
+      "nameEnglish": "Osman Mani",
+      "nameSerbian": "Osman Mani",
+      "idTeacherLicenseMunicipality": 23,
+      "id": 1688
+    },
+    {
+      "nameAlbanian": "Razim Cokli",
+      "nameEnglish": "Razim Cokli",
+      "nameSerbian": "Razim Cokli",
+      "idTeacherLicenseMunicipality": 23,
+      "id": 1689
+    },
+    {
+      "nameAlbanian": "Anton Santori",
+      "nameEnglish": "Anton Santori",
+      "nameSerbian": "Anton Santori",
+      "idTeacherLicenseMunicipality": 23,
+      "id": 1690
+    },
+    {
+      "nameAlbanian": "Kongresi i Manastirit",
+      "nameEnglish": "Kongresi i Manastirit",
+      "nameSerbian": "Kongresi i Manastirit",
+      "idTeacherLicenseMunicipality": 23,
+      "id": 1691
+    },
+    {
+      "nameAlbanian": "Hasan Prishtina",
+      "nameEnglish": "Hasan Prishtina",
+      "nameSerbian": "Hasan Prishtina",
+      "idTeacherLicenseMunicipality": 22,
+      "id": 1692
+    },
+    {
+      "nameAlbanian": "Idriz Ajeti",
+      "nameEnglish": "Idriz Ajeti",
+      "nameSerbian": "Idriz Ajeti",
+      "idTeacherLicenseMunicipality": 22,
+      "id": 1693
+    },
+    {
+      "nameAlbanian": "Lasgush Poradeci",
+      "nameEnglish": "Lasgush Poradeci",
+      "nameSerbian": "Lasgush Poradeci",
+      "idTeacherLicenseMunicipality": 22,
+      "id": 1694
+    },
+    {
+      "nameAlbanian": "Bajram Curri",
+      "nameEnglish": "Bajram Curri",
+      "nameSerbian": "Bajram Curri",
+      "idTeacherLicenseMunicipality": 22,
+      "id": 1695
+    },
+    {
+      "nameAlbanian": "Emin Duraku",
+      "nameEnglish": "Emin Duraku",
+      "nameSerbian": "Emin Duraku",
+      "idTeacherLicenseMunicipality": 22,
+      "id": 1696
+    },
+    {
+      "nameAlbanian": "Abdullah Shabani",
+      "nameEnglish": "Abdullah Shabani",
+      "nameSerbian": "Abdullah Shabani",
+      "idTeacherLicenseMunicipality": 22,
+      "id": 1697
+    },
+    {
+      "nameAlbanian": "Naim Frashëri",
+      "nameEnglish": "Naim Frashëri",
+      "nameSerbian": "Naim Frashëri",
+      "idTeacherLicenseMunicipality": 22,
+      "id": 1698
+    },
+    {
+      "nameAlbanian": "Skenderbeu",
+      "nameEnglish": "Skenderbeu",
+      "nameSerbian": "Skenderbeu",
+      "idTeacherLicenseMunicipality": 22,
+      "id": 1699
+    },
+    {
+      "nameAlbanian": "Shpresa",
+      "nameEnglish": "Shpresa",
+      "nameSerbian": "Shpresa",
+      "idTeacherLicenseMunicipality": 22,
+      "id": 1700
+    },
+    {
+      "nameAlbanian": "Sh.M. Profesionale",
+      "nameEnglish": "Sh.M. Profesionale",
+      "nameSerbian": "Sh.M. Profesionale",
+      "idTeacherLicenseMunicipality": 22,
+      "id": 1701
+    },
+    {
+      "nameAlbanian": "Albiona Asllani",
+      "nameEnglish": "Albiona Asllani",
+      "nameSerbian": "Albiona Asllani",
+      "idTeacherLicenseMunicipality": 22,
+      "id": 1702
+    },
+    {
+      "nameAlbanian": "Nena Zahide",
+      "nameEnglish": "Nena Zahide",
+      "nameSerbian": "Nena Zahide",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1703
+    },
+    {
+      "nameAlbanian": "Enver Haliti",
+      "nameEnglish": "Enver Haliti",
+      "nameSerbian": "Enver Haliti",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1704
+    },
+    {
+      "nameAlbanian": "Fehmi Rama",
+      "nameEnglish": "Fehmi Rama",
+      "nameSerbian": "Fehmi Rama",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1705
+    },
+    {
+      "nameAlbanian": "Elena Gjika",
+      "nameEnglish": "Elena Gjika",
+      "nameSerbian": "Elena Gjika",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1706
+    },
+    {
+      "nameAlbanian": "Halit Geci",
+      "nameEnglish": "Halit Geci",
+      "nameSerbian": "Halit Geci",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1707
+    },
+    {
+      "nameAlbanian": "Ismet Rrahmani",
+      "nameEnglish": "Ismet Rrahmani",
+      "nameSerbian": "Ismet Rrahmani",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1708
+    },
+    {
+      "nameAlbanian": "Idriz Barani",
+      "nameEnglish": "Idriz Barani",
+      "nameSerbian": "Idriz Barani",    
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1709
+    },
+    {
+      "nameAlbanian": "Drenica",
+      "nameEnglish": "Drenica",
+      "nameSerbian": "Drenica",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1710
+    },
+    {
+      "nameAlbanian": "Ismet Uka",
+      "nameEnglish": "Ismet Uka",
+      "nameSerbian": "Ismet Uka",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1711
+    },
+    {
+      "nameAlbanian": "Abedin Rexha-Sandokani",
+      "nameEnglish": "Abedin Rexha-Sandokani",
+      "nameSerbian": "Abedin Rexha-Sandokani",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1712
+    },
+    {
+      "nameAlbanian": "Faik Dragaj",
+      "nameEnglish": "Faik Dragaj",
+      "nameSerbian": "Faik Dragaj",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1713
+    },
+    {
+      "nameAlbanian": "Ilir Lushtaku",
+      "nameEnglish": "Ilir Lushtaku",
+      "nameSerbian": "Ilir Lushtaku",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1714
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Qyqavicës",
+      "nameEnglish": "Dëshmorët e Qyqavicës",
+      "nameSerbian": "Dëshmorët e Qyqavicës",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1715
+    },
+    {
+      "nameAlbanian": "Azem Bejta",
+      "nameEnglish": "Azem Bejta",
+      "nameSerbian": "Azem Bejta",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1716
+    },
+    {
+      "nameAlbanian": "Hamëz Jashari",
+      "nameEnglish": "Hamëz Jashari",
+      "nameSerbian": "Hamëz Jashari",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1717
+    },
+    {
+      "nameAlbanian": "Bashkim Sadiku",
+      "nameEnglish": "Bashkim Sadiku",
+      "nameSerbian": "Bashkim Sadiku",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1718
+    },
+    {
+      "nameAlbanian": "Pavarësia",
+      "nameEnglish": "Pavarësia",
+      "nameSerbian": "Pavarësia",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1719
+    },
+    {
+      "nameAlbanian": "Anton Çetta",
+      "nameEnglish": "Anton Çetta",
+      "nameSerbian": "Anton Çetta",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1720
+    },
+    {
+      "nameAlbanian": "Qendra e Kompetencës",
+      "nameEnglish": "Qendra e Kompetencës",
+      "nameSerbian": "Qendra e Kompetencës",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1721
+    },
+    {
+      "nameAlbanian": "Ahmet Delija",
+      "nameEnglish": "Ahmet Delija",
+      "nameSerbian": "Ahmet Delija",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1722
+    },
+    {
+      "nameAlbanian": "Migjeni",
+      "nameEnglish": "Migjeni",
+      "nameSerbian": "Migjeni",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1723
+    },
+    {
+      "nameAlbanian": "Skënder Skënderi",
+      "nameEnglish": "Skënder Skënderi",
+      "nameSerbian": "Skënder Skënderi",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1724
+    },
+    {
+      "nameAlbanian": "Kuvendi i Drenicës",
+      "nameEnglish": "Kuvendi i Drenicës",
+      "nameSerbian": "Kuvendi i Drenicës",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1725
+    },
+    {
+      "nameAlbanian": "Malush Ahmeti",
+      "nameEnglish": "Malush Ahmeti",
+      "nameSerbian": "Malush Ahmeti",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1726
+    },
+    {
+      "nameAlbanian": "Shaban Jashari",
+      "nameEnglish": "Shaban Jashari",
+      "nameSerbian": "Shaban Jashari",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1727
+    },
+    {
+      "nameAlbanian": "Vëllezërit Frashëri",
+      "nameEnglish": "Vëllezërit Frashëri",
+      "nameSerbian": "Vëllezërit Frashëri",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1728
+    },
+    {
+      "nameAlbanian": "Shotë Galica",
+      "nameEnglish": "Shotë Galica",
+      "nameSerbian": "Shotë Galica",
+      "idTeacherLicenseMunicipality": 21,
+      "id": 1729
+    },
+    {
+      "nameAlbanian": "Migjeni",
+      "nameEnglish": "Migjeni",
+      "nameSerbian": "Migjeni",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1730
+    },
+    {
+      "nameAlbanian": "Drita",
+      "nameEnglish": "Drita",
+      "nameSerbian": "Drita",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1731
+    },
+    {
+      "nameAlbanian": "GJ K Skenderbeu",
+      "nameEnglish": "GJ K Skenderbeu",
+      "nameSerbian": "GJ K Skenderbeu",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1732
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Greikocit",
+      "nameEnglish": "Dëshmorët e Greikocit",
+      "nameSerbian": "Dëshmorët e Greikocit",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1733
+    },
+    {
+      "nameAlbanian": "Vaso Pashë Shkodrani",
+      "nameEnglish": "Vaso Pashë Shkodrani",
+      "nameSerbian": "Vaso Pashë Shkodrani",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1734
+    },
+    {
+      "nameAlbanian": "Kongresi Manastirit",
+      "nameEnglish": "Kongresi Manastirit",
+      "nameSerbian": "Kongresi Manastirit",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1735
+    },
+    {
+      "nameAlbanian": "Rilindja",
+      "nameEnglish": "Rilindja",
+      "nameSerbian": "Rilindja",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1736
+    },
+    {
+      "nameAlbanian": "Flamuri i Arbrit",
+      "nameEnglish": "Flamuri i Arbrit",
+      "nameSerbian": "Flamuri i Arbrit",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1737
+    },
+    {
+      "nameAlbanian": "Besim Ndrecaj",
+      "nameEnglish": "Besim Ndrecaj",
+      "nameSerbian": "Besim Ndrecaj",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1738
+    },
+    {
+      "nameAlbanian": "7 Marsi",
+      "nameEnglish": "7 Marsi",
+      "nameSerbian": "7 Marsi",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1739
+    },
+    {
+      "nameAlbanian": "17 Shkurti",
+      "nameEnglish": "17 Shkurti",
+      "nameSerbian": "17 Shkurti",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1740
+    },
+    {
+      "nameAlbanian": "Edit Durham",
+      "nameEnglish": "Edit Durham",
+      "nameSerbian": "Edit Durham",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1741
+    },
+    {
+      "nameAlbanian": "Destan Bajraktari",
+      "nameEnglish": "Destan Bajraktari",
+      "nameSerbian": "Destan Bajraktari",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1742
+    },
+    {
+      "nameAlbanian": "Shkëndija",
+      "nameEnglish": "Shkëndija",
+      "nameSerbian": "Shkëndija",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1743
+    },
+    {
+      "nameAlbanian": "Lidhja e Prizrenit",
+      "nameEnglish": "Lidhja e Prizrenit",
+      "nameSerbian": "Lidhja e Prizrenit",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1744
+    },
+    {
+      "nameAlbanian": "Naum Veqilharxhi",
+      "nameEnglish": "Naum Veqilharxhi",
+      "nameSerbian": "Naum Veqilharxhi",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1745
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Kombit",
+      "nameEnglish": "Dëshmorët e Kombit",
+      "nameSerbian": "Dëshmorët e Kombit",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1746
+    },
+    {
+      "nameAlbanian": "Iliria",
+      "nameEnglish": "Iliria",
+      "nameSerbian": "Iliria",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1747
+    },
+    {
+      "nameAlbanian": "Shaban Mazreku",
+      "nameEnglish": "Shaban Mazreku",
+      "nameSerbian": "Shaban Mazreku",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1748
+    },
+    {
+      "nameAlbanian": "Vëllezërit Frashëri",
+      "nameEnglish": "Vëllezërit Frashëri",
+      "nameSerbian": "Vëllezërit Frashëri",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1749
+    },
+    {
+      "nameAlbanian": "Bajram Curri",
+      "nameEnglish": "Bajram Curri",
+      "nameSerbian": "Bajram Curri",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1750
+    },
+    {
+      "nameAlbanian": "Hasan Prishtina",
+      "nameEnglish": "Hasan Prishtina",
+      "nameSerbian": "Hasan Prishtina",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1751
+    },
+    {
+      "nameAlbanian": "Dituria",
+      "nameEnglish": "Dituria",
+      "nameSerbian": "Dituria",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1752
+    },
+    {
+      "nameAlbanian": "28 Nëntori",
+      "nameEnglish": "28 Nëntori",
+      "nameSerbian": "28 Nëntori",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1753
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Tivarit",
+      "nameEnglish": "Dëshmorët e Tivarit",
+      "nameSerbian": "Dëshmorët e Tivarit",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1754
+    },
+    {
+      "nameAlbanian": "Sadri Duhla",
+      "nameEnglish": "Sadri Duhla",
+      "nameSerbian": "Sadri Duhla",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1755
+    },
+    {
+      "nameAlbanian": "Ramë Bllaca",
+      "nameEnglish": "Ramë Bllaca",
+      "nameSerbian": "Ramë Bllaca",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1756
+    },
+    {
+      "nameAlbanian": "Ismet Jashari -Kumanova",
+      "nameEnglish": "Ismet Jashari -Kumanova",
+      "nameSerbian": "Ismet Jashari -Kumanova",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1757
+    },
+    {
+      "nameAlbanian": "Jeta e re",
+      "nameEnglish": "Jeta e re",
+      "nameSerbian": "Jeta e re",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1759
+    },
+    {
+      "nameAlbanian": "Skënder Luarasi",
+      "nameEnglish": "Skënder Luarasi",
+      "nameSerbian": "Skënder Luarasi",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1760
+    },
+    {
+      "nameAlbanian": "Xhavit Sylaj",
+      "nameEnglish": "Xhavit Sylaj",
+      "nameSerbian": "Xhavit Sylaj",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1761
+    },
+    {
+      "nameAlbanian": "Abdyl Ramaj",
+      "nameEnglish": "Abdyl Ramaj",
+      "nameSerbian": "Abdyl Ramaj",
+      "idTeacherLicenseMunicipality": 24,
+      "id": 1762
+    },
+    {
+      "nameAlbanian": "Bafti Haxhiu",
+      "nameEnglish": "Bafti Haxhiu",
+      "nameSerbian": "Bafti Haxhiu",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1763
+    },
+    {
+      "nameAlbanian": "Skender Emerllahu",
+      "nameEnglish": "Skender Emerllahu",
+      "nameSerbian": "Skender Emerllahu",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1764
+    },
+    {
+      "nameAlbanian": "Nazmi Pajaziti",
+      "nameEnglish": "Nazmi Pajaziti",
+      "nameSerbian": "Nazmi Pajaziti",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1765
+    },
+    {
+      "nameAlbanian": "Hasan Alia",
+      "nameEnglish": "Hasan Alia",
+      "nameSerbian": "Hasan Alia",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1766
+    },
+    {
+      "nameAlbanian": "Mirali Sejdiu",
+      "nameEnglish": "Mirali Sejdiu",
+      "nameSerbian": "Mirali Sejdiu",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1767
+    },
+    {
+      "nameAlbanian": "Safet Rexhepi",
+      "nameEnglish": "Safet Rexhepi",
+      "nameSerbian": "Safet Rexhepi",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1768
+    },
+    {
+      "nameAlbanian": "Njazi Rexhepi",
+      "nameEnglish": "Njazi Rexhepi",
+      "nameSerbian": "Njazi Rexhepi",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1769
+    },
+    {
+      "nameAlbanian": "Dëshmorët e 5 Prillit",
+      "nameEnglish": "Dëshmorët e 5 Prillit",
+      "nameSerbian": "Dëshmorët e 5 Prillit",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1770
+    },
+    {
+      "nameAlbanian": "Don Mikel Tarabulluzi",
+      "nameEnglish": "Don Mikel Tarabulluzi",
+      "nameSerbian": "Don Mikel Tarabulluzi",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1771
+    },
+    {
+      "nameAlbanian": "Ndre Mjeda",
+      "nameEnglish": "Ndre Mjeda",
+      "nameSerbian": "Ndre Mjeda",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1772
+    },
+    {
+      "nameAlbanian": "28 Nëntori",
+      "nameEnglish": "28 Nëntori",
+      "nameSerbian": "28 Nëntori",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1773
+    },
+    {
+      "nameAlbanian": "Halil Alidema",
+      "nameEnglish": "Halil Alidema",
+      "nameSerbian": "Halil Alidema",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1774
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Vitis",
+      "nameEnglish": "Dëshmorët e Vitis",
+      "nameSerbian": "Dëshmorët e Vitis",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1775
+    },
+    {
+      "nameAlbanian": "Kuvendi i Lezhës",
+      "nameEnglish": "Kuvendi i Lezhës",
+      "nameSerbian": "Kuvendi i Lezhës",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1776
+    },
+    {
+      "nameAlbanian": "Jonuz Zejnullahu",
+      "nameEnglish": "Jonuz Zejnullahu",
+      "nameSerbian": "Jonuz Zejnullahu",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1777
+    },
+    {
+      "nameAlbanian": "Hysen Terpeza",
+      "nameEnglish": "Hysen Terpeza",
+      "nameSerbian": "Hysen Terpeza",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1779
+    },
+    {
+      "nameAlbanian": "Kenan Halimi",
+      "nameEnglish": "Kenan Halimi",
+      "nameSerbian": "Kenan Halimi",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1780
+    },
+    {
+      "nameAlbanian": "Dëshmorët e Lubishtës",
+      "nameEnglish": "Dëshmorët e Lubishtës",
+      "nameSerbian": "Dëshmorët e Lubishtës",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1781
+    },
+    {
+      "nameAlbanian": "Ahmet Hajdari",
+      "nameEnglish": "Ahmet Hajdari",
+      "nameSerbian": "Ahmet Hajdari",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1782
+    },
+    {
+      "nameAlbanian": "Kongresi i Manastirit",
+      "nameEnglish": "Kongresi i Manastirit",
+      "nameSerbian": "Kongresi i Manastirit",
+      "idTeacherLicenseMunicipality": 26,
+      "id": 1783
+    },
+    {
+      "nameAlbanian": "Shkollë e re Pestova",
+      "nameEnglish": "Shkollë e re Pestova",
+      "nameSerbian": "Shkollë e re Pestova",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1785
+    },
+    {
+      "nameAlbanian": "Dëshmorët",
+      "nameEnglish": "Dëshmorët",
+      "nameSerbian": "Dëshmorët",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1786
+    },
+    {
+      "nameAlbanian": "7 marsi",
+      "nameEnglish": "7 marsi",
+      "nameSerbian": "7 marsi",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1787
+    },
+    {
+      "nameAlbanian": "Enver Hadri",
+      "nameEnglish": "Enver Hadri",
+      "nameSerbian": "Enver Hadri",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1788
+    },
+    {
+      "nameAlbanian": "Dobërllukë",
+      "nameEnglish": "Dobërllukë",
+      "nameSerbian": "Dobërllukë",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1789
+    },
+    {
+      "nameAlbanian": "Emin Duraku",
+      "nameEnglish": "Emin Duraku",
+      "nameSerbian": "Emin Duraku",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1790
+    },
+    {
+      "nameAlbanian": "Gjergj Kastriot Skënderbeu",
+      "nameEnglish": "Gjergj Kastriot Skënderbeu",
+      "nameSerbian": "Gjergj Kastriot Skënderbeu",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1791
+    },
+    {
+      "nameAlbanian": "Lumni Surdulli",
+      "nameEnglish": "Lumni Surdulli",
+      "nameSerbian": "Lumni Surdulli",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1792
+    },
+    {
+      "nameAlbanian": "Jusuf Gërvalla",
+      "nameEnglish": "Jusuf Gërvalla",
+      "nameSerbian": "Jusuf Gërvalla",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1793
+    },
+    {
+      "nameAlbanian": "Liria",
+      "nameEnglish": "Liria",
+      "nameSerbian": "Liria",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1794
+    },
+    {
+      "nameAlbanian": "Bajram Curri",
+      "nameEnglish": "Bajram Curri",
+      "nameSerbian": "Bajram Curri",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1795
+    },
+    {
+      "nameAlbanian": "Adem Voca",
+      "nameEnglish": "Adem Voca",
+      "nameSerbian": "Adem Voca",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1796
+    },
+    {
+      "nameAlbanian": "Ali Kelmendi",
+      "nameEnglish": "Ali Kelmendi",
+      "nameSerbian": "Ali Kelmendi",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1797
+    },
+    {
+      "nameAlbanian": "Martirët",
+      "nameEnglish": "Martirët",
+      "nameSerbian": "Martirët",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1798
+    },
+    {
+      "nameAlbanian": "Nedakoc",
+      "nameEnglish": "Nedakoc",
+      "nameSerbian": "Nedakoc",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1799
+    },
+    {
+      "nameAlbanian": "Anton Zako Çajupi",
+      "nameEnglish": "Anton Zako Çajupi",
+      "nameSerbian": "Anton Zako Çajupi",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1800
+    },
+    {
+      "nameAlbanian": "SHMU - 1",
+      "nameEnglish": "SHMU - 1",
+      "nameSerbian": "SHMU - 1",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1801
+    },
+    {
+      "nameAlbanian": "Azem Bejta",
+      "nameEnglish": "Azem Bejta",
+      "nameSerbian": "Azem Bejta",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1802
+    },
+    {
+      "nameAlbanian": "Hajrullah Shala",
+      "nameEnglish": "Hajrullah Shala",
+      "nameSerbian": "Hajrullah Shala",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1803
+    },
+    {
+      "nameAlbanian": "Bahri Kuqi",
+      "nameEnglish": "Bahri Kuqi",
+      "nameSerbian": "Bahri Kuqi",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1804
+    },
+    {
+      "nameAlbanian": "28 Nëntori",
+      "nameEnglish": "28 Nëntori",
+      "nameSerbian": "28 Nëntori",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1805
+    },
+    {
+      "nameAlbanian": "Lutfi Musiqi",
+      "nameEnglish": "Lutfi Musiqi",
+      "nameSerbian": "Lutfi Musiqi",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1806
+    },
+    {
+      "nameAlbanian": "Bahri Haxha",
+      "nameEnglish": "Bahri Haxha",
+      "nameSerbian": "Bahri Haxha",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1807
+    },
+    {
+      "nameAlbanian": "Eqrem Çabej",
+      "nameEnglish": "Eqrem Çabej",
+      "nameSerbian": "Eqrem Çabej",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1808
+    },
+    {
+      "nameAlbanian": "Rilindja",
+      "nameEnglish": "Rilindja",
+      "nameSerbian": "Rilindja",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1809
+    },
+    {
+      "nameAlbanian": "Lumadh",
+      "nameEnglish": "Lumadh",
+      "nameSerbian": "Lumadh",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1810
+    },
+    {
+      "nameAlbanian": "Mustafë Shyti",
+      "nameEnglish": "Mustafë Shyti",
+      "nameSerbian": "Mustafë Shyti",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1811
+    },
+    {
+      "nameAlbanian": "Migjeni",
+      "nameEnglish": "Migjeni",
+      "nameSerbian": "Migjeni",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1812
+    },
+    {
+      "nameAlbanian": "Mustafë Venhari",
+      "nameEnglish": "Mustafë Venhari",
+      "nameSerbian": "Mustafë Venhari",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1813
+    },
+    {
+      "nameAlbanian": "Nazmi Zhegrova",
+      "nameEnglish": "Nazmi Zhegrova",
+      "nameSerbian": "Nazmi Zhegrova",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1814
+    },
+    {
+      "nameAlbanian": "Rexhep Musa",
+      "nameEnglish": "Rexhep Musa",
+      "nameSerbian": "Rexhep Musa",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1815
+    },
+    {
+      "nameAlbanian": "Naim Frashëri",
+      "nameEnglish": "Naim Frashëri",
+      "nameSerbian": "Naim Frashëri",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1816
+    },
+    {
+      "nameAlbanian": "SHMU - 2",
+      "nameEnglish": "SHMU - 2",
+      "nameSerbian": "SHMU - 2",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1817
+    },
+    {
+      "nameAlbanian": "Abdyl Frashëri",
+      "nameEnglish": "Abdyl Frashëri",
+      "nameSerbian": "Abdyl Frashëri",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 1818
+    },
+    
+    {
+      "nameAlbanian": "Osman Rama",
+      "nameEnglish": "Osman Rama",
+      "nameSerbian": "Osman Rama",
+      "idTeacherLicenseMunicipality": 28,
+      "id": 1820
+    },
+    {
+      "nameAlbanian": "Isa Boletini",
+      "nameEnglish": "Isa Boletini",
+      "nameSerbian": "Isa Boletini",
+      "idTeacherLicenseMunicipality": 29,
+      "id": 1821
+    },
+    
+    {
+      "nameAlbanian": "Mehmet Akif",
+      "nameEnglish": "Mehmet Akif",
+      "nameSerbian": "Mehmet Akif",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1869
+    },
+    {
+      "nameAlbanian": "Shkolla Finlandeze SHPK",
+      "nameEnglish": "Shkolla Finlandeze SHPK",
+      "nameSerbian": "Shkolla Finlandeze SHPK",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1870
+    },
+    {
+      "nameAlbanian": "KCG",
+      "nameEnglish": "KCG",
+      "nameSerbian": "KCG",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1871
+    },
+    {
+      "nameAlbanian": "Gjimnazi Cambridge",
+      "nameEnglish": "Gjimnazi Cambridge",
+      "nameSerbian": "Gjimnazi Cambridge",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1872
+    },
+    {
+      "nameAlbanian": "Kolegji UBT",
+      "nameEnglish": "Kolegji UBT",
+      "nameSerbian": "Kolegji UBT",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1873
+    },
+    
+    {
+      "nameAlbanian": "International Maarif Schools of Kosova",
+      "nameEnglish": "International Maarif Schools of Kosova",
+      "nameSerbian": "International Maarif Schools of Kosova",
+      "idTeacherLicenseMunicipality": 13,
+      "id": 1876
+    },
+    
+    
+  
+    
+    {
+      "nameAlbanian": "Diakonie traning Center",
+      "nameEnglish": "Diakonie traning Center",
+      "nameSerbian": "Diakonie traning Center",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1881
+    },
+    {
+      "nameAlbanian": "Kosovo Leadership Academy",
+      "nameEnglish": "Kosovo Leadership Academy",
+      "nameSerbian": "Kosovo Leadership Academy",
+      "idTeacherLicenseMunicipality": 11,
+      "id": 1882
+    },
+    {
+      "nameAlbanian": "Ardhmëria",
+      "nameEnglish": "Ardhmëria",
+      "nameSerbian": "Ardhmëria",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1884
+    },
+    {
+      "nameAlbanian": "Shtëpia ime",
+      "nameEnglish": "Shtëpia ime",
+      "nameSerbian": "Shtëpia ime",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1887
+    },
+    {
+      "nameAlbanian": "Euro School",
+      "nameEnglish": "Euro School",
+      "nameSerbian": "Euro School",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1891
+    },
+    {
+      "nameAlbanian": "Cambridge School",
+      "nameEnglish": "Cambridge School",
+      "nameSerbian": "Cambridge School",
+      "idTeacherLicenseMunicipality": 17,
+      "id": 1892
+    },
+    {
+      "nameAlbanian": "Ariani-B",
+      "nameEnglish": "Ariani-B",
+      "nameSerbian": "Ariani-B",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1899
+    },
+    {
+      "nameAlbanian": "Lindi",
+      "nameEnglish": "Lindi",
+      "nameSerbian": "Lindi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1900
+    },
+    {
+      "nameAlbanian": "Samire Krasniqi",
+      "nameEnglish": "Samire Krasniqi",
+      "nameSerbian": "Samire Krasniqi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1902
+    },
+    {
+      "nameAlbanian": "Rezonanca",
+      "nameEnglish": "Rezonanca",
+      "nameSerbian": "Rezonanca",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1915
+    },
+    {
+      "nameAlbanian": "European School of Kosova",
+      "nameEnglish": "European School of Kosova",
+      "nameSerbian": "European School of Kosova",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1916
+    },
+    {
+      "nameAlbanian": "Quality Schools International",
+      "nameEnglish": "Quality Schools International",
+      "nameSerbian": "Quality Schools International",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1919
+    },
+    {
+      "nameAlbanian": "EdGuard Education Group",
+      "nameEnglish": "EdGuard Education Group",
+      "nameSerbian": "EdGuard Education Group",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1927
+    },
+    {
+      "nameAlbanian": "German School of Kosova",
+      "nameEnglish": "German School of Kosova",
+      "nameSerbian": "German School of Kosova",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1928
+    },
+    {
+      "nameAlbanian": "Akademia Profesionale DC",
+      "nameEnglish": "Akademia Profesionale DC",
+      "nameSerbian": "Akademia Profesionale DC",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1935
+    },
+    {
+      "nameAlbanian": "New York School of Science in Kosova",
+      "nameEnglish": "New York School of Science in Kosova",
+      "nameSerbian": "New York School of Science in Kosova",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1941
+    },
+    {
+      "nameAlbanian": "Ecole Française Internationale",
+      "nameEnglish": "Ecole Française Internationale",
+      "nameSerbian": "Ecole Française Internationale",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1942
+    },
+    {
+      "nameAlbanian": "Agu 2",
+      "nameEnglish": "Agu 2",
+      "nameSerbian": "Agu 2",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1943
+    },
+    {
+      "nameAlbanian": "Kolegji ISPE",
+      "nameEnglish": "Kolegji ISPE",
+      "nameSerbian": "Kolegji ISPE",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1945
+    },
+    {
+      "nameAlbanian": "Nido Montessori School",
+      "nameEnglish": "Nido Montessori School",
+      "nameSerbian": "Nido Montessori School",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1947
+    },
+    {
+      "nameAlbanian": "Pathway",
+      "nameEnglish": "Pathway",
+      "nameSerbian": "Pathway",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1955
+    },
+    {
+      "nameAlbanian": "Gjimnazi Britanik për Teknologji",
+      "nameEnglish": "Gjimnazi Britanik për Teknologji",
+      "nameSerbian": "Gjimnazi Britanik për Teknologji",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1956
+    },
+    {
+      "nameAlbanian": "The British School of Kosova",
+      "nameEnglish": "The British School of Kosova",
+      "nameSerbian": "The British School of Kosova",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1963
+    },
+    {
+      "nameAlbanian": "Hasan Nahi",
+      "nameEnglish": "Hasan Nahi",
+      "nameSerbian": "Hasan Nahi",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1967
+    },
+    
+    {
+      "nameAlbanian": "International School of Prishtina",
+      "nameEnglish": "International School of Prishtina",
+      "nameSerbian": "International School of Prishtina",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1975
+    },
+    {
+      "nameAlbanian": "International Learning Group",
+      "nameEnglish": "International Learning Group",
+      "nameSerbian": "International Learning Group",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1976
+    },
+    {
+      "nameAlbanian": "Prishtina High School",
+      "nameEnglish": "Prishtina High School",
+      "nameSerbian": "Prishtina High School",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1977
+    },
+    {
+      "nameAlbanian": "Don Bosko",
+      "nameEnglish": "Don Bosko",
+      "nameSerbian": "Don Bosko",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1978
+    },
+    {
+      "nameAlbanian": "American School of Kosova",
+      "nameEnglish": "American School of Kosova",
+      "nameSerbian": "American School of Kosova",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1980
+    },
+    {
+      "nameAlbanian": "Zenit",
+      "nameEnglish": "Zenit",
+      "nameSerbian": "Zenit",
+      "idTeacherLicenseMunicipality": 19,
+      "id": 1981
+    },
+    {
+      "nameAlbanian": "Loyola",
+      "nameEnglish": "Loyola",
+      "nameSerbian": "Loyola",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1982
+    },
+    {
+      "nameAlbanian": "Ardhmëria",
+      "nameEnglish": "Ardhmëria",
+      "nameSerbian": "Ardhmëria",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1983
+    },
+    {
+      "nameAlbanian": "London-Eye",
+      "nameEnglish": "London-Eye",
+      "nameSerbian": "London-Eye",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1986
+    },
+    {
+      "nameAlbanian": "Elif",
+      "nameEnglish": "Elif",
+      "nameSerbian": "Elif",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1987
+    },
+    {
+      "nameAlbanian": "Cennet Bahçesi",
+      "nameEnglish": "Cennet Bahçesi",
+      "nameSerbian": "Cennet Bahçesi",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1988
+    },
+    {
+      "nameAlbanian": "Nëna Kabrini",
+      "nameEnglish": "Nëna Kabrini",
+      "nameSerbian": "Nëna Kabrini",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1990
+    },
+    {
+      "nameAlbanian": "Perspektiva",
+      "nameEnglish": "Perspektiva",
+      "nameSerbian": "Perspektiva",
+      "idTeacherLicenseMunicipality": 20,
+      "id": 1991
+    },
+    {
+      "nameAlbanian": "Viciana Med",
+      "nameEnglish": "Viciana Med",
+      "nameSerbian": "Viciana Med",
+      "idTeacherLicenseMunicipality": 27,
+      "id": 2000
+    },
+    {
+      "nameAlbanian": "Halil Bajraktari",
+      "nameEnglish": "Halil Bajraktari",
+      "nameSerbian": "Halil Bajraktari",
+      "idTeacherLicenseMunicipality": 3,
+      "idInternalUser": 472,
+      "id": 2002
+    },
+    {
+      "nameAlbanian": "Rexhep Xheli",
+      "nameEnglish": "Rexhep Xheli",
+      "nameSerbian": "Rexhep Xheli",
+      "idTeacherLicenseMunicipality": 3,
+      "idInternalUser": 472,
+      "id": 2003
+    },
+    {
+      "nameAlbanian": "Shkolla Finlandeze",
+      "nameEnglish": "Shkolla Finlandeze",
+      "nameSerbian": "Shkolla Finlandeze",
+      "idTeacherLicenseMunicipality": 19,
+      "idInternalUser": 472,
+      "id": 2004
+    },
+    {
+      "nameAlbanian": "Shkola Mehmet Akif",
+      "nameEnglish": "Shkola Mehmet Akif",
+      "nameSerbian": "Shkola Mehmet Akif",
+      "idTeacherLicenseMunicipality": 20,
+      "idInternalUser": 472,
+      "id": 2005
+    },
+    {
+      "nameAlbanian": "IAAP\"Rifat Gjota\"-Peje",
+      "nameEnglish": "IAAP\"Rifat Gjota\"-Peje",
+      "nameSerbian": "IAAP\"Rifat Gjota\"-Peje",
+      "idTeacherLicenseMunicipality": 17,
+      "idInternalUser": 472,
+      "id": 2006
+    },
+    {
+      "nameAlbanian": "SHFMU \"7 Shtatori\" – Gërçinë",
+      "nameEnglish": "SHFMU \"7 Shtatori\" – Gërçinë",
+      "nameSerbian": "SHFMU \"7 Shtatori\" – Gërçinë",
+      "idTeacherLicenseMunicipality": 2,
+      "idInternalUser": 472,
+      "id": 2007
+    },
+    {
+      "nameAlbanian": "VSHMU \"Vuk Karagjiqi\" ",
+      "nameEnglish": "VSHMU \"Vuk Karagjiqi\" ",
+      "nameSerbian": "VSHMU \"Vuk Karagjiqi\" ",
+      "idTeacherLicenseMunicipality": 4,
+      "idInternalUser": 472,
+      "id": 2008
+    },
+    {
+      "nameAlbanian": "Gimnazija ",
+      "nameEnglish": "Gimnazija ",
+      "nameSerbian": "Gimnazija ",
+      "idTeacherLicenseMunicipality": 4,
+      "idInternalUser": 472,
+      "id": 2009
+    },
+    {
+      "nameAlbanian": "SHFMU \"12 QERSHORI\" MIHALIQ ",
+      "nameEnglish": "SHFMU \"12 QERSHORI\" MIHALIQ ",
+      "nameSerbian": "SHFMU \"12 QERSHORI\" MIHALIQ ",
+      "idTeacherLicenseMunicipality": 27,
+      "idInternalUser": 472,
+      "id": 2010
+    },
+    
+    {
+      "nameAlbanian": "SHFMU \"Nazmi Hoxha\"",
+      "nameEnglish": "SHFMU \"Nazmi Hoxha\"",
+      "nameSerbian": "SHFMU \"Nazmi Hoxha\"",
+      "idTeacherLicenseMunicipality": 4,
+      "idInternalUser": 472,
+      "id": 2013
+    }
+  ]
+}

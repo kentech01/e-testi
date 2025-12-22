@@ -1,54 +1,84 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 import { Input } from '../../ui/input';
 import { Label } from '../../ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../ui/select';
 import { Button } from '../../ui/button';
 import { User, Mail, School, GraduationCap } from 'lucide-react';
 
 interface ProfileSettingsProps {
   name: string;
   email: string;
-  school: string;
+  school: number | null;
   grade: string;
-  onNameChange: (name: string) => void;
-  onEmailChange: (email: string) => void;
-  onSchoolChange: (school: string) => void;
+  municipality: number | null;
+  onMunicipalityChange: (municipality: number) => void;
+  onSchoolChange: (school: number) => void;
   onGradeChange: (grade: string) => void;
   onSave: () => void;
 }
 
-const kosovoSchools = [
-  'Liceu i Përgjithshëm "Sami Frashëri" - Prishtinë',
-  'Liceu i Përgjithshëm "Hasan Prishtina" - Prishtinë',
-  'Liceu Ekonomik - Prishtinë',
-  'Liceu i Shkencave të Natyrës - Prishtinë',
-  'Liceu i Përgjithshëm - Prizren',
-  'Liceu i Përgjithshëm "Gjon Buzuku" - Prizren',
-  'Liceu i Përgjithshëm - Pejë',
-  'Liceu i Përgjithshëm - Gjakovë',
-  'Liceu i Përgjithshëm - Ferizaj',
-  'Liceu i Përgjithshëm - Gjilan',
-  'Liceu i Përgjithshëm - Mitrovicë',
-  'Liceu i Përgjithshëm - Vushtrri',
-  'Liceu Teknik - Prishtinë',
-  'Liceu Mjekësor - Prishtinë',
-  'Tjetër...'
-];
-
 const grades = ['Klasa 9', 'Klasa 10', 'Klasa 11', 'Klasa 12'];
-
+interface School {
+  nameAlbanian: string;
+  nameEnglish: string;
+  nameSerbian: string;
+  idTeacherLicenseMunicipality: number;
+  id: number;
+}
+export interface Municipality {
+  id: number;
+  nameAlbanian: string;
+  nameEnglish: string;
+  nameSerbian: string;
+}
 export function ProfileSettings({
   name,
   email,
   school,
   grade,
-  onNameChange,
-  onEmailChange,
+  municipality,
+  onMunicipalityChange,
   onSchoolChange,
   onGradeChange,
-  onSave
+  onSave,
 }: ProfileSettingsProps) {
+  const [kosovoSchools, setKosovoSchools] = useState<School[]>([]);
+  const [selectedSchools, setSelectedSchools] = useState<School[]>([]);
+  const [kosovoCities, setKosovoCities] = useState<Municipality[]>([]);
+  useEffect(() => {
+    fetch('/schools.json')
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setSelectedSchools(data.teacherLicenseInstitution)
+        setKosovoSchools(data.teacherLicenseInstitution);
+      })
+      .catch((err) => console.log(err));
+    fetch('/cities.json')
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setKosovoCities(data.teacherLicenseMunicipality);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  const onMunicipalityChangeInside= (value: number)=>{
+    onMunicipalityChange(value);
+    const filtered=kosovoSchools.filter((item:School) => item.idTeacherLicenseMunicipality == value);
+    setSelectedSchools(filtered);
+    if(filtered.length > 0){
+      console.log("pi mor");
+      
+      onSchoolChange(filtered[0]!.id)
+    }
+  }
   return (
     <Card>
       <CardHeader>
@@ -66,7 +96,6 @@ export function ProfileSettings({
               <Input
                 id="name"
                 value={name}
-                onChange={(e) => onNameChange(e.target.value)}
                 placeholder="Shkruani emrin tuaj"
                 className="pl-10"
                 disabled
@@ -80,7 +109,6 @@ export function ProfileSettings({
               <Input
                 id="email"
                 value={email}
-                onChange={(e) => onEmailChange(e.target.value)}
                 placeholder="shkruani@email.com"
                 className="pl-10"
                 disabled
@@ -100,12 +128,33 @@ export function ProfileSettings({
                 </SelectTrigger>
                 <SelectContent>
                   {grades.map((g) => (
-                    <SelectItem key={g} value={g}>{g}</SelectItem>
+                    <SelectItem key={g} value={g}>
+                      {g}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="school">Komuna</Label>
+            <div className="relative">
+              <School className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Select value={municipality} onValueChange={onMunicipalityChangeInside}>
+                <SelectTrigger className="pl-10">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {kosovoCities.map((s) => (
+                    <SelectItem key={s.id} value={s.id}>
+                      {s.nameAlbanian}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="school">Shkolla</Label>
             <div className="relative">
@@ -115,8 +164,10 @@ export function ProfileSettings({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {kosovoSchools.map((s) => (
-                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  {selectedSchools.map((s) => (
+                    <SelectItem key={s.id} value={s.id}>
+                      {s.nameAlbanian}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -130,4 +181,4 @@ export function ProfileSettings({
       </CardContent>
     </Card>
   );
-} 
+}

@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
-import { authAtom } from '../store/atoms/authAtom';
+import { authAtom, User } from '../store/atoms/authAtom';
 import { authService } from '../lib/firebase/auth';
 import { userService } from '../services/users';
 import { toast } from 'sonner';
+import { School } from 'lucide-react';
 
 // Helper function to parse name into firstName and lastName
 const parseName = (
@@ -42,16 +43,13 @@ const ensureUserInDatabase = async (
   try {
     // Try to get user profile - if it exists, user is already in DB
     const profile = await userService.getUserProfile();
+
     return profile;
   } catch (error: any) {
-    
-
     // If user doesn't exist (404), create them
     // 401 might mean auth issue, but we'll try to create anyway
     if (error?.response?.status === 404 || error?.response?.status === 401) {
       try {
-        
-
         // Use provided name if available, otherwise use displayName, otherwise use email prefix
         const nameToUse = providedName || firebaseUser.displayName || '';
         const { firstName, lastName } = parseName(nameToUse);
@@ -60,8 +58,6 @@ const ensureUserInDatabase = async (
         const finalFirstName =
           firstName || firebaseUser.email?.split('@')[0] || 'User';
         const finalLastName = lastName || '';
-
-        
 
         const createdUser = await userService.createUser({
           firstName: finalFirstName,
@@ -111,11 +107,10 @@ export const useFirebaseAuth = () => {
 
     isInitialized.current = true;
 
-    const unsubscribe = authService.onAuthStateChanged((firebaseUser) => {
-      
-
+    const unsubscribe = authService.onAuthStateChanged(async (firebaseUser) => {
       if (firebaseUser) {
         const userData = authService.convertFirebaseUser(firebaseUser);
+
         firebaseUser
           .getIdToken()
           .then(async (token) => {
@@ -129,28 +124,47 @@ export const useFirebaseAuth = () => {
             // Ensure user exists in database (non-blocking)
             // Wait a bit to ensure token is available
             setTimeout(() => {
+
               ensureUserInDatabase(firebaseUser).catch((err) => {
                 console.error('Error ensuring user in database:', err);
               });
             }, 300);
-
+            const profile = await userService.getUserProfile();
+            let completedUser: User | null;
+            if (userData) {
+              completedUser = {
+                ...userData,
+                municipality: profile?.municipality,
+                school: profile?.school,
+              };
+            }
+            
             setAuthState((prev) => ({
               ...prev,
               isAuthenticated: true,
-              user: userData,
+              user: completedUser,
               token,
               loading: false,
               error: null,
             }));
           })
-          .catch(() => {
+          .catch(async () => {
             try {
               localStorage.removeItem('authToken');
             } catch {}
+            const profile = await userService.getUserProfile();
+            let completedUser: User | null;
+            if (userData) {
+              completedUser = {
+                ...userData,
+                municipality: profile?.municipality,
+                school: profile?.school,
+              };
+            }
             setAuthState((prev) => ({
               ...prev,
               isAuthenticated: true,
-              user: userData,
+              user: completedUser!,
               token: null,
               loading: false,
               error: null,
@@ -187,7 +201,8 @@ export const useFirebaseAuth = () => {
     password: string,
     name: string,
     grade: string,
-    school: string
+    school: number,
+    municipality: number
   ) => {
     try {
       setAuthState((prev) => ({ ...prev, loading: true, error: null }));
@@ -197,7 +212,8 @@ export const useFirebaseAuth = () => {
         password,
         name,
         grade,
-        school
+        school,
+        municipality
       );
       const userData = authService.convertFirebaseUser(userCredential.user);
       const token = await userCredential.user.getIdToken();
@@ -207,13 +223,16 @@ export const useFirebaseAuth = () => {
       } catch {}
 
       // Store additional user data (grade, school) in the auth state
-      setAuthState((prev) => ({
-        ...prev,
-        isAuthenticated: true,
-        user: userData ? { ...userData, grade, school } : null,
-        token,
-        loading: false,
-      }));
+      const result = await userService.updateUser({school, municipality})
+      if(result){
+        setAuthState((prev) => ({
+          ...prev,
+          isAuthenticated: true,
+          user: userData ? { ...userData, grade, school, municipality } : null,
+          token,
+          loading: false,
+        }));
+      }
 
       // Create user in database (non-blocking)
       // Pass the name from signup to ensure proper firstName/lastName
@@ -259,11 +278,20 @@ export const useFirebaseAuth = () => {
           console.error('Error ensuring user in database:', err);
         });
       }, 300);
+      const profile = await userService.getUserProfile();
+      let completedUser: User | null;
+      if (userData) {
+        completedUser = {
+          ...userData,
+          municipality: profile?.municipality,
+          school: profile?.school,
+        };
+      }
 
       setAuthState((prev) => ({
         ...prev,
         isAuthenticated: true,
-        user: userData,
+        user: completedUser,
         token,
         loading: false,
       }));
@@ -303,11 +331,19 @@ export const useFirebaseAuth = () => {
           console.error('Error ensuring user in database:', err);
         });
       }, 300);
-
+      const profile = await userService.getUserProfile();
+      let completedUser: User | null;
+      if (userData) {
+        completedUser = {
+          ...userData,
+          municipality: profile?.municipality,
+          school: profile?.school,
+        };
+      }
       setAuthState((prev) => ({
         ...prev,
         isAuthenticated: true,
-        user: userData,
+        user: completedUser,
         token,
         loading: false,
       }));
@@ -328,7 +364,6 @@ export const useFirebaseAuth = () => {
 
   const signOut = async () => {
     try {
-
       // Clear the state immediately for better UX
       setAuthState((prev) => ({
         ...prev,

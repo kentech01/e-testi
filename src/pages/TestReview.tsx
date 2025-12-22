@@ -240,11 +240,11 @@ export function TestReview() {
                       .map((option) => {
                         complexAnswer.current = false
                         const isCorrect = option.isCorrect;
+                        
                         const isSelected = userSelectedOptionIds.has(option.id);
                         const isIncorrectAndSelected = !isCorrect && isSelected;
                         if (option.text.includes('~')) {
                           complexAnswer.current = true;
-                          console.log(option.text, "textiii");
                           
                         }
 
