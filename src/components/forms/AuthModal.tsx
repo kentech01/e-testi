@@ -317,6 +317,7 @@ export function AuthModal({ isOpen, onClose, isLoggedIn }: AuthModalProps) {
       
       await userService.updateUser({school: formData.school, municipality: formData.municipality, sectorId: formData.grade})
       handleClose();
+      window.location.reload();
     }
   }, [formData, validateForm, signUp]);
 

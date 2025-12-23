@@ -84,6 +84,20 @@ export function TestTaking({
   const questionStartTime = useRef<number>(Date.now());
   const timerInitialized = useRef<boolean>(false);
   const autoSubmitStarted = useRef<boolean>(false);
+  const navRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!navRef.current) return;
+
+    // Find the target button inside navRef container
+    const target = navRef.current.ownerDocument.getElementById(`${currentQuestionId}`);
+    console.log(target);
+    
+    if (target) {
+      // Scroll the container so the button is visible
+      target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [currentQuestionId]);
 
   // Get current question object
   const currentQuestion = questions.find((q) => q.id === currentQuestionId);
@@ -347,7 +361,13 @@ export function TestTaking({
     }
   };
 
-  const navigateToQuestion = (questionId: string) => {
+  const navigateToQuestion = async (questionId: string) => {
+    const success = await submitCurrentAnswer();
+
+    // Only navigate if submission succeeded (or no answer to submit)
+    if (!success) {
+      return; // Don't navigate if submission failed
+    }
     setCurrentQuestionId(questionId);
     navigate(`/tests/${examId}/${questionId}`);
     loadQuestionAnswers(questionId);
@@ -908,7 +928,7 @@ export function TestTaking({
               <Progress value={progress} className="h-2" />
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto">
+              <div className="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto" ref={navRef}>
                 {questions.map((question, index) => {
                   const isAnswered = userAnswers.some(
                     (a) => a.questionId === question.id
@@ -918,6 +938,7 @@ export function TestTaking({
                   return (
                     <button
                       key={question.id}
+                      id={question.id}
                       onClick={() => navigateToQuestion(question.id)}
                       className={`
                         w-8 h-8 text-xs rounded border transition-colors
