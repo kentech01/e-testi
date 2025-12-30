@@ -105,9 +105,9 @@ function AppContent() {
   const navigate = useNavigate();
   const { user, loading, signOut } = useFirebaseAuth(); // Get signOut from the hoo
   const [menus, setMenus] = useState([
-    { label: 'Lëndët', isActive: false, redirect: '#lëndët' },
-    { label: 'Testet praktike', isActive: false, redirect: '#testet-raktike' },
+    { label: 'Testet praktike', isActive: false, redirect: '#testet-praktike' },
     { label: 'Si funksionon', isActive: false, redirect: '#si-funksionon' },
+    { label: 'Lëndët', isActive: false, redirect: '#lëndët' },
     { label: 'Deshmitë', isActive: false, redirect: '#deshmitë' },
   ]);
 
@@ -188,7 +188,7 @@ function AppContent() {
             />
           </div>
           <div>
-            <ul className="gap-7 hidden md:dlex">
+            <ul className="gap-7 hidden md:flex">
               {menus.map((menu, index) => (
                 <li key={index}>
                   <a
@@ -246,7 +246,7 @@ function AppContent() {
             </div>
           </div>
         </main>
-        <main className=" mx-auto md:py-30 py-15 px-5  md:px-36  text-center space-y-12">
+        <main id='testet-praktike' className=" mx-auto md:py-30 py-15 px-5  md:px-36  text-center space-y-12">
           <div className="space-y-6">
             <Badge className="bg-[#F7F9FF] text-[#5684FF] border-0 rounded-4xl text-[16px] font-normal px-7 py-3">
               Veçoritë
@@ -290,7 +290,7 @@ function AppContent() {
             ))}
           </div>
         </main>
-        <section className="md:py-30 py-15 px-5  md:px-36  bg-[#EEF2FF]">
+        <section id='si-funksionon' className="md:py-30 py-15 px-5  md:px-36  bg-[#EEF2FF]">
           <div className="space-y-6 text-center ">
             <Badge className="bg-[#F7F9FF] text-[#5684FF] border-0 rounded-4xl text-[16px] font-normal px-7 py-3">
               Si funksionon
