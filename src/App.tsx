@@ -178,12 +178,17 @@ function AppContent() {
     return (
       <div className="">
         {/* Header */}
-        <header className="p-4 px-5 lg:px-36 hidden sm:flex justify-between items-center bg-white">
+        <header className="p-4 px-5 lg:px-36 flex justify-between items-center bg-white">
           <div className="flex items-center space-x-3">
-            <img src="./etesti-logo.svg" alt="" />
+            <img src="./etesti-logo.svg" className="hidden md:block" alt="" />
+            <img
+              src="./etesti-icon.svg"
+              className="block md:hidden w-10"
+              alt=""
+            />
           </div>
           <div>
-            <ul className="flex gap-7">
+            <ul className="gap-7 hidden md:dlex">
               {menus.map((menu, index) => (
                 <li key={index}>
                   <a
@@ -195,6 +200,12 @@ function AppContent() {
                 </li>
               ))}
             </ul>
+            <Button
+              className="font-normal md:hidden rounded-[8px]  px-[30px] py-6 text-[15px]"
+              onClick={() => setShowAuth(true)}
+            >
+              Fillo falas tani
+            </Button>
           </div>
         </header>
 
@@ -212,7 +223,10 @@ function AppContent() {
               moderne dhe të plotë në Kosovë.
             </p>
             <div className="md:flex-row flex-col flex gap-6 justify-center mt-9 mb-9">
-              <Button className="md:py-[30px] font-normal md:text-[20px] rounded-[14px] md:px-[72px] px-[50px] py-[25px] text-[16px]">
+              <Button
+                className="md:py-[30px] font-normal md:text-[20px] rounded-[14px] md:px-[72px] px-[50px] py-[25px] text-[16px]"
+                onClick={() => setShowAuth(true)}
+              >
                 Fillo falas tani
               </Button>
               <Button
@@ -223,12 +237,12 @@ function AppContent() {
                 Shiko demonstrimin
               </Button>
             </div>
-            <div className='sectionHeroImg'>
-            <img
-              src="./landing page 1.png"
-              className=" w-full z-10 relative md:max-w-[90%] max-w-full mx-auto"
-              alt=""
-            />
+            <div className="sectionHeroImg">
+              <img
+                src="./landing page 1.png"
+                className=" w-full z-10 relative md:max-w-[90%] max-w-full mx-auto"
+                alt=""
+              />
             </div>
           </div>
         </main>
@@ -275,7 +289,6 @@ function AppContent() {
               </Card>
             ))}
           </div>
-
         </main>
         <section className="md:py-30 py-15 px-5  md:px-36  bg-[#EEF2FF]">
           <div className="space-y-6 text-center ">
@@ -327,9 +340,12 @@ function AppContent() {
             ))}
           </div>
           <div className="flex justify-center mt-9">
-          <Button className="md:py-[30px] w-full sm:w-max font-normal md:text-[20px] rounded-[14px] md:px-[72px] px-[50px] py-[25px] text-[16px]">
-                Fillo falas tani
-              </Button>
+            <Button
+              className="md:py-[30px] w-full sm:w-max font-normal md:text-[20px] rounded-[14px] md:px-[72px] px-[50px] py-[25px] text-[16px]"
+              onClick={() => setShowAuth(true)}
+            >
+              Fillo falas tani
+            </Button>
           </div>
         </section>
         <section
@@ -338,23 +354,35 @@ function AppContent() {
         >
           <div className="lg:w-1/2 space-y-8 w-full">
             <div className="flex gap-6">
-              <div className="bg-[#F7F9FF] rounded-2xl px-8 md:py-6 py-3 text-center w-full">
-                <p className="md:text-4xl text-2xl font-medium text-[#5684FF]">500+</p>
-                <p className="text-muted-foreground md:text-lg text-sm">Teste</p>
+              <div className="bg-[#F7F9FF] rounded-2xl md:px-8 px-3 md:py-6 py-3 text-center w-full">
+                <p className="md:text-4xl text-2xl font-medium text-[#5684FF]">
+                  500+
+                </p>
+                <p className="text-muted-foreground md:text-lg text-sm">
+                  Teste
+                </p>
               </div>
-              <div className="bg-[#F7F9FF] rounded-2xl px-8 md:py-6 py-3 text-center w-full">
-                <p className="md:text-4xl text-2xl font-medium text-[#8A38F5]">3+</p>
-                <p className="text-muted-foreground md:text-lg text-sm">Lëndët</p>
+              <div className="bg-[#F7F9FF] rounded-2xl md:px-8 px-3  md:py-6 py-3 text-center w-full">
+                <p className="md:text-4xl text-2xl font-medium text-[#8A38F5]">
+                  3+
+                </p>
+                <p className="text-muted-foreground md:text-lg text-sm">
+                  Lëndët
+                </p>
               </div>
-              <div className="bg-[#F7F9FF] rounded-2xl px-8 md:py-6 py-3 text-center w-full">
-                <p className="md:text-4xl text-2xl font-medium text-[#00C84F]">24/7</p>
-                <p className="text-muted-foreground md:text-lg text-sm">Qasje</p>
+              <div className="bg-[#F7F9FF] rounded-2xl md:px-8 px-3  md:py-6 py-3 text-center w-full">
+                <p className="md:text-4xl text-2xl font-medium text-[#00C84F]">
+                  24/7
+                </p>
+                <p className="text-muted-foreground md:text-lg text-sm">
+                  Qasje
+                </p>
               </div>
             </div>
 
             <div className="rounded-3xl overflow-hidden shadow-xl">
               <img
-                src="./c405ecce008ec16c1bd407f960ab6dbeb2339dbe.jpg" 
+                src="./c405ecce008ec16c1bd407f960ab6dbeb2339dbe.jpg"
                 alt="Përgatitja për maturë"
                 className="w-full h-full object-cover"
               />
@@ -417,21 +445,33 @@ function AppContent() {
             </div>
           </div>
         </section>
-        <section id="deshmitë" className="md:py-30 py-15 px-5  md:px-36 bg-[#EEF2FF] text-center w-full">
-            <TestimonialsSection/>
+        <section
+          id="deshmitë"
+          className="md:py-30 py-15 px-5  md:px-36 bg-[#EEF2FF] text-center w-full"
+        >
+          <TestimonialsSection />
         </section>
-        <section id='footer' className={`px-5  md:px-36 bg-[#EEF2FF] pb-10 after:bg-gradient-to-b after:from-white after:via-[#F5F8FF] after:to-[#c6d7fd] relative after:content-[''] after:absolute after:h-[80%] after:w-full after:left-0 after:bottom-0 z-0`}>
-          <div className='w-full bg-primary rounded-3xl md:py-24 py-8 px-4  md:px-16 flex items-center justify-center z-2 relative'>
-            <div className='max-w-[800px] flex flex-col items-center gap-5 md:gap-10'>
-              <h1 className='md:text-6xl sm:text-4xl text-3xl text-white font-bold figtree text-center leading-10 md:leading-20'>Gati të fillosh përgatitjen për maturë?</h1>
+        <section
+          id="footer"
+          className={`px-5  md:px-36 bg-[#EEF2FF] pb-10 after:bg-gradient-to-b after:from-white after:via-[#F5F8FF] after:to-[#c6d7fd] relative after:content-[''] after:absolute after:h-[80%] after:w-full after:left-0 after:bottom-0 z-0`}
+        >
+          <div className="w-full bg-primary rounded-3xl md:py-24 py-8 px-4  md:px-16 flex items-center justify-center z-2 relative">
+            <div className="max-w-[800px] flex flex-col items-center gap-5 md:gap-10">
+              <h1 className="md:text-6xl sm:text-4xl text-3xl text-white font-bold figtree text-center leading-10 md:leading-20">
+                Gati të fillosh përgatitjen për maturë?
+              </h1>
               <Button className="md:py-[30px] py-[25px] font-medium bg-[#FFA033] text-[16px] md:text-[20px] rounded-[14px]  px-[50px]">
-              <div className='flex items-center gap-3 p-0'><Sparkles className="!w-6 !h-6" /> Fillo tani</div>
+                <div className="flex items-center gap-3 p-0">
+                  <Sparkles className="!w-6 !h-6" /> Fillo tani
+                </div>
               </Button>
             </div>
           </div>
-          <div className='flex flex-col items-center pt-16 gap-5 z-2 relative'>
-            <img className='w-10' src="./etesti-icon.svg" alt="" />
-            <p className='figtree text-lg text-[#0A142F] text-center'>© 2025. Të gjitha të drejtat e rezervuara.</p>
+          <div className="flex flex-col items-center pt-16 gap-5 z-2 relative">
+            <img className="w-10" src="./etesti-icon.svg" alt="" />
+            <p className="figtree text-lg text-[#0A142F] text-center">
+              © 2025. Të gjitha të drejtat e rezervuara.
+            </p>
           </div>
         </section>
 
