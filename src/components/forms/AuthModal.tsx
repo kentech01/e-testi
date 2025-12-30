@@ -847,8 +847,9 @@ export function AuthModal({ isOpen, onClose, isLoggedIn }: AuthModalProps) {
       <DialogContent className="max-w-md">
         <DialogHeader>
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-              <GraduationCap className="w-6 h-6 text-white" />
+            <div className="flex items-center">
+              <img src="./etesti-icon.svg" className='h-[30px] w-[40px]' alt="" />
+              {/* <GraduationCap className="w-6 h-6 text-white" /> */}
             </div>
             <div>
               <DialogTitle>

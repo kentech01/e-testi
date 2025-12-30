@@ -12,13 +12,19 @@ import {
   BookOpen,
   Target,
   Users,
+  Play,
   ChevronRight,
   Star,
+  Sparkles,
+  SquareArrowOutUpRight,
+  Check,
 } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 import userService from './services/users';
 import useSectors from './hooks/useSectors';
+import { TestimonialCard } from './ui/TestimonialCard';
+import TestimonialsSection from './ui/TestimonialsSection';
 // Lazy load components
 const AuthModal = lazy(() =>
   import('./components/forms').then((module) => ({ default: module.AuthModal }))
@@ -30,29 +36,51 @@ const AppRouter = lazy(() =>
 // Memoized constants to prevent re-creation
 const features = [
   {
-    icon: Target,
-    title: 'Teste autentike',
-    description: 'Teste të ngjashme me format e maturës zyrtare',
-    badge: '100+ teste',
+    title: 'Regjistrohu falas',
+    description:
+      'Krijo llogarinë tënde në vetëm disa sekonda. Nuk nevojitet kartë krediti.',
   },
   {
-    icon: BookOpen,
-    title: 'Materiale cilësore',
-    description: 'Përmbajtje e përpunuar nga mësimdhënës të përvojshëm',
-    badge: 'E përditësuar',
+    title: 'Zgjidh lëndët',
+    description:
+      'Përzgjidh lëndët që do të testohesh në maturë dhe fillo praktikën e organizuar.',
   },
   {
-    icon: Users,
-    title: 'Komunitet studentësh',
-    description: 'Mëso dhe garo me studentë të tjerë nga e gjithë Kosova',
-    badge: '10K+ studentë',
+    title: 'Praktiko dhe arrij sukses',
+    description:
+      'Praktiko me teste reale, gjurmo progresin dhe përgatitu me besim për maturën.',
   },
 ];
 
 const subjects = [
-  { name: 'Matematika', count: 45 },
-  { name: 'Gjuha Shqipe', count: 38 },
-  { name: 'Anglisht', count: 32 },
+  {
+    name: 'Teste reale të maturës',
+    colorTx: '#5684FF',
+    color: '#E0E9FF',
+    count:
+      'Qasje në qindra teste të vërteta nga vitet e kaluara, të organizuara sipas lëndëve dhe temave.',
+  },
+  {
+    name: 'Praktikë e personalizuar',
+    colorTx: '#8A38F5',
+    color: '#FCE0FF',
+    count:
+      'Ushtrime të zgjedhura sipas gabimeve të tua, që ta shpenzosh kohën vetëm aty ku ka më shumë efekt.',
+  },
+  {
+    name: 'Progres i qartë',
+    colorTx: '#00C84F',
+    color: '#E0FFE5',
+    count:
+      'Shihe përparimin në çdo lëndë: çka po përmirëson dhe çka duhet me përsërit edhe pak.',
+  },
+  {
+    name: 'Mbështetje nga mësimdhënës',
+    colorTx: '#FF6F47',
+    color: '#FFF2E0',
+    count:
+      'Platformë e dizajnuar për shkolla dhe mësimdhënës që duan të ndihmojnë studentët e tyre.',
+  },
 ];
 
 // Loading component
@@ -76,22 +104,30 @@ function AppContent() {
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
   const { user, loading, signOut } = useFirebaseAuth(); // Get signOut from the hoo
-  
+  const [menus, setMenus] = useState([
+    { label: 'Lëndët', isActive: false, redirect: '#lëndët' },
+    { label: 'Testet praktike', isActive: false, redirect: '#testet-raktike' },
+    { label: 'Si funksionon', isActive: false, redirect: '#si-funksionon' },
+    { label: 'Deshmitë', isActive: false, redirect: '#deshmitë' },
+  ]);
 
   // Initialize app state
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
     setDarkMode(savedDarkMode);
-
   }, []);
-  useEffect(()=>{
-    setShowAuth(false)
-    if(user){
-      if(user!.school == null || user!.municipality == null || user!.grade == null){
-        setShowAuth(true)
+  useEffect(() => {
+    setShowAuth(false);
+    if (user) {
+      if (
+        user!.school == null ||
+        user!.municipality == null ||
+        user!.grade == null
+      ) {
+        setShowAuth(true);
       }
     }
-  }, [user])
+  }, [user]);
 
   // Apply dark mode class to document
   useEffect(() => {
@@ -121,9 +157,13 @@ function AppContent() {
     setDarkMode((prev) => !prev);
   };
 
-  const handleUpdateProfile = async (grade: string, school: number, municipality: number) => {
+  const handleUpdateProfile = async (
+    grade: string,
+    school: number,
+    municipality: number
+  ) => {
     // This would need to be implemented with Firebase user profile updates
-    await userService.updateUser({sectorId: grade, school, municipality})
+    await userService.updateUser({ sectorId: grade, school, municipality });
     window.location.reload();
     toast.success('Profili u përditësua me sukses!');
   };
@@ -136,95 +176,122 @@ function AppContent() {
   // Show landing page if no user
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="">
         {/* Header */}
-        <header className="p-4 flex justify-between items-center max-w-6xl mx-auto">
+        <header className="p-4 px-5 lg:px-36 hidden sm:flex justify-between items-center bg-white">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center">
-              <GraduationCap className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="font-bold  text-xl text-foreground">E-testi</h1>
-              <p className="text-xs text-muted-foreground">
-                Përgatitja për maturë
-              </p>
-            </div>
+            <img src="./etesti-logo.svg" alt="" />
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleToggleDarkMode}
-            className="w-10 h-10 p-0"
-          >
-            {darkMode ? '☀️' : '🌙'}
-          </Button>
+          <div>
+            <ul className="flex gap-7">
+              {menus.map((menu, index) => (
+                <li key={index}>
+                  <a
+                    href={menu.redirect}
+                    className="text-[#1E3A8A] text-[16px] font-normal hover:text-[#263041] p-2"
+                  >
+                    {menu.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </header>
 
-        {/* Hero Section */}
-        <main className="max-w-6xl mx-auto px-4 py-12 text-center space-y-12">
-          <div className="space-y-6">
-            <Badge className="bg-gradient-primary text-white border-0 px-4 py-1">
-              <Star className="w-3 h-3 mr-1" />
-              Platforma #1 për maturë në Kosovë
-            </Badge>
+        <main
+          className={`relative md:py-30 py-15 px-5  md:px-36 flex items-center justify-center min-h-screen sectionWithPseudo bg-gradient-to-b from-white via-[#DDE6FF] to-[#5684FF]`}
+        >
+          <div>
+            <h1 className="sm:text-6xl text-5xl font-bold text-card-foreground text-center leading-tight ">
+              Platforma jote digjitale për <br />
+              <span className="text-[#5684FF]">maturë</span>
+            </h1>
 
-            <h2 className="text-4xl md:text-6xl font-bold text-gradient-primary leading-tight">
-              Përgatitu për maturë me sukses
-            </h2>
-
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-[#475569] text:[16px] sm:text-[20px] max-w-[600px] text-center mx-auto mt-5 text-lg">
               Mëso, praktiko dhe përgatitu për testet e maturës me platformën më
-              moderne dhe të plotë në Kosovë. Më shumë se 10,000 studentë tashmë
-              kanë zgjedhur E-test.
+              moderne dhe të plotë në Kosovë.
             </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button
-                onClick={() => setShowAuth(true)}
-                size="lg"
-                className="h-14 px-8 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-lg"
-              >
+            <div className="md:flex-row flex-col flex gap-6 justify-center mt-9 mb-9">
+              <Button className="md:py-[30px] font-normal md:text-[20px] rounded-[14px] md:px-[72px] px-[50px] py-[25px] text-[16px]">
                 Fillo falas tani
-                <ChevronRight className="w-5 h-5 ml-2" />
               </Button>
-              <Button variant="outline" size="lg" className="h-14 px-8 text-lg">
+              <Button
+                variant="secondary"
+                className="flex md:py-[30px] font-normal md:text-[20px] rounded-[14px] md:px-[72px] px-[50px] py-[25px] text-[16px]"
+              >
+                <Play className="w-4 h-4" />
                 Shiko demonstrimin
               </Button>
             </div>
+            <div className='sectionHeroImg'>
+            <img
+              src="./landing page 1.png"
+              className=" w-full z-10 relative md:max-w-[90%] max-w-full mx-auto"
+              alt=""
+            />
+            </div>
+          </div>
+        </main>
+        <main className=" mx-auto md:py-30 py-15 px-5  md:px-36  text-center space-y-12">
+          <div className="space-y-6">
+            <Badge className="bg-[#F7F9FF] text-[#5684FF] border-0 rounded-4xl text-[16px] font-normal px-7 py-3">
+              Veçoritë
+            </Badge>
+
+            <h2 className="text-4xl md:text-5xl font-bold leading-tight">
+              Gjithçka që të duhet për sukses në maturë
+            </h2>
+
+            <p className="text-lg md:text-2xl text-muted-foreground max-w-[80%] mx-auto leading-relaxed">
+              E-testi të ndihmon të mësosh me ritmin tënd: praktikon me teste të
+              vërteta, e kupton ku je dobët dhe përmirësohesh hap pas hapi.
+            </p>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 pt-8">
             {subjects.map((subject, index) => (
               <Card
                 key={index}
-                className="text-center hover:shadow-lg transition-shadow"
+                className="hover:shadow-lg transition-shadow bg-[#F7F9FF] border-0 py-5"
               >
                 <CardContent className="p-6">
                   <div
-                    className={`w-12 h-12 ${
-                      subject.name === 'Matematika'
-                        ? 'subject-math'
-                        : subject.name === 'Gjuha Shqipe'
-                          ? 'subject-albanian'
-                          : 'subject-english'
-                    } rounded-xl mx-auto mb-4 flex items-center justify-center`}
+                    style={{ backgroundColor: subject.color }}
+                    className={`w-16 h-16 rounded-xl mb-14 flex items-center justify-center bg-[${subject.color}]`}
                   >
-                    <BookOpen className="w-6 h-6 text-white" />
+                    <BookOpen
+                      className="w-10 h-10"
+                      style={{ color: subject.colorTx }}
+                    />
                   </div>
-                  <h3 className="font-semibold text-lg mb-2">{subject.name}</h3>
-                  <p className="text-2xl font-bold text-primary mb-1">
+                  <h3 className="text-start font-semibold text-xl mb-2">
+                    {subject.name}
+                  </h3>
+
+                  <p className="text-start text-lg text-muted-foreground">
                     {subject.count}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    teste të disponueshme
                   </p>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-          {/* Features */}
+        </main>
+        <section className="md:py-30 py-15 px-5  md:px-36  bg-[#EEF2FF]">
+          <div className="space-y-6 text-center ">
+            <Badge className="bg-[#F7F9FF] text-[#5684FF] border-0 rounded-4xl text-[16px] font-normal px-7 py-3">
+              Si funksionon
+            </Badge>
+
+            <h2 className="text-4xl md:text-5xl font-bold leading-tight">
+              Rruga drejt suksesit në 3 hapa
+            </h2>
+
+            <p className="text-lg md:text-2xl text-muted-foreground max-w-[80%] mx-auto leading-relaxed">
+              Fillo të përgatitesh për maturë në mënyrën më të thjeshtë dhe më
+              efektive.
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
             {features.map((feature, index) => (
               <Card
@@ -232,49 +299,148 @@ function AppContent() {
                 className="text-left hover:shadow-lg transition-shadow"
               >
                 <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center flex-shrink-0">
-                      <feature.icon className="w-6 h-6 text-white" />
+                  <div className="">
+                    <div className="w-18 rounded-full h-18 bg-primary text-[20px] flex items-center justify-center flex-shrink-0 mb-8 text-white">
+                      0{index + 1}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
-                        <h3 className="font-semibold">{feature.title}</h3>
-                        <Badge variant="secondary" className="text-xs">
-                          {feature.badge}
-                        </Badge>
+                        <h3 className="font-semibold text-[20px]">
+                          {feature.title}
+                        </h3>
                       </div>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-xl text-muted-foreground leading-relaxed">
                         {feature.description}
                       </p>
+                      <div className=" flex gap-2 items-center mt-4">
+                        <div className="w-5 h-5 rounded-full border-1 border-[#5684FF] flex items-center justify-center">
+                          <Check className="w-3 h-3 !text-[#5684FF]" />
+                        </div>
+                        <p className="text-lg text-muted-foreground leading-relaxed flex !text-[#5684FF]">
+                          E thjeshtë dhe e shpejtë
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
-
-          {/* CTA Section */}
-          <Card className="card-gradient text-white border-0 mt-16">
-            <CardContent className="p-8 text-center">
-              <h3 className="text-2xl font-bold mb-4">Gati për të filluar?</h3>
-              <p className="text-white/90 mb-6 max-w-md mx-auto">
-                Bashkohu me mijëra studentë të tjerë që po përgatiten për maturë
-                me E-testi
-              </p>
-              <Button
-                onClick={() => setShowAuth(true)}
-                size="lg"
-                variant="secondary"
-                className="h-12 px-8 bg-white text-purple-600 hover:bg-gray-50"
-              >
-                Krijo llogari falas
+          <div className="flex justify-center mt-9">
+          <Button className="md:py-[30px] w-full sm:w-max font-normal md:text-[20px] rounded-[14px] md:px-[72px] px-[50px] py-[25px] text-[16px]">
+                Fillo falas tani
               </Button>
-            </CardContent>
-          </Card>
-        </main>
+          </div>
+        </section>
+        <section
+          id="lëndët"
+          className="md:py-30 py-15 px-5  md:px-36 lg:flex-row flex-col-reverse flex gap-20 items-center bg-white"
+        >
+          <div className="lg:w-1/2 space-y-8 w-full">
+            <div className="flex gap-6">
+              <div className="bg-[#F7F9FF] rounded-2xl px-8 md:py-6 py-3 text-center w-full">
+                <p className="md:text-4xl text-2xl font-medium text-[#5684FF]">500+</p>
+                <p className="text-muted-foreground md:text-lg text-sm">Teste</p>
+              </div>
+              <div className="bg-[#F7F9FF] rounded-2xl px-8 md:py-6 py-3 text-center w-full">
+                <p className="md:text-4xl text-2xl font-medium text-[#8A38F5]">3+</p>
+                <p className="text-muted-foreground md:text-lg text-sm">Lëndët</p>
+              </div>
+              <div className="bg-[#F7F9FF] rounded-2xl px-8 md:py-6 py-3 text-center w-full">
+                <p className="md:text-4xl text-2xl font-medium text-[#00C84F]">24/7</p>
+                <p className="text-muted-foreground md:text-lg text-sm">Qasje</p>
+              </div>
+            </div>
+
+            <div className="rounded-3xl overflow-hidden shadow-xl">
+              <img
+                src="./c405ecce008ec16c1bd407f960ab6dbeb2339dbe.jpg" 
+                alt="Përgatitja për maturë"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          <div className="lg:w-1/2 space-y-10 lg:block flex flex-col items-center">
+            <Badge className="bg-[#F7F9FF] text-[#5684FF] border-0 rounded-full text-[16px] font-normal px-6 py-3">
+              Lëndët
+            </Badge>
+
+            <h2 className="sm:text-5xl text-4xl font-medium leading-tight">
+              Përgatitu për të gjitha lëndët
+            </h2>
+
+            <p className="text-[16px] text-[#475569] font-normal  leading-10 md:max-w-[90%]">
+              Platforma jonë ofron teste të plota për të gjitha lëndët e
+              maturës, duke përfshirë pyetje të vërteta nga vitet e kaluara.
+            </p>
+
+            {/* Cards */}
+            <div className="space-y-6 w-full">
+              <Card className="border-0 bg-[#F7F9FF] rounded-2xl">
+                <CardContent className="flex items-center justify-between p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center">
+                      <GraduationCap className="w-7 h-7 text-[#5684FF]" />
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-lg">
+                        Testi i maturës
+                      </p>
+                      <p className="font-semibold text-xl">Klasa 12</p>
+                    </div>
+                  </div>
+                  <div className="w-14 h-14 rounded-2xl bg-primary  flex items-center justify-center">
+                    <SquareArrowOutUpRight className="w-8 h-8 text-white" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 bg-[#F7F9FF] rounded-2xl">
+                <CardContent className="flex items-center justify-between p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center">
+                      <GraduationCap className="w-7 h-7 text-[#8A38F5]" />
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-lg">
+                        Testi i arritshmërisë
+                      </p>
+                      <p className="font-semibold text-xl">Klasa 9</p>
+                    </div>
+                  </div>
+                  <div className="w-14 h-14 rounded-2xl bg-primary  flex items-center justify-center">
+                    <SquareArrowOutUpRight className="w-8 h-8 text-white" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+        <section id="deshmitë" className="md:py-30 py-15 px-5  md:px-36 bg-[#EEF2FF] text-center w-full">
+            <TestimonialsSection/>
+        </section>
+        <section id='footer' className={`px-5  md:px-36 bg-[#EEF2FF] pb-10 after:bg-gradient-to-b after:from-white after:via-[#F5F8FF] after:to-[#c6d7fd] relative after:content-[''] after:absolute after:h-[80%] after:w-full after:left-0 after:bottom-0 z-0`}>
+          <div className='w-full bg-primary rounded-3xl md:py-24 py-8 px-4  md:px-16 flex items-center justify-center z-2 relative'>
+            <div className='max-w-[800px] flex flex-col items-center gap-5 md:gap-10'>
+              <h1 className='md:text-6xl sm:text-4xl text-3xl text-white font-bold figtree text-center leading-10 md:leading-20'>Gati të fillosh përgatitjen për maturë?</h1>
+              <Button className="md:py-[30px] py-[25px] font-medium bg-[#FFA033] text-[16px] md:text-[20px] rounded-[14px]  px-[50px]">
+              <div className='flex items-center gap-3 p-0'><Sparkles className="!w-6 !h-6" /> Fillo tani</div>
+              </Button>
+            </div>
+          </div>
+          <div className='flex flex-col items-center pt-16 gap-5 z-2 relative'>
+            <img className='w-10' src="./etesti-icon.svg" alt="" />
+            <p className='figtree text-lg text-[#0A142F] text-center'>© 2025. Të gjitha të drejtat e rezervuara.</p>
+          </div>
+        </section>
 
         <Suspense fallback={<LoadingFallback />}>
-          <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} isLoggedIn={false} />
+          <AuthModal
+            isOpen={showAuth}
+            onClose={() => setShowAuth(false)}
+            isLoggedIn={false}
+          />
         </Suspense>
 
         <Toaster />
@@ -283,16 +449,14 @@ function AppContent() {
   }
 
   // Convert Firebase user to the format expected by AppRouter
-  
+
   const userForRouter = {
     name: user.displayName || 'User',
     email: user.email || '',
     grade: user.grade || 'Klasa 12',
     school: user.school || null,
     municipality: user.municipality || null,
-  };  
-    
-
+  };
 
   return (
     <div className="flex h-screen bg-background">
@@ -304,7 +468,11 @@ function AppContent() {
           onLogout={handleLogout}
           onUpdateProfile={handleUpdateProfile}
         />
-          <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} isLoggedIn={true} />
+        <AuthModal
+          isOpen={showAuth}
+          onClose={() => setShowAuth(false)}
+          isLoggedIn={true}
+        />
       </Suspense>
       <Toaster />
     </div>
@@ -317,15 +485,15 @@ export default function App() {
 
   useEffect(() => {
     const isOnTestPage = matchPath(
-      { path: "/tests/:id/:uid", end: true },
+      { path: '/tests/:id/:uid', end: true },
       location.pathname
     );
 
     if (!isOnTestPage) {
       for (let i = localStorage.length - 1; i >= 0; i--) {
         const key = localStorage.key(i);
-      
-        if (key && key.startsWith("exam_timer")) {
+
+        if (key && key.startsWith('exam_timer')) {
           localStorage.removeItem(key);
         }
       }
