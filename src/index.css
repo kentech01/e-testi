@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -7,15 +8,15 @@
   --background: #ffffff;
   --foreground: oklch(0.145 0 0);
   --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: #0F172A;
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #030213;
+  --primary: #5684FF;
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
+  --secondary-foreground: #475569;
   --muted: #ececf0;
-  --muted-foreground: #717182;
+  --muted-foreground: #94A3B8;
   --accent: #e9ebef;
   --accent-foreground: #030213;
   --destructive: #d4183d;
@@ -188,6 +189,8 @@
 
 html {
   font-size: var(--font-size);
+
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* Custom gradient utilities */
@@ -254,4 +257,31 @@ html {
 }
 button{
   cursor: pointer !important;
+}
+.sectionHeroImg{
+  display: block;
+  position: relative;
+}
+.sectionHeroImg:after{
+  content: "";
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  bottom: -105px;
+  height: 90%;
+  left: -126px;
+  width: calc(100% + 252px);
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+}
+@media screen and (max-width: 776px) {
+.sectionHeroImg:after{
+  width: calc(100% + 40px);
+  left: -20px;
+  bottom: -53px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+}
+html{
+  scroll-behavior: smooth;
 }

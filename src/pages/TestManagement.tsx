@@ -102,7 +102,7 @@ export function TestManagement() {
         </div>
         <Button
           onClick={handleCreateExam}
-          className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md flex items-center gap-2 font-medium"
+          
           style={{ minWidth: '160px' }}
         >
           <Plus className="w-4 h-4" />

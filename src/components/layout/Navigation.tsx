@@ -68,17 +68,15 @@ export function Navigation({
     }
     return true;
   });
+  
 
   return (
     <div className="w-64 h-screen bg-sidebar border-r border-sidebar-border flex flex-col">
       {/* Header */}
       <div className="p-4 border-b border-sidebar-border">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold">
-            E
-          </div>
+        <div className="flex items-center space-x-3 justify-start">
           <div>
-            <h2 className="font-medium text-sidebar-foreground">E-testi</h2>
+            <img src="./etesti-logo.svg" className='w-[105px] mb-2' alt="" />
             <p className="text-xs text-sidebar-foreground/70">
               Përgatitja për maturë
             </p>
@@ -120,9 +118,10 @@ export function Navigation({
               variant={isActive ? 'default' : 'ghost'}
               className={`w-full justify-start h-10 ${
                 isActive
-                  ? 'bg-sidebar-primary text-sidebar-primary-foreground'
+                  ? 'bg-primary !text-[#fff]'
                   : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
-              }`}
+                  
+              }${(darkMode && isActive) && '!text-black'}`}
               onClick={() => navigate(item.path)}
             >
               <Icon className="w-4 h-4 mr-3" />
