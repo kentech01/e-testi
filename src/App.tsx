@@ -188,7 +188,7 @@ function AppContent() {
             />
           </div>
           <div>
-            <ul className="gap-7 hidden md:dlex">
+            <ul className="gap-7 hidden md:flex">
               {menus.map((menu, index) => (
                 <li key={index}>
                   <a
