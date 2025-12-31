@@ -232,7 +232,7 @@ export function TestList({
       </div>
 
       {/* Start New Exam Section */}
-      <Card className="mb-8 bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0">
+      <Card className="mb-8 bg-primary text-white border-0">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
