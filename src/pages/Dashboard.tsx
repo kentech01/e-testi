@@ -230,7 +230,7 @@ export function Dashboard({ user }: DashboardProps) {
   return (
     <div className="p-4 space-y-6 max-w-7xl mx-auto">
       {/* Welcome Section */}
-      <Card className="bg-gradient-to-br from-blue-500 to-purple-600 text-white border-0">
+      <Card className="bg-primary text-white border-0">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -267,11 +267,10 @@ export function Dashboard({ user }: DashboardProps) {
             onClick={handleStartRandomTest}
             size="lg"
             variant="secondary"
-            className="bg-white text-blue-600 hover:bg-blue-50"
+            className="bg-transparent text-white border border-white hover:bg-blue-50 hover:text-primary"
             disabled={isLoading}
           >
-            <Plus className="w-5 h-5 mr-2" />
-            {isLoading ? 'Duke ngarkuar...' : 'Fillo test'}
+            {isLoading ? 'Duke ngarkuar...' : 'Testo njohuritë'}
           </Button>
         </CardFooter>
       </Card>

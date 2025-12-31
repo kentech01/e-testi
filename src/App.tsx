@@ -178,7 +178,7 @@ function AppContent() {
     return (
       <div className="">
         {/* Header */}
-        <header className="p-4 px-5 lg:px-36 flex justify-between items-center bg-white">
+        <header className="p-9 px-5 lg:px-36 flex justify-between items-center bg-white">
           <div className="flex items-center space-x-3">
             <img src="./etesti-logo.svg" className="hidden md:block" alt="" />
             <img
@@ -210,7 +210,7 @@ function AppContent() {
         </header>
 
         <main
-          className={`relative md:py-30 py-15 px-5  md:px-36 flex items-center justify-center min-h-screen sectionWithPseudo bg-gradient-to-b from-white via-[#DDE6FF] to-[#5684FF]`}
+          className={`relative md:py-30 py-15 px-5  md:px-36 flex items-center justify-center min-h-screen sectionWithPseudo bg-gradient-to-b from-[#f7f9ff] via-[#d3defc] to-[#5684FF]`}
         >
           <div>
             <h1 className="sm:text-6xl text-5xl font-bold text-card-foreground text-center leading-tight ">
@@ -224,14 +224,14 @@ function AppContent() {
             </p>
             <div className="md:flex-row flex-col flex gap-6 justify-center mt-9 mb-9">
               <Button
-                className="md:py-[30px] font-normal md:text-[20px] rounded-[14px] md:px-[72px] px-[50px] py-[25px] text-[16px]"
+                className="md:py-[27px] font-normal md:text-[18px] rounded-[14px] md:px-[65px] px-[50px] py-[25px] text-[16px]"
                 onClick={() => setShowAuth(true)}
               >
                 Fillo falas tani
               </Button>
               <Button
                 variant="secondary"
-                className="flex md:py-[30px] font-normal md:text-[20px] rounded-[14px] md:px-[72px] px-[50px] py-[25px] text-[16px]"
+                className="flex md:py-[27px] font-normal md:text-[18px] rounded-[14px] md:px-[72px] px-[50px] py-[25px] text-[16px]"
               >
                 <Play className="w-4 h-4" />
                 Shiko demonstrimin
@@ -239,8 +239,8 @@ function AppContent() {
             </div>
             <div className="sectionHeroImg">
               <img
-                src="./landing page 1.png"
-                className=" w-full z-10 relative md:max-w-[90%] max-w-full mx-auto"
+                src="./Dashboard.png"
+                className=" w-full z-10 relative md:max-w-[90%] max-w-full mx-auto rounded-xl shadow"
                 alt=""
               />
             </div>
@@ -340,12 +340,12 @@ function AppContent() {
             ))}
           </div>
           <div className="flex justify-center mt-9">
-            <Button
-              className="md:py-[30px] w-full sm:w-max font-normal md:text-[20px] rounded-[14px] md:px-[72px] px-[50px] py-[25px] text-[16px]"
-              onClick={() => setShowAuth(true)}
-            >
-              Fillo falas tani
-            </Button>
+          <Button
+                className="md:py-[27px] font-normal md:text-[18px] rounded-[14px] md:px-[65px] px-[50px] py-[25px] text-[16px]"
+                onClick={() => setShowAuth(true)}
+              >
+                Fillo falas tani
+              </Button>
           </div>
         </section>
         <section
@@ -460,7 +460,7 @@ function AppContent() {
               <h1 className="md:text-6xl sm:text-4xl text-3xl text-white font-bold figtree text-center leading-10 md:leading-20">
                 Gati të fillosh përgatitjen për maturë?
               </h1>
-              <Button className="md:py-[30px] py-[25px] font-medium bg-[#FFA033] text-[16px] md:text-[20px] rounded-[14px]  px-[50px]">
+              <Button className="md:py-[27px] py-[25px] font-medium bg-[#FFA033] text-[16px] md:text-[20px] rounded-[14px]  px-[50px]" onClick={()=>setShowAuth(true)}>
                 <div className="flex items-center gap-3 p-0">
                   <Sparkles className="!w-6 !h-6" /> Fillo tani
                 </div>
