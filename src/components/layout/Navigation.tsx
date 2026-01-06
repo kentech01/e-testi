@@ -75,11 +75,7 @@ export function Navigation({
       {/* Header */}
       <div className="p-4 border-b border-sidebar-border">
         <div className="flex items-center space-x-3 justify-start">
-          <div>
-            <img src="./etesti-logo.svg" className='w-[105px] mb-2' alt="" />
-            <p className="text-xs text-sidebar-foreground/70">
-              Përgatitja për maturë
-            </p>
+          <div>{darkMode?<img src="./e-testi-dark.svg" className='w-[105px]' alt="" />:<img src="./etesti-logo.svg" className='w-[105px]' alt="" />}
           </div>
         </div>
       </div>
